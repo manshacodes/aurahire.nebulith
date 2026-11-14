@@ -17,8 +17,11 @@ const HAND = 3;            // random moves dealt per turn (plus "ask about salar
 const RAGE_AT = 40;        // boss HP that triggers rage mode
 const RAGE_MULT = 1.3;     // rage attacks hit this much harder
 const METER_MAX = 100;     // aura meter: full = ultimate unlocked
-const BLOCK_SWEEP = 1100, RAGE_SWEEP = 900;    // how long the block marker takes to cross (ms), faster in rage mode
-const BLOCK_DAMAGE = { perfect: 0, good: 0.5, miss: 1 };
+const BLOCK_SWEEP = 900, RAGE_SWEEP = 750;     // how long the block marker takes to cross (ms), faster in rage mode
+const BLOCK_DAMAGE = { perfect: 0, good: 0.5, miss: 1, none: 1 };
+// The block minigame doesn't come on every attack: always on HR's first one (so you learn it),
+// then about 1 in 3, never twice in a row, and at least once every 4 attacks.
+const BLOCK_CHANCE = 0.25, BLOCK_AT_LEAST_EVERY = 4;
 
 // The ultimate is a move like the others, so it uses the same code path
 const ULT = { id: "ult", name: FIGHT_TEXT.ult.name, hint: FIGHT_TEXT.ult.hint, ult: true, run: () => ({ dmg: rand(45, 60), text: FIGHT_TEXT.ult.text }) };
@@ -32,6 +35,7 @@ function deal() {
 export default function boss(root, { id }) {
   const j = JOBS.find((x) => x.id === id) || JOBS[0];
   let bossHp = BOSS_HP, you = YOUR_HP, busy = true, alive = true, turn = 1, meter = 0;
+  let attacks = 0, sinceBlock = 0;   // for deciding when the block minigame shows up
   // Status effects: dodge (block next attack), charge (2× next hit), stun (boss skips a turn), rage
   const fx = { dodge: false, charge: false, stun: false, rage: false };
   let hand = deal();
@@ -142,7 +146,12 @@ export default function boss(root, { id }) {
     await taunt(enemy, pick(BOSS_TAUNTS));
     if (!alive) return;
     log(`${j.boss} used ${attack.name}!`);
-    const result = await blockQTE({ sweepMs: fx.rage ? RAGE_SWEEP : BLOCK_SWEEP, attack: `${j.boss} used ${attack.name}` });
+    const offerBlock = attacks === 0 || (sinceBlock >= 1 && (Math.random() < BLOCK_CHANCE || sinceBlock >= BLOCK_AT_LEAST_EVERY - 1));
+    attacks += 1;
+    sinceBlock = offerBlock ? 0 : sinceBlock + 1;
+    const result = offerBlock
+      ? await blockQTE({ sweepMs: fx.rage ? RAGE_SWEEP : BLOCK_SWEEP, attack: `${j.boss} used ${attack.name}` })
+      : "none";   // a normal attack: no minigame, full damage
     if (!alive) return;
 
     const dmg = Math.round(rand(attack.min, attack.max) * (fx.rage ? RAGE_MULT : 1) * BLOCK_DAMAGE[result]);
@@ -156,7 +165,7 @@ export default function boss(root, { id }) {
       you = Math.max(0, you - dmg);
       hit(me, dmg);
       addMeter(dmg * 0.8);
-      log(`${attack.text} ${result === "good" ? FIGHT_TEXT.block.good : FIGHT_TEXT.block.miss}`);
+      log(result === "none" ? `${j.boss} used ${attack.name}! ${attack.text}` : `${attack.text} ${result === "good" ? FIGHT_TEXT.block.good : FIGHT_TEXT.block.miss}`);
     }
   }
 

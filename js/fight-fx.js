@@ -60,7 +60,7 @@ export async function taunt(fighterEl, text) {
 const ACCEL = 1.8;                                 // >1 = the marker speeds up as it travels
 const markerAt = (t) => Math.pow(Math.min(1, Math.max(0, t)), ACCEL) * 100;   // time 0-1 -> position 0-100%
 
-export function blockQTE({ sweepMs = 1100, attack = "", stepMs = 480 } = {}) {
+export function blockQTE({ sweepMs = 900, attack = "", stepMs = 450 } = {}) {
   const zoneW = 24, perfectW = 9;                 // widths in % of the bar
   const zoneAt = rand(25, 100 - zoneW - 4);        // where the zone sits (further right = it's moving faster = harder)
   document.body.insertAdjacentHTML("beforeend", `
