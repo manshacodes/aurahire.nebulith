@@ -17,7 +17,7 @@ const HAND = 3;            // random moves dealt per turn (plus "ask about salar
 const RAGE_AT = 40;        // boss HP that triggers rage mode
 const RAGE_MULT = 1.3;     // rage attacks hit this much harder
 const METER_MAX = 100;     // aura meter: full = ultimate unlocked
-const BLOCK_SWEEP = 950, RAGE_SWEEP = 700;   // block bar speed (ms), faster in rage mode
+const BLOCK_SWEEP = 1600, RAGE_SWEEP = 1250;   // how long the block marker takes to cross (ms), faster in rage mode
 const BLOCK_DAMAGE = { perfect: 0, good: 0.5, miss: 1 };
 
 // The ultimate is a move like the others, so it uses the same code path
@@ -142,7 +142,7 @@ export default function boss(root, { id }) {
     await taunt(enemy, pick(BOSS_TAUNTS));
     if (!alive) return;
     log(`${j.boss} used ${attack.name}!`);
-    const result = await blockQTE($("#arena", root), { sweepMs: fx.rage ? RAGE_SWEEP : BLOCK_SWEEP });
+    const result = await blockQTE({ sweepMs: fx.rage ? RAGE_SWEEP : BLOCK_SWEEP, attack: `${j.boss} used ${attack.name}` });
     if (!alive) return;
 
     const dmg = Math.round(rand(attack.min, attack.max) * (fx.rage ? RAGE_MULT : 1) * BLOCK_DAMAGE[result]);
@@ -220,5 +220,5 @@ export default function boss(root, { id }) {
     setButtons(true);
   })();
 
-  return () => { alive = false; stopMusic(); document.querySelectorAll(".vs-intro, .ult-flash, .ko").forEach((el) => el.remove()); };
+  return () => { alive = false; stopMusic(); document.querySelectorAll(".vs-intro, .ult-flash, .ko, .qte-full").forEach((el) => el.remove()); };
 }

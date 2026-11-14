@@ -20,6 +20,10 @@
   /* the batch leaderboard: two cards per row */
   .people { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
+  /* scan: one centred column */
+  .screen > section.scan { width: 100%; max-width: 640px; margin: 0 auto; }
+  .screen > section.scan > * { width: 100%; }
+
   /* chat: bigger memes */
   .msg.sticker .meme { width: 200px; }
   .msg { max-width: 70%; }
@@ -66,8 +70,13 @@
   body:is([data-route="profile"], [data-route="u"], [data-route="f"]) .split { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); }
   body:is([data-route="profile"], [data-route="u"], [data-route="f"]) .split-side { position: static; }
 
-  /* scan: the AuraGPT HUD sticks on the left while lines get judged on the right */
-  .scan { display: grid; grid-template-columns: 380px minmax(0, 1fr); gap: 32px; align-items: start; }
+  /* scan: the AuraGPT HUD sticks on the left while lines get judged on the right.
+     (.screen > section.scan, so it beats the default .screen > section { display: flex }) */
+  .screen > section.scan {
+    display: grid; grid-template-columns: minmax(320px, 400px) minmax(0, 1fr); gap: 32px; align-items: start;
+    width: 100%; max-width: 1100px; margin: 0 auto;
+  }
+  .screen > section.scan > * { width: 100%; min-width: 0; }
   .scan .scan-top { position: sticky; top: 88px; }
 
   /* sticker wall: up to 6 memes a row */

@@ -51,29 +51,34 @@ export async function taunt(fighterEl, text) {
   bubble.remove();
 }
 
-// ---------- Block minigame ----------
-// A marker sweeps across a bar. Tap (or press space/enter) while it's in the zone.
+// ---------- Block minigame (full screen) ----------
+// 1. A warning: "HR is attacking! get ready to block…" (taps don't count yet)
+// 2. A marker sweeps across a big bar. Tap anywhere (or press space/enter) while it's in the zone.
 // Resolves "perfect" (dead centre), "good" (in the zone) or "miss" (outside / too late).
-export function blockQTE(container, { sweepMs = 950 } = {}) {
-  const zoneW = 26, perfectW = 8;                 // widths in % of the bar
+export function blockQTE({ sweepMs = 1600, attack = "", warnMs = 1200 } = {}) {
+  const zoneW = 26, perfectW = 10;                // widths in % of the bar
   const zoneAt = rand(30, 100 - zoneW - 4);        // where the zone sits this time
-  container.insertAdjacentHTML("beforeend", `
-    <div class="qte" role="group" aria-label="Block the attack">
-      <p class="qte-hint">${T.blockHint}</p>
-      <div class="qte-bar">
-        <span class="qte-zone" style="left:${zoneAt}%;width:${zoneW}%"><i style="left:${(zoneW - perfectW) / 2}%;width:${perfectW}%"></i></span>
-        <span class="qte-marker"></span>
+  document.body.insertAdjacentHTML("beforeend", `
+    <div class="qte qte-full warn" role="dialog" aria-label="Block the attack">
+      <div class="qte-inner">
+        <p class="qte-warn">${esc(T.blockWarn)}</p>
+        ${attack ? `<p class="qte-attack">${esc(attack)}</p>` : ""}
+        <p class="qte-ready">${esc(T.blockReady)}</p>
+        <div class="qte-bar">
+          <span class="qte-zone" style="left:${zoneAt}%;width:${zoneW}%"><i style="left:${(zoneW - perfectW) / 2}%;width:${perfectW}%"></i></span>
+          <span class="qte-marker"></span>
+        </div>
+        <button class="btn btn-cta qte-btn">${esc(T.blockPrompt)}</button>
+        <p class="qte-hint">${esc(T.blockHint)}</p>
       </div>
-      <button class="btn btn-cta qte-btn">${T.blockPrompt}</button>
     </div>`);
-  const el = container.querySelector(".qte");
+  const el = document.querySelector(".qte-full");
   const marker = el.querySelector(".qte-marker");
-  const btn = el.querySelector(".qte-btn");
-  btn.focus({ preventScroll: true });
+  el.querySelector(".qte-btn").focus({ preventScroll: true });
+  sfx.thunk();
 
   return new Promise((resolve) => {
-    const start = performance.now();
-    let raf = 0, finished = false;
+    let start = 0, raf = 0, live = false, finished = false, timeout = 0;
 
     const end = (result) => {
       if (finished) return;
@@ -82,10 +87,11 @@ export function blockQTE(container, { sweepMs = 950 } = {}) {
       clearTimeout(timeout);
       removeEventListener("keydown", onKey);
       el.classList.add(`done-${result}`);
-      setTimeout(() => el.remove(), 450);
+      setTimeout(() => el.remove(), 500);
       resolve(result);
     };
     const judge = () => {
+      if (!live) return;                            // still in the warning: ignore early taps
       const p = ((performance.now() - start) / sweepMs) * 100;
       const centre = zoneAt + zoneW / 2;
       if (Math.abs(p - centre) <= perfectW / 2) return end("perfect");
@@ -99,10 +105,18 @@ export function blockQTE(container, { sweepMs = 950 } = {}) {
       if (p < 1) raf = requestAnimationFrame(tick);
     };
 
-    btn.addEventListener("click", judge);
+    el.addEventListener("pointerdown", judge);      // tap anywhere on the screen
     addEventListener("keydown", onKey);
-    raf = requestAnimationFrame(tick);
-    const timeout = setTimeout(() => end("miss"), sweepMs + 60);   // too slow = no block
+
+    // After the warning, the marker starts moving
+    setTimeout(() => {
+      if (finished) return;
+      live = true;
+      start = performance.now();
+      el.classList.remove("warn");
+      raf = requestAnimationFrame(tick);
+      timeout = setTimeout(() => end("miss"), sweepMs + 60);   // too slow = no block
+    }, warnMs);
   });
 }
 
