@@ -436,3 +436,66 @@ body[data-route="chat"] .app { padding-bottom: 120px; }
 .climb-next { font-weight: 800; }
 .farm-tips summary { cursor: pointer; font-size: 13px; font-weight: 800; color: var(--sub); }
 .farm-tips ul { display: grid; gap: 6px; margin-top: 10px; padding-left: 18px; font-size: 13px; font-weight: 600; }
+
+/* ---------- boss fight: fighting-game layer ---------- */
+/* aura meter under your HP */
+.meter-row { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+.meter-label { font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--sub); }
+.meter { flex: 1; height: 8px; border-radius: 999px; background: rgba(127,127,127,0.18); overflow: hidden; }
+.meter span { display: block; height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, #CDBEFF, #FF5FC1, #FFE45C); transition: width 0.5s cubic-bezier(.2,.9,.3,1); }
+.meter.full span { animation: meterGlow 0.8s ease-in-out infinite alternate; }
+@keyframes meterGlow { to { filter: brightness(1.4) saturate(1.4); } }
+/* the ultimate move button */
+.move-ult { grid-column: 1 / -1; background: linear-gradient(110deg, #FFE45C, #FF5FC1, #CDBEFF) !important; color: #1A1033 !important; border-color: transparent !important; animation: ultPulse 1s ease-in-out infinite alternate; }
+.move-ult small { color: #1A1033 !important; opacity: 0.8; }
+@keyframes ultPulse { to { transform: scale(1.03); box-shadow: 0 0 0 4px rgba(255,95,193,0.35); } }
+/* HR's speech bubble */
+.fighter { position: relative; }
+.taunt { position: absolute; right: 0; top: -12px; z-index: 3; max-width: 70%; padding: 8px 12px; border-radius: 14px 14px 4px 14px; background: var(--ink); color: var(--bg); font-size: 13px; font-weight: 800; animation: msgIn 0.3s cubic-bezier(.2,.9,.3,1.3) both; }
+/* block minigame, sits over the arena */
+.arena { position: relative; }
+.qte { position: absolute; inset: 0; z-index: 4; display: flex; flex-direction: column; justify-content: center; gap: 12px; padding: 18px; border-radius: inherit; background: color-mix(in srgb, var(--surface-solid) 88%, transparent); }
+.qte-hint { text-align: center; font-size: 13px; font-weight: 800; color: var(--sub); }
+.qte-bar { position: relative; height: 22px; border-radius: 999px; background: rgba(127,127,127,0.2); overflow: hidden; }
+.qte-zone { position: absolute; top: 0; bottom: 0; background: rgba(34,179,58,0.45); }
+.qte-zone i { position: absolute; top: 0; bottom: 0; background: #22B33A; }
+.qte-marker { position: absolute; top: -2px; bottom: -2px; left: 0; width: 6px; margin-left: -3px; border-radius: 3px; background: var(--ink); box-shadow: 0 0 0 2px var(--surface-solid); }
+.qte-btn { align-self: center; min-width: 60%; font-size: 20px; letter-spacing: 0.04em; }
+.qte.done-perfect .qte-bar { box-shadow: 0 0 0 3px #22B33A; }
+.qte.done-good .qte-bar { box-shadow: 0 0 0 3px #FFE45C; }
+.qte.done-miss .qte-bar { box-shadow: 0 0 0 3px #FF3B5C; }
+/* VS intro */
+.vs-intro { position: fixed; inset: 0; z-index: 170; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px; padding: 24px; background: radial-gradient(circle at 50% 50%, #2A1450 0%, #0A0A0C 70%); color: #fff; cursor: pointer; overflow: hidden; }
+.vs-side { display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; font-size: 15px; }
+.vs-side b { max-width: 140px; font-weight: 900; line-height: 1.15; }
+.vs-av { width: 84px; height: 84px; font-size: 26px; box-shadow: 0 0 0 4px #fff; }
+.vs-boss { width: 84px; height: 84px; animation: none; }
+.vs-boss .visor { top: 28px; left: 12px; right: 12px; height: 16px; }
+.vs-boss .mouth { bottom: 18px; left: 28px; right: 28px; }
+.vs-mid { font-family: var(--font-display); font-weight: 900; font-size: clamp(56px, 16vw, 120px); font-style: italic; color: #FFE45C; text-shadow: 4px 4px 0 #FF3B5C; }
+.vs-call { position: absolute; left: 0; right: 0; bottom: 22%; text-align: center; font-family: var(--font-display); font-weight: 900; font-size: clamp(40px, 12vw, 96px); letter-spacing: -0.02em; font-style: italic; color: #fff; text-shadow: 4px 4px 0 #6D28D9; }
+.vs-call.fight { color: #C8FF2E; text-shadow: 4px 4px 0 #FF3B5C; }
+.vs-skip { position: absolute; bottom: 18px; left: 0; right: 0; text-align: center; font-size: 12px; opacity: 0.6; }
+/* ultimate flash + K.O. splash */
+.ult-flash, .ko { position: fixed; inset: 0; z-index: 165; display: grid; place-items: center; pointer-events: none; }
+.ult-flash { background: radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(255,228,92,0.85) 45%, rgba(255,95,193,0.7) 100%); }
+.ult-flash p { padding: 0 16px; text-align: center; font-family: var(--font-display); font-weight: 900; font-size: clamp(34px, 10vw, 80px); font-style: italic; line-height: 0.95; color: #1A1033; text-shadow: 3px 3px 0 #fff; }
+.ko { background: rgba(10,10,12,0.55); }
+.ko p { font-family: var(--font-display); font-weight: 900; font-size: clamp(90px, 30vw, 220px); font-style: italic; letter-spacing: -0.04em; color: #FF3B5C; text-shadow: 6px 6px 0 #fff, 12px 12px 0 rgba(0,0,0,0.25); }
+.ko.win p { color: #C8FF2E; text-shadow: 6px 6px 0 #111, 12px 12px 0 rgba(0,0,0,0.25); }
+
+/* roast a friend */
+.dropzone-sm { padding: 18px 16px; }
+.judge-card { display: grid; gap: 8px; }
+.judge-top { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
+.judge-top > div:first-child { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; min-width: 0; }
+.judge-name { font-family: var(--font-display); font-weight: var(--display-weight); font-size: 26px; line-height: 1.05; letter-spacing: -0.04em; overflow-wrap: anywhere; }
+.judge-num { font-size: clamp(40px, 13vw, 64px); }
+.judged-lines { display: grid; gap: 10px; padding: 0; list-style: none; }
+.judged-lines li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 10px; padding: 10px 12px; border-radius: var(--radius-sm); background: var(--surface-2); }
+.judged-lines span { font-size: 14px; font-weight: 700; }
+.judged-lines b { font-weight: 900; font-variant-numeric: tabular-nums; }
+.judged-lines b.minus { color: #FF3B5C; }
+.judged-lines b.plus { color: #22B33A; }
+.judged-lines small { grid-column: 1 / -1; font-size: 12px; font-weight: 600; color: var(--sub); }
+textarea[data-lenis-prevent] { overflow-y: auto; resize: none; }

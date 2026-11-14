@@ -7,7 +7,7 @@ A brainrot job portal built for **NEBULITH: The Brainrot Ideathon & Hackathon** 
 
 ## About
 
-AuraHire is a brainrot parody of LinkedIn culture: stop applying, start aura farming. Upload your resume (or pick one of six personas) and AuraGPT judges it line by line, slamming verdict stamps like CAP and NEPO and scoring you in aura points, with a 0–10 breakdown for yap, nepo, delulu, grind, touch grass and cap. Swipe through red-flag job listings (Tralalero Tralala Pvt Ltd wants an Italian brainrot intern), chase a runaway Apply button, then fight HR in a turn-based boss battle. Win and memes slam onto the screen faster and faster; lose and the app drains to grey while HR flips you off. HR only replies in memes, your classmates' profiles are there to roast, and the whole site switches between five vibes. Built with plain HTML, CSS and JavaScript, GSAP and Lenis, fully responsive and deployed on Vercel. Chaos in the copy, clarity in the journey.
+AuraHire is a brainrot parody of LinkedIn culture: stop applying, start aura farming. Upload your resume (PDF, text, or one of six personas) and AuraGPT judges it line by line, slamming stamps like CAP and NEPO and scoring you in aura, with a breakdown for yap, nepo, delulu, grind and cap. Swipe through red-flag listings (Tralalero Tralala Pvt Ltd is hiring), chase a runaway Apply button, then face HR in a fighting-game boss battle with chiptune music, timed blocks and an aura ultimate. Win and memes slam onto the screen; lose and HR flips you off. HR interviews you in memes, every action farms aura to climb the batch leaderboard, and you can roast your friends' resumes too. Five switchable vibes, synthesized sound, plain HTML, CSS and JavaScript with GSAP, fully responsive and live on Vercel. Chaos in the copy, clarity in the journey.
 
 ## The idea
 
@@ -35,9 +35,12 @@ The brief asked for an unusual idea turned into a thoughtfully designed experien
 | --- | --- |
 | **AuraGPT** | A rule-based resume scorer (regex rules + roasts per line) and a 0–10 breakdown across six factors. No servers, no API keys, runs in your browser |
 | **Swipe feed** | Drag-to-swipe card stack with APPLY / GHOST stamps; 12 listings, each with its own boss and signature attack (BOMBARDIRO CROCODILO, FANUM TAX, SKIBIDI DOP DOP…) |
-| **Boss fight** | Real HP, random damage, crits, a reshuffled hand every turn, status effects and rage mode |
+| **Boss fight** | Fighting-game style: a VS intro, HR taunts, a block timing bar (perfect blocks counter-attack), an aura meter that unlocks the AURA FARM ULTIMATE, rage mode, a K.O. splash, and chiptune battle music that speeds up in rage mode |
+| **Roast a friend** | Paste or upload anyone's resume (PDF or .txt), get AuraGPT's full verdict, then add them to the batch to race their aura |
+| **Aura farming** | Every action earns or costs aura with a "+12 aura" pop; pass a classmate and you get told your new rank |
+| **Sound** | Synthesized sound effects, battle music and a victory jingle (Web Audio, no audio files), with a mute button |
 | **Meme slam** | On a win, memes slam in on a shuffled grid sized to your screen (about 30 on a phone), each gap 86% of the last, until the screen is covered |
-| **HR chat** | HR replies in context: each meme gets its own reaction (often a meme back), typed messages get keyword replies, and HR notices repeats, reads your answer to its opening question, and logs off once at "4:30pm" |
+| **HR chat** | An interview over memes: 8 HR questions with tap-to-answer replies. HR replies in context: each meme gets its own reaction (often a meme back), typed messages get keyword replies, and HR notices repeats, reads your answer to its opening question, and logs off once at "4:30pm" |
 | **The batch** | A leaderboard of you + 5 fictional classmates. On their profiles: a mog check against your aura, cap-or-fax votes on each resume line, a diss thread with a diss generator where they clap back, and "larp as them" predicted posts. Your disses and votes are saved |
 | **Your profile** | A LinkedIn-style circle in the top-left (pick a colour and an emoji face), your 5 stickers, your post and sticker reactions |
 | **Sticker ratings** | Drag and drop stickers (RED FLAG, COOKED, MID…) onto a company; the rating bars update live |
@@ -64,7 +67,7 @@ The brief asked for an unusual idea turned into a thoughtfully designed experien
 | **Functionality & Implementation (25%)** | Nothing is faked: AuraGPT scoring and breakdown (`js/aura-engine.js`), the swipe stack, the dodge button and hold ring, the boss fight (`js/screens/boss.js`), the context-aware chat (`js/screens/chat.js`), cap/fax and disses that persist, drag-and-drop ratings, a live theme switcher |
 | **UI/UX & Visual Design (20%)** | 5 complete themes from one set of design tokens (`css/themes.css`), die-cut stickers, a clean single-column app with a tab bar, and chaos kept to copy and interactions |
 | **Code Quality & Structure (15%)** | No framework, no build step. One file per screen, all copy in `js/data.js`, small single-purpose modules, CSS variables for theming, every screen cleans up its timers and animations, user text is escaped |
-| **Deployment & Responsiveness (10%)** | Live on Vercel (auto-deploys on push). Phone-first app screens, a wide landing page on desktop, tested at 375px, 390px and 1440px. Mobile-specific performance work: no smooth-scroll library on touch, no heavy blur filters, pinned scenes sized to fit a small phone |
+| **Deployment & Responsiveness (10%)** | Live on Vercel (auto-deploys on push). Phone-first app screens that switch to wider two-column layouts on tablets and laptops (`css/desktop.css`), tested at 390px, 768px, 1024px and 1440px. Mobile-specific performance work: no smooth-scroll library on touch, no heavy blur filters, pinned scenes sized to fit a small phone |
 | **Theme Interpretation (5%)** | Brainrot as the language of the whole product: aura points instead of skills, stickers instead of messages, memes instead of feedback |
 
 ## Tech

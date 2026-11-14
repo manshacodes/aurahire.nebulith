@@ -22,6 +22,8 @@ import offer from "./screens/offer.js";
 import ghosted from "./screens/ghosted.js";
 import people from "./screens/people.js";
 import person from "./screens/person.js";
+import judge from "./screens/judge.js";
+import friend from "./screens/friend.js";
 import rate from "./screens/rate.js";
 import chat from "./screens/chat.js";
 import profile from "./screens/profile.js";
@@ -77,11 +79,11 @@ function setupMeLink() {
 }
 
 // ---------- bottom tabs: highlight the current one ----------
-// ("/u/kabir" counts as the batch tab)
+// (profiles and roast-a-friend count as the batch tab)
 function setupTabs() {
   const paint = () => {
     const page = location.hash.split("/")[1] || "";
-    const current = page === "u" ? "people" : page;
+    const current = ["u", "f", "judge"].includes(page) ? "people" : page;
     document.querySelectorAll(".tab").forEach((t) => {
       if (t.dataset.tab === current) t.setAttribute("aria-current", "page");
       else t.removeAttribute("aria-current");
@@ -138,5 +140,7 @@ route("/chat", withMotion(chat));
 route("/profile", withMotion(profile));
 route("/people", withMotion(people));
 route("/u/:id", withMotion(person));
+route("/judge", withMotion(judge));
+route("/f/:id", withMotion(friend));
 
 start($("#screen"));

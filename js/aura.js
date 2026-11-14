@@ -5,11 +5,14 @@ import * as S from "./state.js";
 import { toast } from "./fx.js";
 import { AURA_EARN, AURA_RANK, MOCK_PROFILES } from "./data.js";
 
-// Your rank among you + the mock classmates (1 = top)
-export const rankOf = (aura) => 1 + MOCK_PROFILES.filter((p) => p.aura > aura).length;
+// Everyone you're competing with: the mock classmates + friends you've judged (roast a friend)
+export const rivals = () => [...MOCK_PROFILES, ...(S.get().friends || [])];
 
-// The classmate just above you (who to beat next), or null if you're #1
-export const nextTarget = (aura) => MOCK_PROFILES.filter((p) => p.aura > aura).sort((a, b) => a.aura - b.aura)[0] || null;
+// Your rank among you + your rivals (1 = top)
+export const rankOf = (aura) => 1 + rivals().filter((p) => p.aura > aura).length;
+
+// The rival just above you (who to beat next), or null if you're #1
+export const nextTarget = (aura) => rivals().filter((p) => p.aura > aura).sort((a, b) => a.aura - b.aura)[0] || null;
 
 const fill = (text, vars) => text.replace(/\{(\w+)\}/g, (_, k) => vars[k]);
 
@@ -22,8 +25,8 @@ export function earn(id) {
   pop(amount, reason);
 
   // Leaderboard moves: passing someone (or getting passed)
-  const passed = MOCK_PROFILES.filter((p) => before <= p.aura && after > p.aura).sort((a, b) => b.aura - a.aura);
-  const lost = MOCK_PROFILES.filter((p) => before > p.aura && after <= p.aura).sort((a, b) => a.aura - b.aura);
+  const passed = rivals().filter((p) => before <= p.aura && after > p.aura).sort((a, b) => b.aura - a.aura);
+  const lost = rivals().filter((p) => before > p.aura && after <= p.aura).sort((a, b) => a.aura - b.aura);
   const rank = rankOf(after);
   if (passed.length) setTimeout(() => toast(rank === 1 ? AURA_RANK.top : fill(AURA_RANK.passed, { name: passed[0].name, rank })), 500);
   else if (lost.length) setTimeout(() => toast(fill(AURA_RANK.lost, { name: lost[0].name, rank })), 500);

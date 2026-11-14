@@ -2,7 +2,9 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 [hidden] { display: none !important; }
-html { -webkit-text-size-adjust: 100%; }
+/* overflow-x: clip stops anything poking out sideways (like the hero stickers) from making the
+   page scroll left/right on phones, without breaking normal scrolling or sticky elements */
+html { -webkit-text-size-adjust: 100%; overflow-x: clip; }
 body {
   min-height: 100dvh;
   background: var(--bg);
@@ -10,7 +12,8 @@ body {
   font-family: var(--font-body);
   font-size: 16px;
   line-height: 1.5;
-  overflow-x: hidden;
+  overflow-x: hidden;   /* fallback for older browsers */
+  overflow-x: clip;
   transition: color 0.4s;
 }
 button, input, textarea { font: inherit; color: inherit; }
@@ -51,8 +54,8 @@ body[data-route="home"] .me-link { display: none; }
 
 /* bottom tabs: only on the "social" screens */
 .tabbar { position: fixed; left: 50%; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 30; display: none; gap: 4px; width: min(440px, calc(100% - 24px)); padding: 6px; border: 1px solid var(--line); border-radius: 22px; background: var(--surface-solid); box-shadow: 0 10px 30px rgba(0,0,0,0.14); transform: translateX(-50%); }
-body:is([data-route="jobs"], [data-route="people"], [data-route="u"], [data-route="chat"], [data-route="rate"], [data-route="profile"]) .tabbar { display: flex; }
-body:is([data-route="jobs"], [data-route="people"], [data-route="u"], [data-route="chat"], [data-route="rate"], [data-route="profile"]) .app { padding-bottom: 110px; }
+body:is([data-route="jobs"], [data-route="people"], [data-route="u"], [data-route="f"], [data-route="judge"], [data-route="chat"], [data-route="rate"], [data-route="profile"]) .tabbar { display: flex; }
+body:is([data-route="jobs"], [data-route="people"], [data-route="u"], [data-route="f"], [data-route="judge"], [data-route="chat"], [data-route="rate"], [data-route="profile"]) .app { padding-bottom: 110px; }
 .tab { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 4px; border-radius: 16px; color: var(--sub); font-size: 12px; font-weight: 800; text-decoration: none; transition: background 0.2s, color 0.2s; }
 .tab span { font-size: 18px; line-height: 1; }
 .tab:hover { color: var(--ink); }
@@ -291,7 +294,7 @@ body:is([data-route="jobs"], [data-route="people"], [data-route="u"], [data-rout
 }
 
 /* toasts sit above the bottom tab bar on screens that have it */
-body:is([data-route="jobs"], [data-route="people"], [data-route="u"], [data-route="chat"], [data-route="rate"], [data-route="profile"]) .toast { bottom: calc(100px + env(safe-area-inset-bottom)); }
+body:is([data-route="jobs"], [data-route="people"], [data-route="u"], [data-route="f"], [data-route="judge"], [data-route="chat"], [data-route="rate"], [data-route="profile"]) .toast { bottom: calc(100px + env(safe-area-inset-bottom)); }
 
 /* sound toggle: a round icon button next to the vibe button */
 .sound-btn { width: 36px; padding: 0; font-size: 15px; }

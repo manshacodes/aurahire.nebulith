@@ -67,6 +67,7 @@ css/
   components.css      stickers, bars, chips, stats, confetti, shake/float/typing helpers
   screens.css         per-screen styles
   landing.css         scroll-story landing page, custom cursor, 3D tilt
+  desktop.css         tablet (768px+) and desktop (1024px+) layouts; screens use .split/.split-main/.split-side wrappers (display: contents on phones)
   intro.css           the fake LinkedIn intro (fixed palette on purpose)
 js/
   main.js             entry: theme switching, aura pill, route table, withMotion() wrapper
@@ -80,6 +81,9 @@ js/
   slam.js             the accelerating meme slam (boss fight win)
   sound.js            synthesized sound effects (Web Audio) + mute
   music.js            boss fight chiptune loop (speeds up in rage mode) + the victory jingle
+  fight-fx.js         boss fight extras: VS intro, HR taunt bubble, block timing minigame, ultimate flash, K.O. splash
+  resume-file.js      reads .txt and PDF resumes (pdf.js from cdnjs, loaded only when a PDF is picked) + auto-growing text boxes
+  breakdown.js        the AuraGPT breakdown meters, shared by score, roast-a-friend and friend profiles
   aura.js             earn(id): aura for every action (AURA_EARN in data.js), "+N aura" pops, leaderboard overtakes
   memes.js            meme sticker <img> helper + mix/mixGroups for mixing memes with text stickers
   fx.js               $, $$, esc, toast, confetti, countUp, typewriter, shake, floatText, sticker()
@@ -106,7 +110,7 @@ tools/make_sticker.py turns any image into a die-cut sticker PNG (needs: pip ins
 → win: the **meme slam** (`js/slam.js`): meme stickers slam onto the screen one by one, each gap 86% of the last (about 420ms down to 35ms), on a jittered grid until the screen is covered, then "OFFER UNLOCKED" slams on top with confetti. Skipped with reduced motion. Then `#/offer` (confetti, offer letter, typewriter "humbled and honoured" post generator, then the profile)
 → lose: `#/ghosted` (the app drains to grayscale; "HR is typing" forever; −800 aura). Losing the fight lands on `#/ghosted/lost`, which plays the **"HR said:" moment** automatically after a beat; the **"hold to check status" ring** replays it (`js/hand.js`): a dark red overlay, "HR said:" cracks and shatters into clip-path shards, and a hand slams up and flips you off, then "rejected. emotionally." with ok fair / get revenge buttons
 **Tab bar** (bottom, on jobs / people / u / chat / rate / profile, shown by CSS via `body[data-route]`): swipe, the batch, hr chat, me. **Top-left profile circle** (LinkedIn style) links to your profile.
-**Aura farming:** every action calls `earn(id)` (amounts and reasons in `AURA_EARN`), which shows a "+12 aura · reason" pop under the aura pill and toasts when you pass (or drop below) a classmate. **HR chat** is an interview: a random question from `HR_QUESTIONS` opens it, a new one comes every `HR_ASK_EVERY` messages, each with quick-reply chips and tailored answers. **Boss fight** has a looping chiptune track (rage mode speeds it up) and a victory jingle with the win confetti.
+**Boss fight** is fighting-game style: a VS intro (ROUND 1 → FIGHT!), HR taunts before every attack, a block timing bar (perfect = no damage + counter, good = half), an aura meter that unlocks the AURA FARM ULTIMATE, and a K.O. splash. **Roast a friend** (`#/judge`, `#/f/:id`): judge anyone's resume (paste, .txt or PDF), then add them to the batch as a rival (`state.friends`). **Aura farming:** every action calls `earn(id)` (amounts and reasons in `AURA_EARN`), which shows a "+12 aura · reason" pop under the aura pill and toasts when you pass (or drop below) a classmate. **HR chat** is an interview: a random question from `HR_QUESTIONS` opens it, a new one comes every `HR_ASK_EVERY` messages, each with quick-reply chips and tailored answers. **Boss fight** has a looping chiptune track (rage mode speeds it up) and a victory jingle with the win confetti.
 Side screens: `#/people` ("the batch": you + 5 mock classmates ranked by aura, with a climb card: your rank, aura needed to pass the next person, and how to farm aura), `#/u/:id` (a mock profile built for roasting: mog check, cap-or-fax votes on each resume line, a diss thread with a diss generator where they clap back, "larp as them" predicted posts, sticker reactions, connect/endorse; disses and votes persist in `state.social`), `#/rate` (drag-and-drop stickers onto a company, live rating bars), `#/chat` (sticker-only HR chatbot with keyword replies), `#/profile` (profile circle colour + emoji picker, 5 stickers, editable name, post, clickable sticker reactions, reset).
 
 **Landing page chapters** (`js/screens/home.js`, all GSAP ScrollTrigger):
@@ -133,7 +137,7 @@ Side screens: `#/people` ("the batch": you + 5 mock classmates ranked by aura, w
   - Mobile: Lenis is skipped on touch devices (`isTouch` in motion.js); the landing page turns on `ScrollTrigger.normalizeScroll` only while it's open, and `ignoreMobileResize` stops address-bar resizes from re-measuring pins. Pinned chapters must fit in one phone screen (test at 375×667), and landing heights use `svh`, not `dvh`.
   - Elements with the `hidden` attribute need `[hidden] { display: none !important; }`, already in base.css.
 - **Accessibility:** real `<button>`s, `aria-label`s on icon-only controls, a `prefers-reduced-motion` fallback, and toasts in a `role="status"` element.
-- **Mobile first:** app screens use a max-width 460px column. The landing page goes wide (max-width 1180px) on desktop. Test at 390px and 1440px widths.
+- **Mobile first:** app screens are designed as a 460px column, then `css/desktop.css` widens them (760px on tablets, 1180px with two columns on desktop). The landing page goes wide (max-width 1180px) on desktop. Test at 390px and 1440px widths.
 - Keep comments short and human. They help the builder explain the code to judges.
 
 ## Design direction

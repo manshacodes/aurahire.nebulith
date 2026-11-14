@@ -22,7 +22,11 @@ export function initMotion() {
   }
   if (hasGsap && window.Lenis && !reducedMotion() && !isTouch) {
     // Lenis runs off GSAP's ticker so it and ScrollTrigger never disagree about scroll position
-    lenis = new window.Lenis({ duration: 1.1, easing: (t) => Math.min(1, 1.001 - 2 ** (-10 * t)), smoothWheel: true });
+    lenis = new window.Lenis({
+      duration: 1.1, easing: (t) => Math.min(1, 1.001 - 2 ** (-10 * t)), smoothWheel: true,
+      // let text boxes and inner scrollers use the normal mouse wheel (Lenis was swallowing it)
+      prevent: (node) => node.nodeName === "TEXTAREA" || Boolean(node.closest?.("[data-lenis-prevent], .tray-row, .quick-row")),
+    });
     lenis.on("scroll", ScrollTrigger.update);
     gsap.ticker.add((time) => lenis.raf(time * 1000));
     gsap.ticker.lagSmoothing(0);

@@ -1,0 +1,110 @@
+/* Tablets and computers. Every screen is designed phone-first (a single column);
+   this file widens the app and switches screens to two columns on bigger screens.
+   The .split / .split-main / .split-side wrappers in the screens are invisible on phones. */
+
+/* phones: the wrappers don't exist as far as layout is concerned */
+.split, .split-main, .split-side { display: contents; }
+
+/* ---------- tablets (iPad portrait and up) ---------- */
+@media (min-width: 768px) {
+  .app { max-width: 760px; padding-left: 32px; padding-right: 32px; }
+
+  .personas { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .moves { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stack { max-width: 520px; width: 100%; margin: 0 auto; }
+
+  /* sticker wall (pick 5): wider meme cards, more per row */
+  .pick-mixed .meme-opt { width: calc((100% - 36px) / 4); max-width: 150px; }
+  .pick-mixed .row-break { display: none; }   /* let memes and stickers flow freely */
+
+  /* the batch leaderboard: two cards per row */
+  .people { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  /* chat: bigger memes */
+  .msg.sticker .meme { width: 200px; }
+  .msg { max-width: 70%; }
+}
+
+/* ---------- desktops and laptops (iPad landscape, MacBooks and up) ---------- */
+@media (min-width: 1024px) {
+  .app { max-width: 1180px; padding-left: 40px; padding-right: 40px; }
+
+  /* two columns: main on the left, side on the right */
+  .split { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 32px; align-items: start; }
+  .split-main, .split-side { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+  .split-side { position: sticky; top: 88px; }
+
+  /* bigger headings now there's room */
+  .h1 { font-size: clamp(44px, 4.4vw, 64px); }
+
+  /* screens that read better as one centred column */
+  body:is([data-route="chat"], [data-route="offer"], [data-route="ghosted"], [data-route="rate"], [data-route="jobs"], [data-route="stickers"]) .screen > section {
+    width: 100%; max-width: 820px; margin: 0 auto;
+  }
+  body[data-route="jobs"] .screen > section { max-width: 640px; }
+  body[data-route="stickers"] .screen > section { max-width: 1100px; }
+
+  /* upload: name + resume on the left, personas + scan on the right */
+  body[data-route="upload"] .split-side .personas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  /* boss fight: arena + log on the left, your moves on the right */
+  body[data-route="boss"] .split { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  body[data-route="boss"] .moves { grid-template-columns: 1fr; }
+  body[data-route="boss"] .move { padding: 18px; }
+  body[data-route="boss"] .move b { font-size: 17px; }
+  body[data-route="boss"] .avatar.boss-av { width: 120px; height: 120px; }
+  body[data-route="boss"] .boss-av .visor { top: 42px; left: 18px; right: 18px; height: 22px; }
+  body[data-route="boss"] .boss-av .mouth { bottom: 28px; left: 40px; right: 40px; }
+
+  /* the batch: climb card on the left (sticky), leaderboard on the right */
+  body[data-route="people"] .split { grid-template-columns: 360px minmax(0, 1fr); }
+  body[data-route="people"] .split-main { position: sticky; top: 88px; }
+  body[data-route="people"] .split-side { position: static; }
+  body[data-route="people"] .people { grid-template-columns: 1fr; }
+
+  /* profiles: give the post / roast column room */
+  body:is([data-route="profile"], [data-route="u"], [data-route="f"]) .split { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); }
+  body:is([data-route="profile"], [data-route="u"], [data-route="f"]) .split-side { position: static; }
+
+  /* scan: the AuraGPT HUD sticks on the left while lines get judged on the right */
+  .scan { display: grid; grid-template-columns: 380px minmax(0, 1fr); gap: 32px; align-items: start; }
+  .scan .scan-top { position: sticky; top: 88px; }
+
+  /* sticker wall: up to 6 memes a row */
+  .pick-mixed .meme-opt { width: calc((100% - 60px) / 6); }
+  .pick-mixed { gap: 22px 14px; }
+
+  /* roast a friend: an empty verdict panel until you judge someone */
+  body[data-route="judge"] #result:empty { display: grid; place-items: center; min-height: 280px; border: 2px dashed var(--line); border-radius: var(--radius); color: var(--sub); font-weight: 700; }
+  body[data-route="judge"] #result:empty::before { content: "AuraGPT's verdict shows up here."; }
+  body[data-route="judge"] #result { display: flex; flex-direction: column; gap: 18px; }
+
+  /* the side marquees only when there's empty space beside the app */
+  .side-marquee { display: none; }
+}
+
+@media (min-width: 1560px) {
+  .side-marquee { display: block; }
+}
+
+/* ---------- HR chat on desktop: messages left, stickers + memes panel right ---------- */
+@media (min-width: 1024px) {
+  body[data-route="chat"] .screen > section {
+    max-width: 1100px;
+    display: grid; grid-template-columns: minmax(0, 1fr) 400px; grid-template-rows: auto 1fr;
+    column-gap: 28px; align-items: start;
+  }
+  body[data-route="chat"] .chat-head { grid-column: 1 / -1; }
+  body[data-route="chat"] .chat-thread { grid-column: 1; min-height: 60vh; }
+  body[data-route="chat"] .composer {
+    grid-column: 2; grid-row: 2; position: sticky; top: 88px; bottom: auto;
+    max-height: calc(100vh - 210px); overflow: hidden;
+  }
+  /* the tray wraps into a grid you scroll up and down (no sideways scrolling needed) */
+  body[data-route="chat"] .tray-mixed {
+    display: flex; flex-wrap: wrap; align-content: flex-start; justify-content: center;
+    overflow-x: hidden; overflow-y: auto; min-height: 0; flex: 1; padding: 8px 4px;
+  }
+  body[data-route="chat"] .quick-row { flex-wrap: wrap; overflow: visible; }
+  body[data-route="chat"] .app { padding-bottom: 110px; }
+}

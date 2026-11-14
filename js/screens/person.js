@@ -39,6 +39,7 @@ export default function person(root, { id }) {
   root.innerHTML = `
     <section>
       <a class="back-link" href="#/people">← the batch</a>
+      <div class="split"><div class="split-main">
       <div class="cover"></div>
       <div class="avatar-lg" style="background:${p.color};color:${p.ink}">${esc(initials(p.name))}</div>
       <div>
@@ -76,6 +77,7 @@ export default function person(root, { id }) {
         </ul>
       </div>
 
+      </div><div class="split-side">
       <div class="card">
         <p class="label" style="margin-bottom:12px">their 5 stickers</p>
         <div class="chips" style="gap:14px 10px">${p.stickers.map(([l, c], k) => sticker(l, c, { rot: k % 2 ? 3 : -3, size: "sm" })).join("")}</div>
@@ -110,6 +112,7 @@ export default function person(root, { id }) {
       </div>
 
       <button class="btn btn-ghost btn-block" id="next">next profile: ${esc(next.name)} →</button>
+      </div></div>
     </section>`;
 
   // ---------- connect + endorse ----------

@@ -2,27 +2,27 @@
 // The climb card shows your rank and how much aura you need to pass the next person.
 import * as S from "../state.js";
 import { esc, signed } from "../fx.js";
-import { MOCK_PROFILES, AURA_RANK } from "../data.js";
+import { AURA_RANK, JUDGE_TEXT } from "../data.js";
 import { tierFor } from "../aura-engine.js";
 import { initials, avatarHTML } from "../identity.js";
-import { rankOf, nextTarget } from "../aura.js";
+import { rankOf, nextTarget, rivals } from "../aura.js";
 
 export default function people(root) {
   const s = S.get();
   const rows = [
-    ...MOCK_PROFILES.map((p) => ({ ...p, href: `#/u/${p.id}` })),
+    ...rivals().map((p) => ({ ...p, href: p.lines ? `#/f/${p.id}` : `#/u/${p.id}`, friend: Boolean(p.lines) })),
     { id: "you", name: `${s.name} (you)`, aura: s.aura, href: "#/profile", you: true },
   ].sort((a, b) => b.aura - a.aura || (b.you ? 1 : 0) - (a.you ? 1 : 0));   // ties go your way
 
-  // Mock profiles use their own colour; your row uses your profile circle
-  const circle = (p) => (p.you
-    ? avatarHTML(s, "avatar-sm")
+  // Mock profiles use their own colour, friends a sticker colour, and you your profile circle
+  const circle = (p) => (p.you ? avatarHTML(s, "avatar-sm")
+    : p.friend ? `<span class="av avatar-sm" data-c="${p.color}">${esc(initials(p.name))}</span>`
     : `<span class="avatar-sm" style="background:${p.color};color:${p.ink}">${esc(initials(p.name))}</span>`);
 
   // Climb card: your rank, and a bar towards the person just above you
   const rank = rankOf(s.aura);
   const target = nextTarget(s.aura);
-  const below = MOCK_PROFILES.filter((p) => p.aura <= s.aura).sort((a, b) => b.aura - a.aura)[0];
+  const below = rivals().filter((p) => p.aura <= s.aura).sort((a, b) => b.aura - a.aura)[0];
   const floor = below ? below.aura : Math.min(0, s.aura);
   const progress = target ? Math.max(4, Math.min(100, ((s.aura - floor) / (target.aura - floor)) * 100)) : 100;
   const climb = `
@@ -45,7 +45,10 @@ export default function people(root) {
         <h1 class="h1" data-scramble>the batch.</h1>
         <p class="sub" style="margin-top:6px">ranked by aura. farm aura to climb. tap anyone to stalk their profile, call cap on their resume and diss them.</p>
       </div>
+      <div class="split"><div class="split-main">
       ${climb}
+      <a class="btn btn-ghost btn-block" href="#/judge">${esc(JUDGE_TEXT.cta)}</a>
+      </div><div class="split-side">
       <ol class="people">
         ${rows.map((p, i) => `
           <li>
@@ -54,12 +57,13 @@ export default function people(root) {
               ${circle(p)}
               <span class="person-meta">
                 <b>${esc(p.name)}</b>
-                <small>${esc(tierFor(p.aura).name)}</small>
+                <small>${p.friend ? `${esc(JUDGE_TEXT.friendTag)} · ` : ""}${esc(tierFor(p.aura).name)}</small>
               </span>
               <span class="person-aura">${signed(p.aura)}</span>
             </a>
           </li>`).join("")}
       </ol>
       ${s.aura ? "" : `<a class="btn btn-cta btn-block" href="#/upload">scan your resume to join the ranking →</a>`}
+      </div></div>
     </section>`;
 }

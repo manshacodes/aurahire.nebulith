@@ -311,7 +311,40 @@ export const FIGHT_TEXT = {
   rage: (boss) => `${boss} entered unpaid-overtime mode. attacks hit harder now.`,
   slamFinale: "OFFER UNLOCKED",   // the big sticker at the end of the win meme slam
   fx: { dodge: "wifi \"down\"", charge: "2× charged", stun: "buffering", rage: "rage mode" },
+  // fighting-game moments
+  round: "ROUND 1",
+  fight: "FIGHT!",
+  vs: "VS",
+  ko: "K.O.",
+  skipIntro: "tap to skip",
+  // block minigame: tap when the marker is in the zone
+  blockPrompt: "BLOCK!",
+  blockHint: "tap when the marker hits the zone",
+  block: {
+    perfect: (boss) => `PERFECT BLOCK. ${boss} took the counter.`,
+    good: "blocked half of it. not bad, twin.",
+    miss: "no block. you felt that one.",
+  },
+  counter: 8,   // damage a perfect block reflects back
+  // aura ultimate: fills as you deal and take damage
+  meterLabel: "aura",
+  ultReady: "ULTIMATE READY",
+  ult: { name: "AURA FARM ULTIMATE", hint: "45–60 dmg · it's giving main character", text: "you stared into the camera like a sigma edit. HR's whole department felt it." },
 };
+
+// What HR says right before attacking (speech bubble over the boss)
+export const BOSS_TAUNTS = [
+  "is that your final answer?",
+  "we have 11,204 other applicants.",
+  "your linkedin said \"expert\".",
+  "let's circle back to you crying.",
+  "this is a learning opportunity.",
+  "per my last email…",
+  "be honest. was that chatgpt?",
+  "i've seen better resumes from interns' interns.",
+  "your aura is giving \"pending\".",
+  "we're like a family. i'm the strict uncle.",
+];
 
 export const BOSS_ATTACKS = [
   { name: "AWKWARD SILENCE", text: "it's super effective.", min: 8, max: 14 },
@@ -716,6 +749,7 @@ export const AURA_EARN = {
   rate:    [5, "rated a company"],
   bossWin: [1000, "beat HR"],
   ghosted: [-800, "ghosted. womp womp"],
+  judge:   [20, "judged a friend"],
 };
 
 // Leaderboard copy ({name}, {rank}, {gap} get filled in)
@@ -735,4 +769,27 @@ export const AURA_RANK = {
     "call cap, diss and larp on the batch's profiles",
     "getting ghosted: −800 (avoid)",
   ],
+};
+
+// ---------- roast a friend: judge someone else's resume ----------
+export const JUDGE_TEXT = {
+  label: "AuraGPT, but for your friends",
+  title: "roast a friend's resume.",
+  sub: "paste (or upload) anyone's resume. AuraGPT judges them, and you can add them to the batch to race their aura.",
+  nameLabel: "their name",
+  namePlaceholder: "e.g. your roommate",
+  pastePlaceholder: "Won a hackathon (internal round)\nCore member of 6 clubs\nProficient in MS Word",
+  judge: "judge them",
+  emptyName: "give them a name. even a fake one.",
+  emptyResume: "they need a resume, twin. paste something.",
+  verdictTitle: "AuraGPT's verdict",
+  worstTitle: "their most questionable lines",
+  add: "add them to the batch →",
+  again: "judge someone else",
+  added: "{name} joined the batch. may the best aura win.",
+  friendTag: "friend",
+  remove: "remove from the batch",
+  removed: "{name} has been ghosted from the batch.",
+  linesTitle: "every line, judged",
+  cta: "+ roast a friend's resume",
 };

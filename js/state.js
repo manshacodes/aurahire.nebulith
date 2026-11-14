@@ -6,8 +6,10 @@ const defaults = {
   theme: "clean",
   name: "Aarav Grindwala",
   muted: false,          // sound effects on/off (the 🔊 button)
+  nameSet: false,        // true once you type your own first name
   surnameRoll: 0,        // how many times you rerolled your AuraGPT-assigned surname
   avatar: { color: "lilac", emoji: "" },   // your profile circle
+  friends: [],           // resumes you judged with "roast a friend": { id, name, aura, lines, scores, rizz, color }
   social: {},            // per mock profile: { disses: [...], votes: { lineIndex: "cap"|"fax" } }
   resume: "",
   aura: 0,

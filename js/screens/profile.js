@@ -13,6 +13,7 @@ export default function profile(root) {
 
   root.innerHTML = `
     <section>
+      <div class="split"><div class="split-main">
       <div class="cover"></div>
       <div class="avatar-lg-wrap" id="bigAv">${avatarHTML(s, "av-lg")}</div>
       <div>
@@ -31,6 +32,7 @@ export default function profile(root) {
         </div>
       </div>
 
+      </div><div class="split-side">
       <div class="card">
         <p class="label" style="margin-bottom:12px">my 5 stickers</p>
         ${s.stickers.length
@@ -53,6 +55,7 @@ export default function profile(root) {
       <a class="btn btn-ghost btn-block" href="#/rate">rate companies with stickers →</a>
       <button class="btn btn-cta btn-xl" id="grind">back to the grind</button>
       <button class="link-btn" id="reset">start over (reset aura)</button>
+      </div></div>
     </section>`;
 
   // Redraw the big circle (the top-left one updates itself from state)

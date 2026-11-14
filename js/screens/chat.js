@@ -149,6 +149,19 @@ export default function chat(root) {
     }
   });
 
+  // A mouse wheel only scrolls up/down, so turn it into sideways scrolling on the trays
+  // (on phones you swipe them; on a computer this is the only way to reach every meme)
+  root.querySelectorAll("#tray, #quick").forEach((row) => {
+    row.addEventListener("wheel", (e) => {
+      const sideways = row.scrollWidth > row.clientWidth + 2 && getComputedStyle(row).overflowX !== "visible";
+      if (!sideways || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+      const atEnd = (e.deltaY > 0 && row.scrollLeft + row.clientWidth >= row.scrollWidth - 1) || (e.deltaY < 0 && row.scrollLeft <= 0);
+      if (atEnd) return;   // at the end of the tray, let the page scroll as normal
+      e.preventDefault();
+      row.scrollLeft += e.deltaY;
+    }, { passive: false });
+  });
+
   $("#quick", root).addEventListener("click", (e) => {
     const chip = e.target.closest(".quick-chip");
     if (chip) sendText(chip.dataset.text);

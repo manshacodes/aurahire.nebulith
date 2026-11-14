@@ -18,6 +18,7 @@ export default function job(root, { id }) {
       <a href="#/jobs" class="back">← back to the grind</a>
       <div class="banner" style="background:${j.color}">${esc(j.company)}<small>${j.posted} · ${j.applicants} applicants · remote (office 6 days a week)</small></div>
       <h1 class="h1" data-scramble>${esc(j.title)}</h1>
+      <div class="split"><div class="split-main">
       <div class="card">
         <p class="label" style="margin-bottom:12px">requirements</p>
         <ul class="req">${j.reqs.map((r) => `<li>${esc(r)}</li>`).join("")}</ul>
@@ -28,10 +29,12 @@ export default function job(root, { id }) {
         <p class="label" style="margin-top:16px">vibe check · ${j.vibe}% match</p>
         <div class="bar" style="margin-top:8px"><span id="vibe"></span></div>
       </div>
+      </div><div class="split-side">
       <div class="dodge-zone" id="zone">
         <button class="btn btn-cta dodge-btn" id="apply">apply</button>
       </div>
       <p class="fine" id="hint">(good luck clicking it)</p>
+      </div></div>
     </section>`;
 
   requestAnimationFrame(() => { $("#vibe", root).style.width = `${j.vibe}%`; });
