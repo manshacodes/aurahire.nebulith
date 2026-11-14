@@ -319,8 +319,10 @@ export const FIGHT_TEXT = {
   skipIntro: "tap to skip",
   // block minigame: tap when the marker is in the zone
   blockPrompt: "BLOCK!",
-  blockWarn: "HR is attacking!",
-  blockReady: "get ready to block…",
+  blockWarn: "HR is about to cook you",
+  blockReady: "block minigame loading…",
+  countdown: ["3… lock in 🔒", "2… no yapping", "1… it's giving block"],   // one per second before the bar moves
+  blockGo: "NOW. BLOCK IT, TWIN.",
   blockHint: "tap anywhere (or press space) when the marker is in the green zone",
   block: {
     perfect: (boss) => `PERFECT BLOCK. ${boss} took the counter.`,

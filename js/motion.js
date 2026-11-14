@@ -50,6 +50,25 @@ export function resumeScroll() {
   if (lenis) lenis.start();
 }
 
+// Smoothly scroll the page to a y position (through Lenis when it's running, so they don't fight)
+let scrollFallback = 0;
+export function scrollToY(y) {
+  if (lenis) {
+    lenis.resize();   // the page just got taller (new chat message), so Lenis must re-measure first
+    lenis.scrollTo(y, { duration: 0.6, force: true });
+  } else {
+    window.scrollTo({ top: y, behavior: reducedMotion() ? "auto" : "smooth" });
+  }
+  // some browsers skip smooth scrolling: if we haven't arrived shortly after, just jump there
+  clearTimeout(scrollFallback);
+  scrollFallback = setTimeout(() => {
+    const target = Math.min(y, document.documentElement.scrollHeight - innerHeight);
+    if (Math.abs(scrollY - target) <= 4) return;
+    if (lenis) lenis.scrollTo(target, { immediate: true, force: true });
+    else window.scrollTo(0, target);
+  }, 900);
+}
+
 export function scrollTo(target) {
   if (lenis) lenis.scrollTo(target, { offset: -70, duration: 1.4 });
   else document.querySelector(target)?.scrollIntoView({ behavior: "smooth" });

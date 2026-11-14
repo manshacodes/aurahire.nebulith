@@ -506,14 +506,15 @@ textarea[data-lenis-prevent] { overflow-y: auto; resize: none; }
 .qte-inner { display: flex; flex-direction: column; align-items: center; gap: 16px; width: min(640px, 100%); text-align: center; }
 .qte-warn { font-family: var(--font-display); font-weight: 900; font-size: clamp(32px, 8vw, 60px); font-style: italic; line-height: 1; color: #FF3B5C; }
 .qte-attack { font-weight: 900; font-size: clamp(16px, 4vw, 22px); letter-spacing: -0.01em; }
-.qte-ready { font-weight: 800; color: var(--sub); }
+.qte-count { min-height: 1.2em; font-family: var(--font-display); font-weight: 900; font-size: clamp(26px, 7vw, 44px); letter-spacing: -0.02em; }
+.qte-count.tick { animation: countPop 0.35s cubic-bezier(.2,.9,.3,1.6); }
+@keyframes countPop { from { transform: scale(1.8); opacity: 0; } }
 .qte-full .qte-bar { width: 100%; height: 34px; }
 .qte-full .qte-marker { width: 8px; margin-left: -4px; }
 .qte-full .qte-btn { min-width: 70%; padding: 18px 24px; font-size: clamp(22px, 6vw, 30px); }
 .qte-full .qte-hint { font-size: 14px; font-weight: 700; color: var(--sub); }
 /* during the warning: the bar waits, the button looks inactive */
-.qte-full.warn .qte-ready { animation: blink 0.5s infinite; }
-.qte-full:not(.warn) .qte-ready { visibility: hidden; }
+.qte-full:not(.warn) .qte-count { color: #22B33A; }
 .qte-full.warn .qte-btn { opacity: 0.45; }
 .qte-full.warn .qte-warn { animation: warnPulse 0.4s ease-in-out infinite alternate; }
 @keyframes warnPulse { to { transform: scale(1.06); } }

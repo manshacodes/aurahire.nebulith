@@ -9,6 +9,7 @@ import {
 } from "../data.js";
 import { memeImg, mix } from "../memes.js";
 import { earn } from "../aura.js";
+import { scrollToY } from "../motion.js";
 
 const TRAY = ["SIX7", "W", "L", "COOKED", "TWIN", "UNC", "SEVEN", "DELULU", "CRASH", "GLAZER", "HUZZ", "WOMP"];
 const AI_MEME_SRC = "assets/no-thanks-i-use-ai.png";
@@ -51,8 +52,22 @@ export default function chat(root) {
     el.className = `msg ${who} ${extra}`;
     el.innerHTML = html;
     thread.appendChild(el);
-    el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    scrollToLatest(el);
+    // memes load a moment later and push things down, so scroll again once they're in
+    el.querySelectorAll("img").forEach((img) => img.addEventListener("load", () => scrollToLatest(el), { once: true }));
     return el;
+  }
+
+  // Keep the newest message in view, just above whatever sits at the bottom of the screen
+  // (on phones: the sticky composer + tab bar; on desktop the composer is a side panel, so just the tab bar)
+  function scrollToLatest(el) {
+    if (!alive || !el.isConnected) return;
+    const composer = $(".composer", root).getBoundingClientRect();
+    const msg = el.getBoundingClientRect();
+    const besideChat = composer.left >= msg.right - 1;            // desktop: composer is beside the thread
+    const covered = besideChat ? 120 : innerHeight - composer.top + 16;
+    const y = scrollY + msg.bottom - (innerHeight - covered);
+    if (y > scrollY + 2) scrollToY(y);
   }
 
   // Quick replies: answers to the current question, or general asks when HR isn't waiting

@@ -52,18 +52,19 @@ export async function taunt(fighterEl, text) {
 }
 
 // ---------- Block minigame (full screen) ----------
-// 1. A warning: "HR is attacking! get ready to block…" (taps don't count yet)
-// 2. A marker sweeps across a big bar. Tap anywhere (or press space/enter) while it's in the zone.
+// 1. A warning + a 3, 2, 1 countdown ("3… lock in 🔒") so you know it's coming (taps don't count yet)
+// 2. "NOW. BLOCK IT, TWIN." and a marker sweeps across a big bar.
+//    Tap anywhere (or press space/enter) while it's in the green zone.
 // Resolves "perfect" (dead centre), "good" (in the zone) or "miss" (outside / too late).
-export function blockQTE({ sweepMs = 1600, attack = "", warnMs = 1200 } = {}) {
-  const zoneW = 26, perfectW = 10;                // widths in % of the bar
+export function blockQTE({ sweepMs = 2400, attack = "", stepMs = 800 } = {}) {
+  const zoneW = 30, perfectW = 12;                // widths in % of the bar
   const zoneAt = rand(30, 100 - zoneW - 4);        // where the zone sits this time
   document.body.insertAdjacentHTML("beforeend", `
     <div class="qte qte-full warn" role="dialog" aria-label="Block the attack">
       <div class="qte-inner">
         <p class="qte-warn">${esc(T.blockWarn)}</p>
         ${attack ? `<p class="qte-attack">${esc(attack)}</p>` : ""}
-        <p class="qte-ready">${esc(T.blockReady)}</p>
+        <p class="qte-count" aria-live="assertive">${esc(T.blockReady)}</p>
         <div class="qte-bar">
           <span class="qte-zone" style="left:${zoneAt}%;width:${zoneW}%"><i style="left:${(zoneW - perfectW) / 2}%;width:${perfectW}%"></i></span>
           <span class="qte-marker"></span>
@@ -108,15 +109,21 @@ export function blockQTE({ sweepMs = 1600, attack = "", warnMs = 1200 } = {}) {
     el.addEventListener("pointerdown", judge);      // tap anywhere on the screen
     addEventListener("keydown", onKey);
 
-    // After the warning, the marker starts moving
-    setTimeout(() => {
+    // 3… 2… 1… then GO: the marker starts moving
+    const count = el.querySelector(".qte-count");
+    const steps = [...T.countdown, T.blockGo];
+    steps.forEach((text, i) => setTimeout(() => {
       if (finished) return;
+      count.textContent = text;
+      count.classList.remove("tick"); void count.offsetWidth; count.classList.add("tick");
+      if (i < steps.length - 1) { sfx.thunk(); return; }
+      sfx.ding();
       live = true;
       start = performance.now();
       el.classList.remove("warn");
       raf = requestAnimationFrame(tick);
       timeout = setTimeout(() => end("miss"), sweepMs + 60);   // too slow = no block
-    }, warnMs);
+    }, 500 + i * stepMs));
   });
 }
 
