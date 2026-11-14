@@ -55,7 +55,7 @@ export default function boss(root, { id }) {
     } else {
       log("your aura has been fully depleted. womp womp.");
       await sleep(1500);
-      if (alive) go("/ghosted");
+      if (alive) go("/ghosted/lost");
     }
   }
 

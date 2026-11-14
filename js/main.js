@@ -94,6 +94,7 @@ route("/job/:id", withMotion(job));
 route("/boss/:id", withMotion(boss));
 route("/offer", withMotion(offer));
 route("/ghosted", withMotion(ghosted));
+route("/ghosted/:how", withMotion(ghosted));   // "/ghosted/lost" auto-plays the HR hand
 route("/rate", withMotion(rate));
 route("/chat", withMotion(chat));
 route("/profile", withMotion(profile));

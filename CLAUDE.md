@@ -98,7 +98,7 @@ tools/make_sticker.py turns any image into a die-cut sticker PNG (needs: pip ins
 → `#/job/:id`: details; the **Apply button runs from your cursor** (6 escapes with taunts on mouse, 3 on touch), then gives up and turns into a **"hold to apply" ring** (1.6s press-and-hold, inspired by zero.university's tap-hold; letting go early resets it with a roast).
 → `#/boss/:id`: turn-based fight (you have 120 HP, the boss 100). Moves: mention excel, show hackathon cert (risky crit), glaze the manager (costs dignity), ask about salary (backfires).
 → win: `#/offer` (confetti, offer letter, typewriter "humbled and honoured" post generator, then the profile)
-→ lose: `#/ghosted` (the app drains to grayscale; "HR is typing" forever; −800 aura). A **"hold to check status" ring** triggers the **"HR said:" moment** (`js/hand.js`): a dark red overlay, "HR said:" cracks and shatters into clip-path shards, and a hand slams up and flips you off, then "rejected. emotionally." with ok fair / get revenge buttons
+→ lose: `#/ghosted` (the app drains to grayscale; "HR is typing" forever; −800 aura). Losing the fight lands on `#/ghosted/lost`, which plays the **"HR said:" moment** automatically after a beat; the **"hold to check status" ring** replays it (`js/hand.js`): a dark red overlay, "HR said:" cracks and shatters into clip-path shards, and a hand slams up and flips you off, then "rejected. emotionally." with ok fair / get revenge buttons
 Side screens: `#/rate` (drag-and-drop stickers onto a company, live rating bars), `#/chat` (sticker-only HR chatbot with keyword replies), `#/profile` (5 stickers, editable name, post, clickable sticker reactions, reset).
 
 **Landing page chapters** (`js/screens/home.js`, all GSAP ScrollTrigger):

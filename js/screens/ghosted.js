@@ -4,9 +4,10 @@ import { $, sticker } from "../fx.js";
 import { mountHold } from "../hold.js";
 import { playHand } from "../hand.js";
 
-export default function ghosted(root) {
+// params.how === "lost" means we came straight from losing the boss fight
+export default function ghosted(root, params = {}) {
   S.addAura(-800);
-  let stopHold = null, stopHand = null;
+  let stopHold = null, stopHand = null, autoTimer = null;
 
   root.innerHTML = `
     <section>
@@ -29,18 +30,25 @@ export default function ghosted(root) {
     stopHold = mountHold($("#statusHold", root), {
       title: "check", sub: "hold to check status", doneText: "checking…", ms: 1500,
       roasts: ["scared of the answer?", "HR felt that.", "hold longer. like your hope."],
-      onDone: () => {
-        stopHand = playHand({
-          onClose: () => { $("#holdHint", root).textContent = "(you can check again. it won't change.)"; startHold(); },
-          onRevenge: () => go("/rate"),
-        });
-      },
+      onDone: showHand,
     });
   };
+
+  // The "HR said:" hand. Closing it brings the ring back so you can check again.
+  function showHand() {
+    if (stopHold) { stopHold(); stopHold = null; }
+    stopHand = playHand({
+      onClose: () => { $("#holdHint", root).textContent = "(you can check again. it won't change.)"; startHold(); },
+      onRevenge: () => go("/rate"),
+    });
+  }
+
   startHold();
+  // Just lost the fight? HR answers on its own after a beat, no hold needed.
+  if (params.how === "lost") autoTimer = setTimeout(showHand, 1400);
 
   $("#again", root).addEventListener("click", () => go("/jobs"));
   $("#rate", root).addEventListener("click", () => go("/rate"));
 
-  return () => { if (stopHold) stopHold(); if (stopHand) stopHand(); };
+  return () => { clearTimeout(autoTimer); if (stopHold) stopHold(); if (stopHand) stopHand(); };
 }
