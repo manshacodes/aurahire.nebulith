@@ -1,12 +1,13 @@
 import { go } from "../router.js";
 import * as S from "../state.js";
-import { $, esc, pick, toast } from "../fx.js";
+import { $, esc, pick, shuffle, toast } from "../fx.js";
 import { JOBS, GHOST_TOASTS } from "../data.js";
 
 const THRESHOLD = 110; // px you need to drag to count as a swipe
 
 export default function jobs(root) {
   let index = 0;
+  const order = shuffle(JOBS);   // new order every visit, so the feed never feels the same
   let busy = false;
 
   root.innerHTML = `
@@ -43,7 +44,7 @@ export default function jobs(root) {
     </article>`;
 
   function render() {
-    const visible = [0, 1, 2].map((k) => JOBS[(index + k) % JOBS.length]);
+    const visible = [0, 1, 2].map((k) => order[(index + k) % order.length]);
     // Last child = top card, so render back-to-front
     stack.innerHTML = visible.map((j, depth) => cardHTML(j, depth)).reverse().join("");
     bindDrag(stack.lastElementChild);
