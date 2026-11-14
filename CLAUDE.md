@@ -150,7 +150,7 @@ Done and tested end to end in headless Chrome (no console errors):
 
 ## Next up (priority order)
 
-1. [x] **Deploy (live at https://manshacodes.github.io/aurahire.nebulith/):** push to a public GitHub repo, enable GitHub Pages (or Netlify/Vercel), and add the live URL to the README.
+1. [x] **Deploy (live at https://aurahire-nebulith.vercel.app/):** push to a public GitHub repo, enable GitHub Pages (or Netlify/Vercel), and add the live URL to the README.
 2. [ ] **Liquid glass vibe** (6th theme, maybe the new default): animated gradient background, frosted cards (`backdrop-filter: blur(24px) saturate(180%)`), bright 1px top edge, inner highlight, glossy pill buttons. Optional SVG displacement refraction in Chromium.
 3. [ ] **Real brainrot stickers:** the builder will supply Pinterest meme/reaction images. Convert each with `python3 tools/make_sticker.py in.jpg assets/stickers/name.png` (cutout: removes the background and adds a white die-cut outline; `--style card` keeps the whole image, for memes with text). Then add them to an image-sticker list in `data.js` and use them in the chat tray, rating tray, profile reactions and landing sticker storm alongside the text stickers.
 4. [x] **Hand gesture animation (done, as the "HR said:" moment on Ghosted).** It uses an original cartoon SVG hand. To swap in your own render or GIF, set `HAND_IMAGE = "assets/hand.png"` in `data.js` (a transparent PNG/WebP/GIF looks best; `tools/make_sticker.py` can cut one out). Old plan, for reference: a scroll-scrubbed image sequence (canvas + GSAP, Apple style) of a 3D hand. On the Ghosted screen it flips you off; on a low score it does an "L". Frames go in `assets/hand/frame-0001.webp …`, made by the builder (Spline or an AI video tool), with placeholders until then.
