@@ -5,6 +5,17 @@ export const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 export const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 export const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 export const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+// Phone haptics, only once the user has tapped (browsers block it before that and log an error)
+export function buzz(pattern) {
+  if (navigator.vibrate && navigator.userActivation?.hasBeenActive) navigator.vibrate(pattern);
+}
+
+// Fisher-Yates shuffle (returns a new array)
+export function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
+}
 export const reducedMotion = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 // Escape anything a user typed before putting it into HTML.

@@ -223,15 +223,17 @@ body[data-route="ghosted"] .app { animation: drain 1.6s ease forwards; }
 .chat-head { display: flex; align-items: center; gap: 12px; }
 .chat-head .avatar { width: 46px; height: 46px; font-size: 14px; color: #fff; background: #FF5FC1; }
 .chat-head small { display: block; font-size: 13px; color: var(--sub); }
-.thread { display: flex; flex-direction: column; gap: 12px; min-height: 260px; }
+.chat-thread { display: flex; flex-direction: column; gap: 12px; min-height: 260px; }
 .msg { max-width: 80%; padding: 12px 14px; border-radius: 20px; font-size: 15px; font-weight: 500; animation: msgIn 0.35s cubic-bezier(.2,.9,.3,1.3) both; }
 .msg.hr { align-self: flex-start; background: var(--surface); border: 1px solid var(--line); border-bottom-left-radius: 6px; backdrop-filter: var(--glass); }
 .msg.me { align-self: flex-end; background: var(--cta); color: var(--cta-ink); border-bottom-right-radius: 6px; }
 .msg.sticker { padding: 8px 6px; background: none !important; border: 0; }
 .msg.hint { align-self: center; max-width: 100%; padding: 4px 10px; font-size: 12px; font-weight: 700; color: var(--sub); }
 @keyframes msgIn { from { opacity: 0; transform: translateY(10px) scale(0.94); } }
-.meme { width: 180px; border-radius: 16px; transform: rotate(3deg); box-shadow: 0 0 0 5px #fff, 0 8px 20px rgba(0,0,0,0.25); }
-.meme-btn img { width: 64px; height: 62px; object-fit: cover; border-radius: 10px; box-shadow: 0 0 0 3px #fff, 0 4px 10px rgba(0,0,0,0.18); }
+.meme { display: block; width: 180px; border-radius: 16px; transform: rotate(var(--rot, 3deg)); box-shadow: 0 0 0 5px #fff, 0 8px 20px rgba(0,0,0,0.25); }
+.meme-btn { flex: none; padding: 4px; border-radius: 12px; transition: transform 0.15s; }
+.meme-btn:hover { transform: scale(1.08); }
+.meme-thumb { display: block; width: 64px; height: 64px; object-fit: cover; border-radius: 10px; transform: rotate(var(--rot, 0deg)); box-shadow: 0 0 0 3px #fff, 0 4px 10px rgba(0,0,0,0.18); }
 .composer { position: sticky; bottom: 12px; display: flex; flex-direction: column; gap: 10px; padding: 14px; }
 .tray-row { display: flex; align-items: center; gap: 14px; overflow-x: auto; padding: 8px 6px 10px; scrollbar-width: none; }
 .tray-row::-webkit-scrollbar { display: none; }
@@ -289,13 +291,13 @@ body[data-route="ghosted"] .app { animation: drain 1.6s ease forwards; }
 .claim-result { grid-column: 1 / -1; font-size: 12px; font-weight: 700; color: var(--sub); }
 .claim-result:empty { display: none; }
 /* diss thread */
-.thread { display: grid; gap: 10px; margin-top: 16px; }
-.thread:empty { display: none; }
-.msg { display: flex; align-items: flex-start; gap: 8px; }
-.msg p { padding: 8px 12px; border-radius: 14px; background: var(--surface-2); font-size: 14px; font-weight: 600; }
-.msg p b { display: block; font-size: 11px; color: var(--sub); }
-.msg.me p { background: var(--accent); color: var(--accent-ink); }
-.msg.me p b { color: inherit; opacity: 0.7; }
+.diss-thread { display: grid; gap: 10px; margin-top: 16px; }
+.diss-thread:empty { display: none; }
+.dmsg { display: flex; align-items: flex-start; gap: 8px; }
+.dmsg p { padding: 8px 12px; border-radius: 14px; background: var(--surface-2); font-size: 14px; font-weight: 600; }
+.dmsg p b { display: block; font-size: 11px; color: var(--sub); }
+.dmsg.me p { background: var(--accent); color: var(--accent-ink); }
+.dmsg.me p b { color: inherit; opacity: 0.7; }
 .diss-box { display: grid; gap: 10px; margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--line); }
 .diss-box textarea { min-height: 0; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface-2); font-size: 15px; resize: none; }
 /* larp */
@@ -383,3 +385,38 @@ body[data-route="ghosted"] .app { animation: drain 1.6s ease forwards; }
 .factor-top span { font-weight: 800; font-variant-numeric: tabular-nums; }
 .factor .bar { height: 10px; }
 .factor small { font-size: 12px; font-weight: 600; color: var(--sub); }
+
+/* chat: keep the composer above the bottom tab bar */
+body[data-route="chat"] .composer { bottom: calc(96px + env(safe-area-inset-bottom)); }
+body[data-route="chat"] .app { padding-bottom: 120px; }
+.msg.sticker .meme { width: 160px; }
+
+/* pick-5: meme stickers */
+.pick-sub { margin-top: 6px; }
+.meme-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px 12px; padding: 4px; }
+.meme-opt { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 6px 4px 8px; border-radius: 14px; transition: transform 0.15s, opacity 0.2s; }
+.meme-opt .meme-pick { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 12px; transform: rotate(var(--rot, 0deg)); box-shadow: 0 0 0 4px #fff, 0 6px 14px rgba(0,0,0,0.2); transition: transform 0.25s cubic-bezier(.2,.9,.3,1.5), filter 0.2s; }
+.meme-opt small { font-size: 11px; font-weight: 800; line-height: 1.2; text-align: center; }
+.meme-opt[aria-pressed="false"] .meme-pick { filter: grayscale(0.85) opacity(0.6); }
+.meme-opt[aria-pressed="false"] small { color: var(--sub); }
+.meme-opt[aria-pressed="true"] .meme-pick { transform: rotate(var(--rot, 0deg)) scale(1.06); box-shadow: 0 0 0 4px #fff, 0 0 0 7px var(--ink), 0 8px 18px rgba(0,0,0,0.25); }
+.meme-opt:hover .meme-pick { transform: rotate(var(--rot, 0deg)) scale(1.06); }
+/* profile: meme stickers next to the text ones */
+.meme-chip { display: inline-flex; flex-direction: column; align-items: center; gap: 6px; width: 84px; }
+.meme-chip .meme-pick { width: 72px; height: 72px; object-fit: cover; border-radius: 10px; transform: rotate(var(--rot, 0deg)); box-shadow: 0 0 0 3px #fff, 0 4px 10px rgba(0,0,0,0.18); }
+.meme-chip small { font-size: 10px; font-weight: 800; line-height: 1.15; text-align: center; }
+
+/* mixed sticker walls: text stickers between meme cards */
+.pick-mixed { justify-content: center; align-items: center; gap: 18px 12px; }
+.pick-mixed .meme-opt { width: calc((100% - 24px) / 3); max-width: 120px; }
+/* chat tray: two scrolling rows so memes + stickers fit */
+.tray-mixed { display: grid; grid-auto-flow: column; grid-template-rows: repeat(2, auto); align-items: center; justify-items: center; gap: 12px 14px; }
+.pick-mixed .row-break { flex-basis: 100%; height: 0; }
+.tray-mixed { grid-auto-columns: max-content; }
+.tray-mixed .meme-thumb { max-width: none; flex: none; }
+
+/* ---------- meme slam (boss fight win) ---------- */
+.meme-slam { position: fixed; inset: 0; z-index: 160; overflow: hidden; pointer-events: none; }
+.slam-meme { position: absolute; max-width: 260px; aspect-ratio: 1; object-fit: cover; border-radius: 16px; box-shadow: 0 0 0 5px #fff, 0 12px 30px rgba(0,0,0,0.35); will-change: transform; }
+.slam-finale { position: absolute; inset: 0; display: grid; place-items: center; }
+.slam-finale .stk { font-size: clamp(30px, 9vw, 72px); padding: 0.35em 0.6em; border-radius: 0.4em; box-shadow: 0 0 0 8px #fff, 0 20px 50px rgba(0,0,0,0.4); }

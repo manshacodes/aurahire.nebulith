@@ -289,3 +289,6 @@ body:is([data-route="jobs"], [data-route="people"], [data-route="u"], [data-rout
     transition-duration: 0.01ms !important;
   }
 }
+
+/* toasts sit above the bottom tab bar on screens that have it */
+body:is([data-route="jobs"], [data-route="people"], [data-route="u"], [data-route="chat"], [data-route="rate"], [data-route="profile"]) .toast { bottom: calc(100px + env(safe-area-inset-bottom)); }

@@ -1,7 +1,8 @@
 import { go } from "../router.js";
 import * as S from "../state.js";
 import { $, $$, toast, shake, esc } from "../fx.js";
-import { PERSONALITY } from "../data.js";
+import { PERSONALITY, MEMES } from "../data.js";
+import { memeImg, mixGroups } from "../memes.js";
 
 const MAX = 5;
 const ROTATIONS = [-4, 3, -2, 5, -5, 2, -3, 4, -2, 3, -4, 2, 5, -3, 3, -5];
@@ -14,10 +15,23 @@ export default function pick(root) {
       <p class="label">like a dating app, but recruiters swipe on you</p>
       <h1 class="h1" data-scramble>pick 5 stickers that describe you.</h1>
       <div class="dots" id="dots" aria-live="polite"></div>
-      <div class="pick-grid" id="grid">
-        ${PERSONALITY.map(([label, c], i) => `
-          <button class="stk ${chosen.has(label) ? "" : "off"}" data-c="${c}" data-label="${esc(label)}"
-            style="--rot:${ROTATIONS[i % ROTATIONS.length]}deg" aria-pressed="${chosen.has(label)}">${esc(label)}</button>`).join("")}
+      <p class="fine pick-sub" style="text-align:left">text stickers and memes, all mixed up. pick any 5.</p>
+      <!-- one sticker wall: meme cards with text stickers spread between them -->
+      <div class="pick-grid pick-mixed" id="grid">
+        ${mixGroups(
+          Object.entries(MEMES).map(([id, m], i) => {
+            const key = `img:${id}`;
+            return `
+            <button class="meme-opt" data-label="${key}" aria-pressed="${chosen.has(key)}" aria-label="${esc(m.label)}">
+              ${memeImg(id, "meme-pick", ROTATIONS[i % ROTATIONS.length])}
+              <small>${esc(m.label)}</small>
+            </button>`;
+          }),
+          PERSONALITY.map(([label, c], i) => `
+            <button class="stk ${chosen.has(label) ? "" : "off"}" data-c="${c}" data-label="${esc(label)}"
+              style="--rot:${ROTATIONS[(i + 3) % ROTATIONS.length]}deg" aria-pressed="${chosen.has(label)}">${esc(label)}</button>`),
+          3, `<span class="row-break" aria-hidden="true"></span>`,
+        ).join("")}
       </div>
       <button class="btn btn-cta btn-xl" id="lock">lock in my vibe</button>
     </section>`;
@@ -29,13 +43,13 @@ export default function pick(root) {
   };
   paintDots();
 
-  $("#grid", root).addEventListener("click", (e) => {
-    const btn = e.target.closest(".stk");
-    if (!btn) return;
+  // One toggle for both text stickers and meme stickers (memes are saved as "img:<id>")
+  const toggle = (btn) => {
     const label = btn.dataset.label;
+    const isText = btn.classList.contains("stk");
     if (chosen.has(label)) {
       chosen.delete(label);
-      btn.classList.add("off");
+      if (isText) btn.classList.add("off");
       btn.setAttribute("aria-pressed", "false");
     } else {
       if (chosen.size >= MAX) {
@@ -44,13 +58,16 @@ export default function pick(root) {
         return;
       }
       chosen.add(label);
-      btn.classList.remove("off", "pop");
-      void btn.offsetWidth;
-      btn.classList.add("pop");
+      if (isText) {
+        btn.classList.remove("off", "pop");
+        void btn.offsetWidth;
+        btn.classList.add("pop");
+      }
       btn.setAttribute("aria-pressed", "true");
     }
     paintDots();
-  });
+  };
+  $("#grid", root).addEventListener("click", (e) => { const b = e.target.closest(".stk, .meme-opt"); if (b) toggle(b); });
 
   $("#lock", root).addEventListener("click", () => {
     if (chosen.size < MAX) {

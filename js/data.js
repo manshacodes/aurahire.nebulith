@@ -253,6 +253,7 @@ export const FIGHT_TEXT = {
   dodged: "…but your wifi \"died\". it missed.",
   stunned: (boss) => `${boss} is still buffering. they skipped their turn.`,
   rage: (boss) => `${boss} entered unpaid-overtime mode. attacks hit harder now.`,
+  slamFinale: "OFFER UNLOCKED",   // the big sticker at the end of the win meme slam
   fx: { dodge: "wifi \"down\"", charge: "2× charged", stun: "buffering", rage: "rage mode" },
 };
 
@@ -294,15 +295,24 @@ export const HR_STICKER_REPLIES = {
 
 export const HR_DEFAULT_REPLIES = [[{ stk: "NPC" }], [{ text: "per my last email…" }], [{ stk: "MID" }], [{ text: "noted. (it was not noted)" }]];
 
-// Reply to text you type (words are "banned", but HR answers anyway).
+// Your first typed answer to HR's opener ("can you solve a DSA problem live?")
+export const HR_OPENER_ANSWERS = [
+  [/\b(yes|yeah|ya|yep|sure|ofc|of course|obviously|can)\b/i, [{ text: "great. reverse a linked list. in your head. now." }, { img: "loading" }]],
+  [/\b(no|nah|nope|can'?t|cannot)\b/i, [{ text: "honesty. we hate that here." }, { img: "skill" }]],
+  [/chatgpt|\bai\b|gpt|claude|copilot/i, [{ img: "erm" }, { text: "using AI in the interview? bold. still no." }]],
+];
+
+// Reply to text you type (words are "banned", but HR answers anyway). Last rule catches everything.
 export const HR_TEXT_REPLIES = [
-  [/salary|stipend|pay|ctc|money|paid/i, "it's a learning opportunity."],
-  [/leave|holiday|vacation|off/i, "leave? we're a family here."],
-  [/wfh|remote|work from home/i, "remote means office 6 days a week."],
-  [/when|update|status|result|selected/i, "we'll circle back. (we won't)"],
-  [/\b(hi|hello|hey|sir|ma'?am)\b/i, "hello. are you comfortable working weekends?"],
-  [/thank/i, "👍"],
-  [/.*/, "words are banned here. reply in stickers, bestie."],
+  [/salary|stipend|pay|ctc|money|paid|lpa/i, [{ img: "shook" }, { text: "it's a learning opportunity." }]],
+  [/leave|holiday|vacation|day off/i, [{ text: "leave? we're a family here." }, { img: "crying" }]],
+  [/wfh|remote|work from home/i, [{ text: "remote means office 6 days a week." }]],
+  [/when|update|status|result|selected|offer/i, [{ text: "we'll circle back. (we won't)" }, { img: "gn" }]],
+  [/chatgpt|\bai\b|gpt|claude|copilot/i, [{ img: "erm" }, { text: "we also use AI. it rejected you." }]],
+  [/sorry|pls|please|beg/i, [{ text: "begging noted." }, { img: "crying" }]],
+  [/\b(hi|hello|hey|sir|ma'?am)\b/i, [{ text: "hello. are you comfortable working weekends?" }, { img: "stare" }]],
+  [/thank/i, [{ text: "👍" }]],
+  [/.*/, [{ text: "words are banned here. reply in stickers, bestie." }]],
 ];
 
 // ---------- the ghosted hand ----------
@@ -465,3 +475,60 @@ export const FACTORS = [
   { id: "grass", label: "touch grass", low: "has not seen sunlight since sem 2.", mid: "touches grass on weekends.", high: "outdoorsy. are you even in cse?" },
   { id: "cap", label: "cap detector", low: "mostly fax.", mid: "some lines are doing a lot of work.", high: "the cap is load-bearing." },
 ];
+
+// ---------- meme stickers (images in assets/stickers) ----------
+// alt = what the image shows (for screen readers), label = how it reads as a personality trait.
+export const MEMES = {
+  shook:       { alt: "lego guy in a white tux, frozen in shock", label: "PERMANENTLY SHOOK" },
+  stare:       { alt: "blurry cat with a dead-eyed stare", label: "THE STARE" },
+  lockin:      { alt: "monkey with a lightbulb: time to lock in", label: "LOCKED IN 24/7" },
+  chillin:     { alt: "guy lying on clouds: i js be chillin fr", label: "CHRONICALLY CHILLIN" },
+  unimpressed: { alt: "cartoon girl in a pink hood with a grown man's face", label: "UNIMPRESSED BY EVERYTHING" },
+  crashout:    { alt: "dolphins at sunset: im about to lose my shit", label: "CRASH OUT ARTIST" },
+  crazy:       { alt: "guy on a laptop: i'm going to succeed because i'm crazy", label: "SUCCEEDING BECAUSE CRAZY" },
+  loading:     { alt: "orange cat with a loading spinner on its head, maths behind it", label: "BRAIN STILL LOADING" },
+  six7:        { alt: "cat holding a 6 and a 7", label: "6-7 ENERGY" },
+  crying:      { alt: "two men crying with their hands clasped", label: "CRIES IN THE LAB" },
+  erm:         { alt: "cat in nerd glasses: erm what the sigma", label: "ERM WHAT THE SIGMA" },
+  nobrain:     { alt: "x-ray skeleton with its brain in its butt", label: "0 BRAIN CELLS, 100% VIBES" },
+  hmm:         { alt: "monkey with a hand on its chin, thinking", label: "CHRONIC OVERTHINKER" },
+  itsfine:     { alt: "cat sitting calmly in front of a huge explosion", label: "THIS IS FINE (IT'S NOT)" },
+  slay:        { alt: "smug cartoon girl with a hand on her chin", label: "SLAY ONLY" },
+  gn:          { alt: "man asleep in a minecraft bed: goodnight", label: "SLEEPS THROUGH 9AM" },
+  yippee:      { alt: "screaming blob riding a unicorn under a rainbow", label: "DELULU AND THRIVING" },
+  skill:       { alt: "doctor emoji writing: diagnosis: skill issue", label: "SKILL ISSUE (SELF-DIAGNOSED)" },
+  zen:         { alt: "dogs levitating in meditation", label: "INNER PEACE (FAKE)" },
+  scream:      { alt: "blue creature screaming in front of fire", label: "SCREAMING INTERNALLY" },
+};
+export const memeSrc = (id) => `assets/stickers/${id}.jpg`;
+
+// HR's reaction to each meme you send. Parts: { text }, { stk: STICKERS id }, { img: MEMES id }.
+// Each meme has a few options so the chat doesn't repeat itself.
+export const HR_MEME_REPLIES = {
+  shook:       [[{ text: "why are you shook. we haven't even mentioned the 9am standups." }, { img: "stare" }], [{ text: "you'll be more shook when you see the stipend." }]],
+  stare:       [[{ img: "stare" }, { text: "staring contest? HR has not blinked since 2019." }], [{ text: "please stop staring at the offer letter. it won't change." }]],
+  lockin:      [[{ text: "love that you're locking in. lock in for free, please." }, { img: "slay" }], [{ text: "locked in? great. your shift starts now. it ends never." }]],
+  chillin:     [[{ text: "chillin? on company time?" }, { img: "unimpressed" }], [{ text: "chilling is a fireable offence. we checked." }]],
+  unimpressed: [[{ text: "we're also unimpressed. by your cgpa." }, { stk: "MID" }], [{ img: "unimpressed" }, { text: "mirror match." }]],
+  crashout:    [[{ img: "zen" }, { text: "please crash out in the designated crash out room." }], [{ text: "noted: \"handles pressure poorly\"." }]],
+  crazy:       [[{ text: "finally. a culture fit." }, { img: "yippee" }], [{ text: "crazy is one of our core values. you're hired. (unpaid)" }]],
+  loading:     [[{ text: "take your time." }, { text: "(you have 10 seconds)" }, { img: "stare" }], [{ text: "still loading? that's what your last internship said too." }]],
+  six7:        [[{ text: "is that your expected CTC? 6-7 LPA? lol." }, { img: "nobrain" }], [{ text: "6-7k per month. stipend secured." }, { stk: "SIX7" }]],
+  crying:      [[{ text: "crying doesn't change the stipend." }, { img: "chillin" }], [{ text: "tears are not a valid form of negotiation." }]],
+  erm:         [[{ text: "erm, what the sigma is that gap in your resume?" }, { img: "hmm" }], [{ img: "erm" }, { text: "don't correct HR." }]],
+  nobrain:     [[{ text: "finally, some honesty. you're perfect for management." }, { img: "slay" }], [{ text: "that tracks with your github." }]],
+  hmm:         [[{ text: "don't 'hmm' me. the offer is exposure." }, { img: "unimpressed" }], [{ text: "overthinking is free. like this internship." }]],
+  itsfine:     [[{ text: "same. that's our office every monday." }, { img: "crashout" }], [{ text: "it's called a startup, bestie." }]],
+  slay:        [[{ text: "slay? the dress code is business casual." }, { img: "skill" }], [{ text: "we don't slay here. we synergise." }]],
+  gn:          [[{ text: "goodnight? standup is at 9. sharp." }, { img: "stare" }], [{ text: "logging off before 11pm? interesting choice." }]],
+  yippee:      [[{ text: "HR does not experience joy." }, { img: "unimpressed" }], [{ text: "save that energy for the unpaid weekend hackathon." }]],
+  skill:       [[{ img: "skill" }, { text: "no, YOUR skill issue. we checked your leetcode." }], [{ text: "self-awareness. +1. still rejected." }]],
+  zen:         [[{ text: "inner peace isn't on your resume." }, { img: "scream" }], [{ text: "meditating won't speed up the background check." }]],
+  scream:      [[{ text: "please lower your voice. this is an open office." }, { img: "zen" }], [{ text: "screaming is only allowed during appraisals." }]],
+};
+
+// When you send the same thing twice in a row
+export const HR_REPEAT_REPLY = [{ text: "you sent that already. HR is documenting this." }, { img: "stare" }];
+// After a few messages HR "logs off" (once)
+export const HR_LOGOFF = [{ img: "gn" }, { text: "HR has logged off for the day. (it's 4:30pm)" }];
+export const HR_BACK = "HR is back online. unfortunately.";

@@ -1,7 +1,8 @@
 import { go } from "../router.js";
 import * as S from "../state.js";
 import { $, esc, signed, sticker, toast } from "../fx.js";
-import { PERSONALITY, STICKERS, AVATAR_COLORS, AVATAR_EMOJI } from "../data.js";
+import { PERSONALITY, STICKERS, AVATAR_COLORS, AVATAR_EMOJI, MEMES } from "../data.js";
+import { memeImg, isMemePick, memeIdOf } from "../memes.js";
 import { tierFor } from "../aura-engine.js";
 import { avatarHTML } from "../identity.js";
 
@@ -32,7 +33,9 @@ export default function profile(root) {
       <div class="card">
         <p class="label" style="margin-bottom:12px">my 5 stickers</p>
         ${s.stickers.length
-          ? `<div class="chips" style="gap:14px 10px">${s.stickers.map((l, i) => sticker(l, colorOf(l), { rot: i % 2 ? 3 : -3, size: "sm" })).join("")}</div>`
+          ? `<div class="chips" style="gap:14px 10px;align-items:center">${s.stickers.map((l, i) => (isMemePick(l)
+              ? `<span class="meme-chip">${memeImg(memeIdOf(l), "meme-pick", i % 2 ? 4 : -4)}<small>${esc(MEMES[memeIdOf(l)]?.label || "")}</small></span>`
+              : sticker(l, colorOf(l), { rot: i % 2 ? 3 : -3, size: "sm" }))).join("")}</div>`
           : `<a class="empty" href="#/stickers" style="display:block;text-decoration:none">no stickers yet. pick your 5 →</a>`}
         <p style="margin-top:16px;font-weight:700;color:var(--accent-2-ink)">endorsed for "breathing" by 43 people</p>
       </div>

@@ -1,7 +1,9 @@
 import { go } from "../router.js";
 import * as S from "../state.js";
-import { $, esc, pick, rand, sleep, floatText, confetti } from "../fx.js";
+import { $, esc, pick, rand, sleep, floatText, confetti, reducedMotion } from "../fx.js";
 import { JOBS, MOVES, BOSS_ATTACKS, BOSS_HP, YOUR_HP, FIGHT_TEXT } from "../data.js";
+import { hasGsap } from "../motion.js";
+import { memeSlam, preloadMemes } from "../slam.js";
 
 const HAND = 3;            // random moves dealt per turn (plus "ask about salary")
 const RAGE_AT = 40;        // boss HP that triggers rage mode
@@ -72,9 +74,12 @@ export default function boss(root, { id }) {
     setButtons(false);
     if (won) {
       log(`${j.boss} has 0 HP left. HR is drafting your offer…`);
-      confetti(60);
       S.set({ currentJob: j.id });
-      await sleep(1500);
+      await sleep(700);
+      if (!alive) return;
+      // The win moment: memes slam onto the screen faster and faster, then "OFFER UNLOCKED"
+      if (hasGsap && !reducedMotion()) await memeSlam({ finale: FIGHT_TEXT.slamFinale });
+      else { confetti(60); await sleep(1500); }
       if (alive) go("/offer");
     } else {
       log("your aura has been fully depleted. womp womp.");
@@ -150,6 +155,7 @@ export default function boss(root, { id }) {
   });
 
   renderHand();
+  preloadMemes();   // so the win slam is instant
   paint();
 
   return () => { alive = false; };

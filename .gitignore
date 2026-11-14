@@ -5,3 +5,6 @@ __pycache__/
 .vercel
 .env*
 .claude/
+
+# original sticker images (the site uses the resized copies in assets/stickers)
+/stickers/

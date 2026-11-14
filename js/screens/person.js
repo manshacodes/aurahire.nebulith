@@ -91,7 +91,7 @@ export default function person(root, { id }) {
           ${Object.entries(reactions).map(([sid, n]) => sticker(`${STICKERS[sid].label} ${n}`, STICKERS[sid].c, { tag: "button", size: "sm", rot: -2, attrs: `data-id="${sid}"` })).join("")}
         </div>
 
-        <div class="thread" id="thread"></div>
+        <div class="diss-thread" id="thread"></div>
         <div class="diss-box">
           <textarea id="dissText" rows="2" maxlength="140" aria-label="Write a diss" placeholder="say something. respectfully. (or not)"></textarea>
           <div class="row">
@@ -154,8 +154,8 @@ export default function person(root, { id }) {
 
   // ---------- diss thread: you post, they clap back ----------
   const msgHTML = (m) => (m.from === "me"
-    ? `<div class="msg me">${avatarHTML(S.get(), "avatar-xs")}<p><b>${esc(S.get().name)}</b>${esc(m.text)}</p></div>`
-    : `<div class="msg them"><span class="avatar-xs" style="background:${p.color};color:${p.ink}">${esc(initials(p.name))}</span>${m.stk ? sticker(m.stk, m.c, { rot: -4, size: "sm" }) : `<p><b>${esc(first)}</b>${esc(m.text)}</p>`}</div>`);
+    ? `<div class="dmsg me">${avatarHTML(S.get(), "avatar-xs")}<p><b>${esc(S.get().name)}</b>${esc(m.text)}</p></div>`
+    : `<div class="dmsg them"><span class="avatar-xs" style="background:${p.color};color:${p.ink}">${esc(initials(p.name))}</span>${m.stk ? sticker(m.stk, m.c, { rot: -4, size: "sm" }) : `<p><b>${esc(first)}</b>${esc(m.text)}</p>`}</div>`);
   const renderThread = () => { $("#thread", root).innerHTML = social().disses.map(msgHTML).join(""); };
   renderThread();
 
