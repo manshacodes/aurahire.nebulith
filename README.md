@@ -2,7 +2,7 @@
 
 A brainrot job portal built for **NEBULITH: The Brainrot Ideathon & Hackathon** (Celestial Biscuit, IGDTUW). It's a parody of student LinkedIn culture. Your resume is rated in aura points, every job listing is a red flag, applying is a boss fight, and HR only replies in stickers.
 
-**Live demo:** _add your deployed link here_
+**Live demo:** https://manshacodes.github.io/aurahire.nebulith/
 
 ## The idea
 
