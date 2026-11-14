@@ -22,10 +22,7 @@ export default function jobs(root) {
         <button class="btn btn-cta" id="apply">apply →</button>
       </div>
       <nav class="mini-links" aria-label="More">
-        <a href="#/rate">rate companies</a>
-        <a href="#/chat">hr chat <span class="dot" aria-label="1 new message"></span></a>
-        <a href="#/people">people</a>
-        <a href="#/profile">profile</a>
+        <a href="#/rate">rate companies with stickers</a>
       </nav>
     </section>`;
 

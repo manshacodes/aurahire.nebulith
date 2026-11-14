@@ -5,7 +5,7 @@
 import { go } from "../router.js";
 import { $, $$, sticker, signed, rand } from "../fx.js";
 import { SLANG, JOBS, STICKERS } from "../data.js";
-import { gsap, ScrollTrigger, hasGsap, isTouch, scrollTo } from "../motion.js";
+import { gsap, ScrollTrigger, hasGsap, scrollTo } from "../motion.js";
 import { reducedMotion } from "../fx.js";
 import { playIntro, shouldPlayIntro } from "../intro.js";
 
@@ -39,7 +39,7 @@ export default function home(root) {
           ${HERO_STICKERS.map(([l, c, r, size, speed, top, left]) =>
             `<span class="hero-stk" data-speed="${speed}" style="top:${top};left:${left}">${sticker(l, c, { rot: r, size })}</span>`).join("")}
         </div>
-        <p class="label">nebulith '26 · brainrot ui</p>
+        <p class="label">nebulith '26 · the anti job portal</p>
         <h1 class="hero-title glitch" data-text="aurahire">aurahire</h1>
         <p class="tagline">stop applying.<br><span class="hl">start aura farming,</span> twin.</p>
         <div class="hero-cta">
@@ -135,10 +135,6 @@ export default function home(root) {
   $("#replay", root).addEventListener("click", () => { window.scrollTo(0, 0); playIntro().then(heroIn); });
   if (shouldPlayIntro()) playIntro().then(heroIn); else heroIn();
 
-  // On touch screens, let GSAP drive scrolling on this page so pinned chapters don't
-  // jitter (mobile browsers scroll on a separate thread). Turned off again when you leave.
-  if (isTouch) ScrollTrigger.normalizeScroll(true);
-
   const ctx = gsap.context(() => {
     // Hero: stickers drift at their own speeds, title lifts away as you scroll
     $$("[data-speed]", root).forEach((el) => {
@@ -203,5 +199,5 @@ export default function home(root) {
       scrollTrigger: { trigger: ".final", start: "top 95%", end: "top 35%", scrub: true } });
   }, root);
 
-  return () => { alive = false; ctx.revert(); if (isTouch) ScrollTrigger.normalizeScroll(false); };
+  return () => { alive = false; ctx.revert(); };
 }

@@ -320,6 +320,12 @@ export const MOCK_PROFILES = [
     endorsed: "endorsed for \"fixing the projector\" by 12 people",
     post: "humbled and honoured to share that i participated in my 14th hackathon 🙏\n\nwe did not win. we did not finish. the wifi did not work.\n\nbut the real prize was the free t-shirt we made along the way.\n\n#grateful #hackathon #nosleep",
     reactions: { W: 14, DELULU: 22, WOMP: 9 },
+    resume: ["Participated in 14 hackathons", "Built 9 projects in 36 hours each (none deployed)", "Pitched to 'investors' (the judges)", "Proficient in caffeine"],
+    larps: [
+      "excited to announce i'm attending my 15th hackathon this weekend 🙏 the grind never sleeps (neither do i)",
+      "unpopular opinion: participation certificates are just wins that haven't happened yet",
+      "lost another hackathon. but did the judges see my vision? no. did i see theirs? also no.",
+    ],
   },
   {
     id: "tanvi", name: "tanvi | core ×6", color: "#CDBEFF", ink: "#1E1340", aura: 3780,
@@ -329,6 +335,12 @@ export const MOCK_PROFILES = [
     endorsed: "endorsed for \"making a google form for everything\" by 67 people",
     post: "what being core member of 6 societies taught me about leadership 🧵\n\n1. calendars are a social construct\n2. every meeting could have been a whatsapp poll\n3. i have not attended a class since august\n\nagree?",
     reactions: { AURA: 49, GLAZER: 31, CRASH: 7 },
+    resume: ["President of 3 societies", "Organised 40 events (12 had attendees)", "Leadership: made a google form", "Attendance: 38%"],
+    larps: [
+      "thrilled to announce i've been elected core member of a 7th society. the calendar is now load-bearing.",
+      "leadership is when you schedule a meeting to plan the next meeting. agree? 👇",
+      "i don't attend classes. i attend *experiences*. #growth",
+    ],
   },
   {
     id: "rohan", name: "rohan (day 412)", color: "#FF8A3D", ink: "#2A1200", aura: 940,
@@ -338,6 +350,42 @@ export const MOCK_PROFILES = [
     endorsed: "endorsed for \"waking up early\" by 5 people (all at 5am)",
     post: "day 412 of learning dsa.\n\ntoday i solved two sum.\nagain.\n\nconsistency > talent. see you tomorrow at 5am.\n\n#100daysofcode (it has been 412)",
     reactions: { UNC: 41, WOMP: 19, SIGMA: 6 },
+    resume: ["Day 412 of learning DSA", "Solved two sum (6 times)", "5am club founding member (only member)", "Cold plunge certified"],
+    larps: [
+      "day 413. watched a 4 hour dsa video at 2× speed. understood nothing. twice as fast.",
+      "woke up at 4:59am today. you're not behind, you're just not me.",
+      "they laughed at my streak. now my streak laughs at them. (i still can't reverse a linked list)",
+    ],
+  },
+  {
+    id: "meher", name: "meher.ai", color: "#8FD3FF", ink: "#062A44", aura: 3150,
+    headline: "prompt engineer | ai thought leader since tuesday | building agi in my hostel room",
+    stickers: [["NO THANKS I USE AI", "yellow"], ["MAIN CHARACTER", "lilac"], ["CERTIFIED YAPPER", "pink"], ["DELULU BUT DEDICATED", "lilac"], ["3AM DEBUGGER", "black"]],
+    stats: [["prompts written", "9,001"], ["models trained", "0"], ["ai newsletters", "4"]],
+    endorsed: "endorsed for \"knowing what an llm is\" by 31 people",
+    post: "ai won't replace you.\n\na person using ai will.\n\nthat person is me. i am replacing you.\n\nfollow for more ai insights (copied from twitter)",
+    reactions: { DELULU: 38, SEVEN: 12, RATIO: 4 },
+    resume: ["Prompt engineer (self-taught, 3 days)", "Built an AI startup (a chatgpt wrapper)", "Speaker at 0 conferences", "Fluent in Python (imports only)"],
+    larps: [
+      "just asked chatgpt to write my linkedin post. it said no. agi is here.",
+      "10 ai tools that will 10× your productivity (i have used none of them) 🧵",
+      "my startup is like uber but for prompts. we're pre-revenue and pre-product.",
+    ],
+  },
+  {
+    id: "arjun", name: "arjun (gym era)", color: "#FFE45C", ink: "#2A2100", aura: 2560,
+    headline: "cse student by day, gym sigma by night | mogging since 2024 | 7x7=49 certified",
+    stickers: [["7x7=49 ENERGY", "lime"], ["AURA FARMER", "black"], ["MAIN CHARACTER", "lilac"], ["NAVY BLUE TYPA VIBE", "sky"], ["TOUCHES GRASS (RARELY)", "grey"]],
+    stats: [["bench", "60kg"], ["mirror selfies", "412"], ["commits", "3"]],
+    endorsed: "endorsed for \"carrying the group project (the laptop bag)\" by 9 people",
+    post: "lessons from the gym that apply to coding:\n\n1. never skip leg day\n2. never skip leg day\n3. i haven't opened vs code in a month\n\nconsistency.",
+    reactions: { SIGMA: 33, MOGGED: 21, NPC: 5 },
+    resume: ["Gym every day (photos available)", "Built a protein tracker (spreadsheet)", "Mogged 3 people in the lab", "Knows what a for loop is"],
+    larps: [
+      "hit a new pr today. not a pull request. i don't do those.",
+      "my code doesn't compile but my physique does. balance.",
+      "ranked my batch by jawline. i'm #1. the list is attached.",
+    ],
   },
 ];
 
@@ -353,4 +401,67 @@ export const CONNECT_TOASTS = [
   "request sent. they'll accept in 6-7 business days.",
   "they viewed your profile and left. classic.",
   "pending. like your internship applications.",
+];
+
+// ---------- identity: funny surnames + avatars ----------
+// AuraGPT "assigns" you a surname from your first name. Reroll if you don't like it.
+export const SURNAMES = [
+  "Grindwala", "Mogwani", "Auraiyer", "Rizzvi", "Sigmanathan", "Yapadhyay", "Cookedkar", "Deluluwala",
+  "Glazewala", "Larpwani", "Hustlani", "Ratiowal", "Choppedra", "Brainrotia", "Farmkar", "Unc-ikrishnan",
+  "Womp-Wompkar", "Aurasinghania", "Crashoutra", "Navybluewala",
+];
+export const SURNAME_LINES = [
+  "AuraGPT has assigned your surname.",
+  "your ancestors farmed aura. it's in the name.",
+  "legally, this is your name now.",
+  "your surname has been decided by the council.",
+];
+export const DEFAULT_FIRST = "Aarav";
+
+// Profile circle: fixed sticker colours + optional emoji face
+export const AVATAR_COLORS = ["lilac", "lime", "pink", "orange", "sky", "yellow", "black", "grey"];
+export const AVATAR_EMOJI = ["", "😎", "🗿", "💀", "🤓", "🐸", "🧢", "🫠", "👁️", "🦍"];
+
+// ---------- roasting other people's profiles ----------
+// "cap or fax" on each line of their resume; the batch agrees with you some % of the time
+export const CAP_FAX = {
+  cap: ["the batch agrees. it's cap.", "{pct}% of the batch also said cap.", "cap detected. their aura dropped."],
+  fax: ["fax. respect where it's due.", "{pct}% said fax. you're not alone.", "fax. reluctant W."],
+};
+
+// The diss generator. {first} = their first name, {stat} = one of their stats
+export const DISSES = [
+  "{first} really put \"{stat}\" on their profile like it's a flex",
+  "the only thing {first} has shipped is a linkedin post",
+  "{first}'s resume is 90% fonts",
+  "ratio + {first} still uses light mode",
+  "{first} said \"let's connect\" and never connected",
+  "{stat}? unc behaviour, {first}",
+  "{first} peaked in the class whatsapp group",
+  "not {first} glazing their own post in the comments",
+  "{first}, this post has npc energy and you know it",
+  "{first} is the reason HR says \"we'll circle back\"",
+];
+
+// What they say back when you diss them (sometimes just a sticker)
+export const DISS_REPLIES = [
+  { text: "thanks for the engagement 🙏 the algorithm loves you" },
+  { text: "this is a safe space. reported." },
+  { stk: "L", c: "pink" },
+  { text: "ok but did you see my last post" },
+  { stk: "COPE", c: "grey" },
+  { text: "mentorship available for ₹4,999/hr" },
+  { stk: "RATIO", c: "sky" },
+  { text: "blocked. (they did not block you)" },
+];
+
+// ---------- AuraGPT breakdown (score screen) ----------
+// Each factor is scored 0-10 in aura-engine.js; these are the labels and roasts per level.
+export const FACTORS = [
+  { id: "yap", label: "yap level", low: "concise. suspicious.", mid: "a healthy amount of yapping.", high: "certified yapper. HR fell asleep." },
+  { id: "nepo", label: "nepo index", low: "self-made (allegedly).", mid: "a family friend may be involved.", high: "uncle-powered. the nepotism is structural." },
+  { id: "delulu", label: "delulu meter", low: "grounded. touchingly realistic.", mid: "a little delulu. it's the solulu.", high: "fully delulu. main character syndrome." },
+  { id: "grind", label: "grind", low: "the grind is on pause.", mid: "decent grind. unc-approved.", high: "sweaty. respectfully sweaty." },
+  { id: "grass", label: "touch grass", low: "has not seen sunlight since sem 2.", mid: "touches grass on weekends.", high: "outdoorsy. are you even in cse?" },
+  { id: "cap", label: "cap detector", low: "mostly fax.", mid: "some lines are doing a lot of work.", high: "the cap is load-bearing." },
 ];

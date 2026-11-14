@@ -1,10 +1,9 @@
 import { go } from "../router.js";
 import * as S from "../state.js";
 import { $, esc, signed, sticker, toast } from "../fx.js";
-import { PERSONALITY, STICKERS } from "../data.js";
+import { PERSONALITY, STICKERS, AVATAR_COLORS, AVATAR_EMOJI } from "../data.js";
 import { tierFor } from "../aura-engine.js";
-
-const initials = (name) => name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0].toUpperCase()).join("") || "?";
+import { avatarHTML } from "../identity.js";
 
 export default function profile(root) {
   const s = S.get();
@@ -13,12 +12,22 @@ export default function profile(root) {
   root.innerHTML = `
     <section>
       <div class="cover"></div>
-      <div class="avatar-lg" id="initials">${initials(s.name)}</div>
+      <div class="avatar-lg-wrap" id="bigAv">${avatarHTML(s, "av-lg")}</div>
       <div>
         <input class="name-input" id="name" value="${esc(s.name)}" aria-label="Your name" maxlength="28" />
         <p class="headline">CSE '29 | ${s.aura >= 3300 ? "certified sigma" : "aspiring sigma"} | ${signed(s.aura)} aura | open to work (desperately)</p>
       </div>
       <span class="pill">${tierFor(s.aura).name}</span>
+
+      <div class="card">
+        <p class="label" style="margin-bottom:12px">your profile circle</p>
+        <div class="swatches-row" id="avColors" role="group" aria-label="Circle colour">
+          ${AVATAR_COLORS.map((c) => `<button class="swatch av" data-c="${c}" data-color="${c}" aria-label="${c}" aria-pressed="${s.avatar.color === c}"></button>`).join("")}
+        </div>
+        <div class="emoji-row" id="avEmoji" role="group" aria-label="Circle face">
+          ${AVATAR_EMOJI.map((e) => `<button class="emoji-opt" data-emoji="${e}" aria-label="${e || "initials"}" aria-pressed="${s.avatar.emoji === e}">${e || "Aa"}</button>`).join("")}
+        </div>
+      </div>
 
       <div class="card">
         <p class="label" style="margin-bottom:12px">my 5 stickers</p>
@@ -37,19 +46,31 @@ export default function profile(root) {
         <p class="fine" style="text-align:left;margin-top:12px">react with stickers. "congratulations!" is banned.</p>
       </div>
 
-      <div class="row">
-        <a class="btn btn-ghost" href="#/chat">hr chat (1)</a>
-        <a class="btn btn-ghost" href="#/rate">rate companies</a>
-      </div>
-      <a class="btn btn-ghost btn-block" href="#/people">batch leaderboard: people you may mog →</a>
+      <a class="btn btn-ghost btn-block" href="#/rate">rate companies with stickers →</a>
       <button class="btn btn-cta btn-xl" id="grind">back to the grind</button>
       <button class="link-btn" id="reset">start over (reset aura)</button>
     </section>`;
 
+  // Redraw the big circle (the top-left one updates itself from state)
+  const paintAvatar = () => { $("#bigAv", root).innerHTML = avatarHTML(S.get(), "av-lg"); };
+
   $("#name", root).addEventListener("input", (e) => {
     S.set({ name: e.target.value || "anonymous sigma" });
-    $("#initials", root).textContent = initials(e.target.value);
+    paintAvatar();
   });
+
+  // Pick a colour or an emoji face for your profile circle
+  const pickAvatar = (groupSel, attr, key) => {
+    $(groupSel, root).addEventListener("click", (e) => {
+      const btn = e.target.closest(`[data-${attr}]`);
+      if (!btn) return;
+      S.set({ avatar: { ...S.get().avatar, [key]: btn.dataset[attr] } });
+      $(groupSel, root).querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
+      paintAvatar();
+    });
+  };
+  pickAvatar("#avColors", "color", "color");
+  pickAvatar("#avEmoji", "emoji", "emoji");
 
   $("#reactions", root).addEventListener("click", (e) => {
     const btn = e.target.closest("[data-id]");

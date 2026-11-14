@@ -1,4 +1,4 @@
-// The intro: a believable fake "LinkedOut" feed gets crossed out, stickered,
+// The intro: a believable fake LinkedIn feed (parody, text only, no real logo) gets crossed out, stickered,
 // scrambled into brainrot, and wiped away to reveal AuraHire.
 // Plays once per browser session (and on "replay intro").
 
@@ -52,7 +52,8 @@ function markup() {
     <div class="intro" role="dialog" aria-label="Intro animation">
       <div class="lo-page">
         <header class="lo-top">
-          <span class="lo-logo" aria-hidden="true">Lo</span>
+          <span class="lo-logo" aria-hidden="true">in</span>
+          <span class="lo-word">LinkedIn</span>
           <span class="lo-search">search jobs, people, delusion</span>
           <nav class="lo-nav" aria-hidden="true">
             <span>home</span><span>my network</span><span>jobs</span><span>messaging</span><span class="lo-badge">notifications</span>

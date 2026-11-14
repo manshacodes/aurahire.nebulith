@@ -1,10 +1,9 @@
-// "batch leaderboard": you + the mock profiles, ranked by aura. Tap a row to open their profile.
+// "the batch": you + the mock profiles, ranked by aura. Tap a row to stalk (and roast) their profile.
 import * as S from "../state.js";
 import { esc, signed } from "../fx.js";
 import { MOCK_PROFILES } from "../data.js";
 import { tierFor } from "../aura-engine.js";
-
-export const initials = (name) => name.split(/[\s|(.]+/).filter(Boolean).slice(0, 2).map((w) => w[0].toUpperCase()).join("") || "?";
+import { initials, avatarHTML } from "../identity.js";
 
 export default function people(root) {
   const s = S.get();
@@ -13,19 +12,24 @@ export default function people(root) {
     { id: "you", name: `${s.name} (you)`, aura: s.aura, href: "#/profile", you: true },
   ].sort((a, b) => b.aura - a.aura);
 
+  // Mock profiles use their own colour; your row uses your profile circle
+  const circle = (p) => (p.you
+    ? avatarHTML(s, "avatar-sm")
+    : `<span class="avatar-sm" style="background:${p.color};color:${p.ink}">${esc(initials(p.name))}</span>`);
+
   root.innerHTML = `
     <section>
       <div>
         <p class="label">people you may mog</p>
-        <h1 class="h1" data-scramble>batch leaderboard.</h1>
-        <p class="sub" style="margin-top:6px">ranked by aura. tap anyone to stalk their profile.</p>
+        <h1 class="h1" data-scramble>the batch.</h1>
+        <p class="sub" style="margin-top:6px">ranked by aura. tap anyone to stalk their profile, call cap on their resume and diss them.</p>
       </div>
       <ol class="people">
         ${rows.map((p, i) => `
           <li>
             <a class="card person-row${p.you ? " is-you" : ""}" href="${p.href}">
               <span class="rank">#${i + 1}</span>
-              <span class="avatar-sm" style="${p.color ? `background:${p.color};color:${p.ink}` : ""}">${esc(initials(p.name))}</span>
+              ${circle(p)}
               <span class="person-meta">
                 <b>${esc(p.name)}</b>
                 <small>${esc(tierFor(p.aura).name)}</small>
@@ -35,9 +39,5 @@ export default function people(root) {
           </li>`).join("")}
       </ol>
       ${s.aura ? "" : `<a class="btn btn-cta btn-block" href="#/upload">scan your resume to join the ranking →</a>`}
-      <nav class="mini-links" aria-label="More">
-        <a href="#/jobs">jobs</a>
-        <a href="#/profile">my profile</a>
-      </nav>
     </section>`;
 }

@@ -24,6 +24,7 @@
 
   <div class="app">
     <header class="topbar">
+      <a href="#/profile" class="me-link" id="meLink" aria-label="Your profile"></a>
       <a href="#/" class="logo" aria-label="AuraHire home">aurahire</a>
       <a href="#/profile" class="aura-pill" id="auraPill" aria-label="Your aura, open profile">aura: 0</a>
       <button class="icon-btn" id="vibeBtn" aria-label="Change vibe (theme)" aria-expanded="false">vibe</button>
@@ -31,6 +32,14 @@
 
     <main id="screen" class="screen" aria-live="polite"></main>
   </div>
+
+  <!-- Bottom tabs on the "social" screens (shown/hidden by CSS using body[data-route]) -->
+  <nav class="tabbar" aria-label="Main">
+    <a class="tab" data-tab="jobs" href="#/jobs"><span aria-hidden="true">🔥</span>swipe</a>
+    <a class="tab" data-tab="people" href="#/people"><span aria-hidden="true">👀</span>the batch</a>
+    <a class="tab" data-tab="chat" href="#/chat"><span aria-hidden="true">💬</span>hr chat</a>
+    <a class="tab" data-tab="profile" href="#/profile"><span aria-hidden="true">🪪</span>me</a>
+  </nav>
 
   <div class="scrim" id="scrim" hidden></div>
   <aside class="sheet" id="vibeSheet" aria-label="Choose a vibe" hidden>

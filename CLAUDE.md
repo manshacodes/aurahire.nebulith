@@ -67,17 +67,18 @@ css/
   components.css      stickers, bars, chips, stats, confetti, shake/float/typing helpers
   screens.css         per-screen styles
   landing.css         scroll-story landing page, custom cursor, 3D tilt
-  intro.css           the fake "LinkedOut" intro (fixed palette on purpose)
+  intro.css           the fake LinkedIn intro (fixed palette on purpose)
 js/
   main.js             entry: theme switching, aura pill, route table, withMotion() wrapper
   router.js           route(pattern, screen) + go(path); each screen returns an optional cleanup fn
   state.js            get / set / addAura / subscribe / reset, persisted to localStorage
   motion.js           Lenis + ScrollTrigger setup, scramble-text headings, springy cursor, tilt
-  intro.js            the "LinkedOut gets crossed out" intro timeline
+  intro.js            the "LinkedIn gets crossed out" intro timeline
+  identity.js         funny surname generator (surnameFor) + profile circle (avatarHTML)
   hold.js             reusable press-and-hold ring (used by Apply and Ghosted)
   hand.js             the "HR said:" shatter + hand flip-off overlay
   fx.js               $, $$, esc, toast, confetti, countUp, typewriter, shake, floatText, sticker()
-  aura-engine.js      "AuraGPT": a regex rule list that scores each resume line (+ roast)
+  aura-engine.js      "AuraGPT": regex rules score each resume line (+ roast); analyzeResume() gives the 0-10 breakdown
   data.js             ALL copy: jobs, stickers, slang, boss moves, HR chat replies, post templates
   screens/            one file per screen (see the flow below)
 vendor/               gsap, ScrollTrigger, ScrambleTextPlugin, lenis (+ lenis.css)
@@ -87,19 +88,20 @@ tools/make_sticker.py turns any image into a die-cut sticker PNG (needs: pip ins
 
 ## User flow (screens)
 
-**Intro (first visit per session, `js/intro.js` + `css/intro.css`):** a believable fake "LinkedOut" feed (parody name, no real logo) gets a red marker X, "nah.", stickers slapped on the posts, the post text scrambled into brainrot, a shake and grey-out, then an acid-lime circle wipe reveals AuraHire. Skippable, and replayable from the landing footer.
+**Intro (first visit per session, `js/intro.js` + `css/intro.css`):** a believable fake LinkedIn feed (the name in text, no real logo image) gets a red marker X, "nah.", stickers slapped on the posts, the post text scrambled into brainrot, a shake and grey-out, then an acid-lime circle wipe reveals AuraHire. Skippable, and replayable from the landing footer.
 
 `#/` **home**: scroll-story landing page.
-→ `#/upload`: paste your resume, upload a .txt, or pick one of 6 demo personas (`DEMO_RESUMES` in data.js: hackathon tourist, nepo intern, dsa monk, linkedin lunatic, founder (19), club president), each tuned to land in a different aura tier.
+→ `#/upload`: type your first name (AuraGPT assigns a funny surname like "Grindwala", reroll-able), then paste your resume, upload a .txt (only .txt is accepted), or pick one of 6 demo personas (`DEMO_RESUMES` in data.js: hackathon tourist, nepo intern, dsa monk, linkedin lunatic, founder (19), club president), each tuned to land in a different aura tier.
 → `#/scan`: AuraGPT v6.7 judges line by line: a sticky HUD with a thinking orb (turns green or pink per verdict) and a live counter + sparkline, a terminal log of its "thoughts", a highlighter sweep on each line, verdict stamps slamming on (W, BASED, MID, L, CAP, NEPO, GLAZE, LARP, TOURIST), points flying into the counter, a shake on big Ls, confetti on big Ws, a "SCAN COMPLETE" stamp, and a skip button.
-→ `#/score`: count-up, confetti, rank tier, roast, stats, "copy my flex".
+→ `#/score`: count-up, confetti, rank tier, roast, rizz / Ws / crash outs, best + worst line, and the **AuraGPT breakdown**: yap, nepo, delulu, grind, touch grass and cap, each 0-10 from signals in the resume (`SIGNALS` in aura-engine.js, copy in `FACTORS`), "copy my flex".
 → `#/stickers`: pick exactly 5 personality stickers (a 6th shakes: "this isn't 6-7, twin").
 → `#/jobs`: swipeable card stack (drag right to apply, left to ghost).
 → `#/job/:id`: details; the **Apply button runs from your cursor** (6 escapes with taunts on mouse, 3 on touch), then gives up and turns into a **"hold to apply" ring** (1.6s press-and-hold, inspired by zero.university's tap-hold; letting go early resets it with a roast).
 → `#/boss/:id`: turn-based fight (you have 120 HP, the boss 100). Each turn you're dealt a hand of 3 random moves from a pool of 11 (excel, hackathon cert crit, glaze, github link, "i'm a quick learner" heal, fake wifi drop = dodge, "any questions for me?" = boss skips a turn, aura farm = 2× next hit, say 6-7 (rare 67 dmg), startup pitch, chatgpt live), plus "ask about salary", which is always there and always backfires. Status chips show under the HP bars, and below 40 HP the boss enters rage mode (+30% damage).
 → win: `#/offer` (confetti, offer letter, typewriter "humbled and honoured" post generator, then the profile)
 → lose: `#/ghosted` (the app drains to grayscale; "HR is typing" forever; −800 aura). Losing the fight lands on `#/ghosted/lost`, which plays the **"HR said:" moment** automatically after a beat; the **"hold to check status" ring** replays it (`js/hand.js`): a dark red overlay, "HR said:" cracks and shatters into clip-path shards, and a hand slams up and flips you off, then "rejected. emotionally." with ok fair / get revenge buttons
-Side screens: `#/people` (batch leaderboard: you + 3 mock classmates ranked by aura), `#/u/:id` (a mock profile: stickers, stats, cringe post with sticker reactions, connect/endorse jokes, and a "mog check" bar comparing your aura with theirs), `#/rate` (drag-and-drop stickers onto a company, live rating bars), `#/chat` (sticker-only HR chatbot with keyword replies), `#/profile` (5 stickers, editable name, post, clickable sticker reactions, reset).
+**Tab bar** (bottom, on jobs / people / u / chat / rate / profile, shown by CSS via `body[data-route]`): swipe, the batch, hr chat, me. **Top-left profile circle** (LinkedIn style) links to your profile.
+Side screens: `#/people` ("the batch": you + 5 mock classmates ranked by aura), `#/u/:id` (a mock profile built for roasting: mog check, cap-or-fax votes on each resume line, a diss thread with a diss generator where they clap back, "larp as them" predicted posts, sticker reactions, connect/endorse; disses and votes persist in `state.social`), `#/rate` (drag-and-drop stickers onto a company, live rating bars), `#/chat` (sticker-only HR chatbot with keyword replies), `#/profile` (profile circle colour + emoji picker, 5 stickers, editable name, post, clickable sticker reactions, reset).
 
 **Landing page chapters** (`js/screens/home.js`, all GSAP ScrollTrigger):
 1. Hero: scramble-text logo, parallax stickers (`data-speed`), the title lifts away on scroll.
@@ -145,7 +147,7 @@ Done and tested end to end in headless Chrome (no console errors):
 - [x] AuraGPT scoring, boss fight, swipe stack, dodge button, sticker drag and drop, chat bot, post generator
 - [x] 5 vibes, localStorage persistence
 - [x] scroll-story landing page, scramble headings, spring cursor, tilt cards, reduced-motion fallback
-- [x] "LinkedOut gets crossed out" intro animation
+- [x] "LinkedIn gets crossed out" intro animation
 - [x] runaway Apply button, then "hold to apply"
 - [x] Ghosted "hold to check status", then the "HR said:" hand flip-off
 
@@ -164,6 +166,6 @@ Done and tested end to end in headless Chrome (no console errors):
 
 - Don't add a framework or build step.
 - Don't copy reference designs or assets (Behance shots, X posts, the zero.university hand).
-- Don't use real LinkedIn branding or logos.
+- Naming LinkedIn in text is fine (the builder asked for it so people get the parody); don't use the real logo image.
 - Don't break the reduced-motion fallback or the no-GSAP fallback.
 - Don't make the core flow confusing. Chaos is in the details, not the navigation.

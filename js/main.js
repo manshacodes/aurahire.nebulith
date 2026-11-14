@@ -5,6 +5,7 @@ import * as S from "./state.js";
 import { $, signed } from "./fx.js";
 import { THEMES } from "./data.js";
 import { initMotion, afterRender } from "./motion.js";
+import { avatarHTML } from "./identity.js";
 
 import home from "./screens/home.js";
 import upload from "./screens/upload.js";
@@ -58,6 +59,29 @@ function setupVibes() {
   });
 }
 
+// ---------- your profile circle (top left, like LinkedIn) ----------
+function setupMeLink() {
+  const link = $("#meLink");
+  const paint = (s) => { link.innerHTML = avatarHTML(s, "av-top"); };
+  paint(S.get());
+  S.subscribe(paint);
+}
+
+// ---------- bottom tabs: highlight the current one ----------
+// ("/u/kabir" counts as the batch tab)
+function setupTabs() {
+  const paint = () => {
+    const page = location.hash.split("/")[1] || "";
+    const current = page === "u" ? "people" : page;
+    document.querySelectorAll(".tab").forEach((t) => {
+      if (t.dataset.tab === current) t.setAttribute("aria-current", "page");
+      else t.removeAttribute("aria-current");
+    });
+  };
+  addEventListener("hashchange", paint);
+  paint();
+}
+
 // ---------- aura pill ----------
 function setupAuraPill() {
   const pill = $("#auraPill");
@@ -85,6 +109,8 @@ applyTheme(S.get().theme);
 initMotion();
 setupVibes();
 setupAuraPill();
+setupMeLink();
+setupTabs();
 
 route("/", withMotion(home));
 route("/upload", withMotion(upload));

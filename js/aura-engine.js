@@ -70,3 +70,58 @@ export function scoreResume(text) {
   const total = BASE_AURA + lines.reduce((sum, l) => sum + l.points, 0);
   return { lines, total, tier: tierFor(total) };
 }
+
+// ---------- the AuraGPT breakdown ----------
+// Each factor counts "signals" in your resume. Every signal is [regex, weight].
+// The score is 0-10: more signals = higher. Copy for each factor lives in data.js (FACTORS).
+const SIGNALS = {
+  yap: [
+    [/passionate|hard.?working|team player|motivated|go.?getter|detail.?oriented|enthusiast|visionary|thought leader|synergy|humbled|honou?red|leadership|wealth/gi, 2],
+    [/core member|coordinator|president|\bvp\b|\bhead\b|\blead\b|organi[sz]er|society|societies/gi, 1.5],
+    [/linkedin|followers|influencer|top voice|posts?\b/gi, 2],
+    [/\(.+?\)/g, 0.5],                      // every "(disclaimer)" is extra yapping
+  ],
+  nepo: [[/uncle|aunt|dad'?s|papa|mom'?s|cousin|family friend|relatives?|father'?s/gi, 3]],
+  delulu: [
+    [/startup|founder|\bceo\b|stealth|pre.?revenue|investors?|incubat/gi, 2],
+    [/\bai\b|\bagi\b|llm|machine learning|prompt engineer/gi, 1.5],
+    [/top voice|self.?nominated|influencer|thought leader|visionary|generational wealth/gi, 2.5],
+    [/full.?stack|rockstar|ninja|10x/gi, 1.5],
+  ],
+  grind: [
+    [/leetcode|\bdsa\b|codeforces|codechef|icpc|problems/gi, 2],
+    [/hackathons?/gi, 1],
+    [/open.?source|github|\bprs?\b|gsoc|merged/gi, 1.5],
+    [/\bc?gpa\b|intern(ship)?|research/gi, 1],
+    [/c\+\+|java\b|python|react|backend/gi, 0.5],
+  ],
+  grass: [[/gym|cricket|football|sports|dance|music|sing|volunteer|\bnss\b|\bngo\b|trek|plunge|outdoor/gi, 3]],
+  cap: [
+    [/\(.+?\)/g, 1.5],                      // "won SIH (internal round)" is doing a lot
+    [/internal round|fixed a typo|self.?nominated|self.?taught, \d+ days|0 users|none deployed|imports only/gi, 3],
+    [/\b(\d{2,}|\d{1,3},\d{3})\s*(hackathons?|certificat\w*|courses?|clubs?|followers|languages)/gi, 2],
+    [/\b(1[1-9]|[2-9]\d)\s*clubs?/gi, 2],
+  ],
+};
+
+const clamp10 = (n) => Math.max(0, Math.min(10, Math.round(n)));
+
+// "Core member of 9 clubs" is 9 times the yapping
+const clubCount = (text) => [...text.matchAll(/(\d+)\s*(?:more\s+)?clubs?/gi)].reduce((n, m) => n + Number(m[1]), 0);
+
+export function analyzeResume(lines) {
+  const text = lines.map((l) => l.text).join("\n");
+  const count = (id) => SIGNALS[id].reduce((sum, [re, w]) => sum + (text.match(re) || []).length * w, 0);
+  // the multipliers keep a normal resume away from 10 so the meters actually differ
+  const scores = {
+    yap: clamp10((1 + count("yap") + clubCount(text) * 0.5) * 0.6),
+    nepo: clamp10(count("nepo")),
+    delulu: clamp10((1 + count("delulu")) * 0.8),
+    grind: clamp10(count("grind") * 0.6),
+    grass: clamp10((1 + count("grass")) * 0.8),
+    cap: clamp10((1 + count("cap")) * 0.6),
+  };
+  // Rizz: touching grass helps, being delulu helps a little, plus a pinch of chaos per resume
+  const rizz = clamp10(2 + scores.grass * 0.5 + scores.delulu * 0.2 + (hash(text) % 4));
+  return { scores, rizz };
+}

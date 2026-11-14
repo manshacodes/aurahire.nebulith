@@ -30,6 +30,14 @@
 .dropzone:hover, .dropzone.over { border-color: var(--ink); transform: scale(1.015); }
 .dz-icon { display: grid; place-items: center; width: 52px; height: 52px; margin-bottom: 6px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); font-size: 24px; font-weight: 900; animation: bob 2s ease-in-out infinite; }
 @keyframes bob { 50% { transform: translateY(-6px); } }
+.name-card { display: flex; flex-direction: column; gap: 10px; }
+.name-row { display: flex; gap: 8px; }
+.text-input { flex: 1; min-width: 0; padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface-2); font-weight: 700; font-size: 16px; }
+.text-input:focus { outline: none; border-color: var(--ink); }
+.reroll { flex: none; padding: 0 14px; font-size: 14px; }
+.name-preview { font-weight: 600; color: var(--sub); }
+.name-preview b { display: inline-block; color: var(--ink); font-family: var(--font-display); font-weight: var(--display-weight); font-size: 22px; letter-spacing: -0.03em; }
+.name-preview b.pop { animation: bump 0.45s cubic-bezier(.2,.9,.3,1.6); }
 .personas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 .persona { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 14px 12px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); text-align: left; transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s; backdrop-filter: var(--glass); }
 .persona small { font-size: 12px; font-weight: 600; line-height: 1.3; color: var(--sub); }
@@ -235,6 +243,16 @@ body[data-route="ghosted"] .app { animation: drain 1.6s ease forwards; }
 /* ---------- profile ---------- */
 .cover { height: 110px; border-radius: var(--radius); background: linear-gradient(120deg, var(--accent), var(--accent-2)); }
 .avatar-lg { display: grid; place-items: center; width: 92px; height: 92px; margin: -64px 0 0 18px; border: 5px solid #fff; border-radius: 50%; background: var(--accent-2); color: var(--accent-2-ink); font-weight: 900; font-size: 30px; }
+.avatar-lg-wrap { margin: -64px 0 0 18px; line-height: 0; }
+.av-lg { width: 92px; height: 92px; font-size: 30px; border: 5px solid #fff; }
+.av-lg .av-emoji { font-size: 44px; }
+.swatches-row, .emoji-row { display: flex; flex-wrap: wrap; gap: 10px; }
+.emoji-row { margin-top: 14px; gap: 8px; }
+.swatch { width: 34px; height: 34px; border: 3px solid #fff; box-shadow: 0 0 0 1px var(--line); transition: transform 0.15s; }
+.swatch[aria-pressed="true"] { box-shadow: 0 0 0 3px var(--ink); transform: scale(1.1); }
+.emoji-opt { width: 40px; height: 40px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-2); font-size: 20px; font-weight: 900; }
+.emoji-opt:first-child { font-size: 14px; }
+.emoji-opt[aria-pressed="true"] { border-color: var(--ink); box-shadow: 0 0 0 2px var(--ink); }
 .name-input { width: 100%; padding: 2px 0; border: 0; border-bottom: 2px dashed transparent; background: none; font-family: var(--font-display); font-weight: var(--display-weight); font-size: 30px; letter-spacing: -0.04em; }
 .name-input:focus { outline: none; border-bottom-color: var(--line); }
 .headline { font-size: 14px; font-weight: 500; color: var(--sub); }
@@ -258,6 +276,30 @@ body[data-route="ghosted"] .app { animation: drain 1.6s ease forwards; }
 .back-link:hover { color: var(--ink); }
 .mog-bar { display: grid; grid-template-columns: 64px 1fr auto; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 13px; font-weight: 800; }
 .mog-bar > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.av.avatar-sm, .av.avatar-xs { background: var(--c-bg); color: var(--c-ink); }
+.avatar-xs { display: inline-grid; place-items: center; flex: none; width: 30px; height: 30px; border-radius: 50%; font-size: 11px; font-weight: 900; }
+/* cap or fax */
+.claims { display: grid; gap: 10px; padding: 0; list-style: none; }
+.claim { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 4px 10px; padding: 10px 12px; border-radius: var(--radius-sm); background: var(--surface-2); }
+.claim-text { font-weight: 700; font-size: 14px; }
+.claim-btns { display: flex; gap: 6px; }
+.cf { padding: 6px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); font-size: 12px; font-weight: 900; text-transform: uppercase; }
+.cf.cap[aria-pressed="true"] { background: #FF3B5C; color: #fff; border-color: transparent; }
+.cf.fax[aria-pressed="true"] { background: #22B33A; color: #fff; border-color: transparent; }
+.claim-result { grid-column: 1 / -1; font-size: 12px; font-weight: 700; color: var(--sub); }
+.claim-result:empty { display: none; }
+/* diss thread */
+.thread { display: grid; gap: 10px; margin-top: 16px; }
+.thread:empty { display: none; }
+.msg { display: flex; align-items: flex-start; gap: 8px; }
+.msg p { padding: 8px 12px; border-radius: 14px; background: var(--surface-2); font-size: 14px; font-weight: 600; }
+.msg p b { display: block; font-size: 11px; color: var(--sub); }
+.msg.me p { background: var(--accent); color: var(--accent-ink); }
+.msg.me p b { color: inherit; opacity: 0.7; }
+.diss-box { display: grid; gap: 10px; margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--line); }
+.diss-box textarea { min-height: 0; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface-2); font-size: 15px; resize: none; }
+/* larp */
+.larp-out { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; padding: 12px; border-radius: var(--radius-sm); background: var(--surface-2); font-weight: 600; }
 .mog-verdict { margin-top: 6px; font-weight: 800; font-size: 17px; letter-spacing: -0.01em; }
 
 /* ---------- hold ring zone + "HR said:" hand moment ---------- */
@@ -332,3 +374,12 @@ body[data-route="ghosted"] .app { animation: drain 1.6s ease forwards; }
 .fly-pts { position: fixed; z-index: 95; font-weight: 900; font-size: 22px; pointer-events: none; text-shadow: 0 2px 0 #fff; }
 .fly-pts.good { color: #2FA80F; }
 .fly-pts.bad { color: #E0123A; }
+
+/* ---------- AuraGPT breakdown (score screen) ---------- */
+.factors { display: grid; gap: 14px; padding: 0; list-style: none; }
+.factor { display: grid; gap: 6px; }
+.factor-top { display: flex; justify-content: space-between; font-size: 14px; }
+.factor-top b { font-weight: 800; }
+.factor-top span { font-weight: 800; font-variant-numeric: tabular-nums; }
+.factor .bar { height: 10px; }
+.factor small { font-size: 12px; font-weight: 600; color: var(--sub); }

@@ -41,6 +41,23 @@ img { max-width: 100%; display: block; }
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
 }
+/* your profile circle, top left (colours come from the fixed sticker palette) */
+.av { display: inline-grid; place-items: center; flex: none; border-radius: 50%; background: var(--c-bg, #CDBEFF); color: var(--c-ink, #1E1340); font-weight: 900; line-height: 1; }
+.av-emoji { font-size: 1.15em; }
+.av-top { width: 36px; height: 36px; font-size: 13px; box-shadow: 0 0 0 2px #fff, 0 2px 8px rgba(0,0,0,0.15); transition: transform 0.2s; }
+.me-link { display: inline-flex; text-decoration: none; border-radius: 50%; }
+.me-link:hover .av-top { transform: scale(1.08) rotate(-4deg); }
+body[data-route="home"] .me-link { display: none; }
+
+/* bottom tabs: only on the "social" screens */
+.tabbar { position: fixed; left: 50%; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 30; display: none; gap: 4px; width: min(440px, calc(100% - 24px)); padding: 6px; border: 1px solid var(--line); border-radius: 22px; background: var(--surface-solid); box-shadow: 0 10px 30px rgba(0,0,0,0.14); transform: translateX(-50%); }
+body:is([data-route="jobs"], [data-route="people"], [data-route="u"], [data-route="chat"], [data-route="rate"], [data-route="profile"]) .tabbar { display: flex; }
+body:is([data-route="jobs"], [data-route="people"], [data-route="u"], [data-route="chat"], [data-route="rate"], [data-route="profile"]) .app { padding-bottom: 110px; }
+.tab { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 4px; border-radius: 16px; color: var(--sub); font-size: 12px; font-weight: 800; text-decoration: none; transition: background 0.2s, color 0.2s; }
+.tab span { font-size: 18px; line-height: 1; }
+.tab:hover { color: var(--ink); }
+.tab[aria-current="page"] { background: var(--accent); color: var(--accent-ink); }
+
 .logo {
   margin-right: auto;
   font-family: var(--font-display);
@@ -226,15 +243,25 @@ img { max-width: 100%; display: block; }
   width: 420px;
   height: 420px;
   border-radius: 50%;
-  background: var(--blob-1);
-  filter: blur(110px);
+  /* a soft radial gradient looks like a blurred circle but costs nothing to draw
+     (filter: blur(110px) made phones redraw a huge blur every frame) */
+  --blob: var(--blob-1);
+  background: radial-gradient(circle, color-mix(in srgb, var(--blob) 85%, transparent) 0%, transparent 68%);
   opacity: 0.7;
   pointer-events: none;
+  will-change: transform;
   animation: drift 18s ease-in-out infinite alternate;
 }
 .blobs span:first-child { top: -140px; left: -140px; }
-.blobs span:last-child { bottom: -160px; right: -140px; background: var(--blob-2); animation-duration: 22s; animation-direction: alternate-reverse; }
+.blobs span:last-child { --blob: var(--blob-2); bottom: -160px; right: -140px; animation-duration: 22s; animation-direction: alternate-reverse; }
 @keyframes drift { to { transform: translate(80px, 60px) scale(1.15); } }
+
+/* Phones: frosted glass (backdrop-filter) on every card is too heavy to scroll smoothly.
+   Keep it on the topbar only and use solid surfaces elsewhere. */
+@media (pointer: coarse) {
+  .card, .btn-ghost, .move, .persona, .dropzone, .msg.hr, .icon-btn { backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .card { background: var(--surface-solid, var(--surface)); }
+}
 
 .side-marquee { position: fixed; top: 0; bottom: 0; z-index: 0; display: none; overflow: hidden; pointer-events: none; }
 .side-marquee.left { left: 3vw; }

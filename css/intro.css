@@ -6,6 +6,7 @@
 
 .lo-top { display: flex; align-items: center; gap: 12px; height: 56px; padding: 0 16px; background: #fff; border-bottom: 1px solid #E5E5E5; }
 .lo-logo { display: grid; place-items: center; flex: none; width: 34px; height: 34px; border-radius: 6px; background: #0A66C2; color: #fff; font-weight: 800; font-size: 17px; letter-spacing: -0.04em; }
+.lo-word { margin-left: -4px; color: #0A66C2; font-weight: 800; font-size: 19px; letter-spacing: -0.03em; }
 .lo-search { flex: 1; max-width: 280px; padding: 8px 12px; border-radius: 6px; background: #EDF3F8; color: #666; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .lo-nav { display: none; margin-left: auto; gap: 22px; font-size: 12px; color: #666; }
 .lo-badge { position: relative; }
