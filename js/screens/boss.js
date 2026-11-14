@@ -17,7 +17,7 @@ const HAND = 3;            // random moves dealt per turn (plus "ask about salar
 const RAGE_AT = 40;        // boss HP that triggers rage mode
 const RAGE_MULT = 1.3;     // rage attacks hit this much harder
 const METER_MAX = 100;     // aura meter: full = ultimate unlocked
-const BLOCK_SWEEP = 2400, RAGE_SWEEP = 1900;   // how long the block marker takes to cross (ms), faster in rage mode
+const BLOCK_SWEEP = 1100, RAGE_SWEEP = 900;    // how long the block marker takes to cross (ms), faster in rage mode
 const BLOCK_DAMAGE = { perfect: 0, good: 0.5, miss: 1 };
 
 // The ultimate is a move like the others, so it uses the same code path

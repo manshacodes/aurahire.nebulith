@@ -53,12 +53,16 @@ export async function taunt(fighterEl, text) {
 
 // ---------- Block minigame (full screen) ----------
 // 1. A warning + a 3, 2, 1 countdown ("3… lock in 🔒") so you know it's coming (taps don't count yet)
-// 2. "NOW. BLOCK IT, TWIN." and a marker sweeps across a big bar.
+// 2. "NOW. BLOCK IT, TWIN." and a marker sweeps across a big bar, speeding up as it goes
+//    (it creeps at the start and rips across the end: that's the adrenaline).
 //    Tap anywhere (or press space/enter) while it's in the green zone.
 // Resolves "perfect" (dead centre), "good" (in the zone) or "miss" (outside / too late).
-export function blockQTE({ sweepMs = 2400, attack = "", stepMs = 800 } = {}) {
-  const zoneW = 30, perfectW = 12;                // widths in % of the bar
-  const zoneAt = rand(30, 100 - zoneW - 4);        // where the zone sits this time
+const ACCEL = 1.8;                                 // >1 = the marker speeds up as it travels
+const markerAt = (t) => Math.pow(Math.min(1, Math.max(0, t)), ACCEL) * 100;   // time 0-1 -> position 0-100%
+
+export function blockQTE({ sweepMs = 1100, attack = "", stepMs = 480 } = {}) {
+  const zoneW = 24, perfectW = 9;                 // widths in % of the bar
+  const zoneAt = rand(25, 100 - zoneW - 4);        // where the zone sits (further right = it's moving faster = harder)
   document.body.insertAdjacentHTML("beforeend", `
     <div class="qte qte-full warn" role="dialog" aria-label="Block the attack">
       <div class="qte-inner">
@@ -93,7 +97,7 @@ export function blockQTE({ sweepMs = 2400, attack = "", stepMs = 800 } = {}) {
     };
     const judge = () => {
       if (!live) return;                            // still in the warning: ignore early taps
-      const p = ((performance.now() - start) / sweepMs) * 100;
+      const p = markerAt((performance.now() - start) / sweepMs);   // same curve as the marker you see
       const centre = zoneAt + zoneW / 2;
       if (Math.abs(p - centre) <= perfectW / 2) return end("perfect");
       if (p >= zoneAt && p <= zoneAt + zoneW) return end("good");
@@ -101,9 +105,9 @@ export function blockQTE({ sweepMs = 2400, attack = "", stepMs = 800 } = {}) {
     };
     const onKey = (e) => { if (e.key === " " || e.key === "Enter") { e.preventDefault(); judge(); } };
     const tick = (now) => {
-      const p = Math.min(1, (now - start) / sweepMs);
-      marker.style.left = `${p * 100}%`;
-      if (p < 1) raf = requestAnimationFrame(tick);
+      const t = (now - start) / sweepMs;
+      marker.style.left = `${markerAt(t)}%`;
+      if (t < 1) raf = requestAnimationFrame(tick);
     };
 
     el.addEventListener("pointerdown", judge);      // tap anywhere on the screen
@@ -123,7 +127,7 @@ export function blockQTE({ sweepMs = 2400, attack = "", stepMs = 800 } = {}) {
       el.classList.remove("warn");
       raf = requestAnimationFrame(tick);
       timeout = setTimeout(() => end("miss"), sweepMs + 60);   // too slow = no block
-    }, 500 + i * stepMs));
+    }, 300 + i * stepMs));
   });
 }
 
