@@ -1,65 +1,110 @@
 # AuraHire: stop applying. start aura farming.
 
-A brainrot job portal built for **NEBULITH: The Brainrot Ideathon & Hackathon** (Celestial Biscuit, IGDTUW). It's a parody of student LinkedIn culture. Your resume is rated in aura points, every job listing is a red flag, applying is a boss fight, and HR only replies in stickers.
+A brainrot job portal built for **NEBULITH: The Brainrot Ideathon & Hackathon** (Celestial Biscuit, IGDTUW), Track 2: **SUPERNOVA, The Code Chaos**.
 
-**Live demo:** https://aurahire-nebulith.vercel.app/
+**Live site:** https://aurahire-nebulith.vercel.app/
+**Repo:** https://github.com/manshacodes/aurahire.nebulith
+
+## About
+
+AuraHire is a brainrot parody of LinkedIn culture: stop applying, start aura farming. Upload your resume (or pick one of six personas) and AuraGPT judges it line by line, slamming verdict stamps like CAP and NEPO and scoring you in aura points, with a 0–10 breakdown for yap, nepo, delulu, grind, touch grass and cap. Swipe through red-flag job listings (Tralalero Tralala Pvt Ltd wants an Italian brainrot intern), chase a runaway Apply button, then fight HR in a turn-based boss battle. Win and memes slam onto the screen faster and faster; lose and the app drains to grey while HR flips you off. HR only replies in memes, your classmates' profiles are there to roast, and the whole site switches between five vibes. Built with plain HTML, CSS and JavaScript, GSAP and Lenis, fully responsive and deployed on Vercel. Chaos in the copy, clarity in the journey.
 
 ## The idea
 
-Every BTech student knows the LinkedIn grind: 14 hackathon participation certificates, core member of 6 clubs, "humbled and honoured" posts. AuraHire stops pretending and makes it official. The interface takes a clean, modern job-portal layout and fills it with internet-brainrot energy, but the user journey stays clear and easy to follow.
+Every BTech student knows the LinkedIn grind: 14 hackathon participation certificates, core member of 6 clubs, "humbled and honoured" posts. AuraHire stops pretending and makes it official. Your resume is rated in aura, every listing is a red flag, applying is a boss fight, and HR only replies in stickers.
+
+The brief asked for an unusual idea turned into a thoughtfully designed experience, not a cluttered one. So the chaos lives in the **copy, stickers and interactions**, while the **layout and user journey stay clean**: one clear path from landing page to offer (or ghosting), with a tab bar for everything else.
+
+## The journey
+
+1. **Intro:** a believable LinkedIn feed gets crossed out with a red marker, "nah.", stickered, scrambled into brainrot, and wiped away to reveal AuraHire.
+2. **Landing page:** a scroll story (see below), ending in a live theme picker and a feature grid.
+3. **Upload:** type your first name and AuraGPT assigns you a surname (Grindwala, Mogwani, Rizzvi…, reroll-able). Then paste your resume, upload a `.txt`, or pick a persona: the hackathon tourist, the nepo intern, the dsa monk, the linkedin lunatic, the founder (19) or the club president.
+4. **Scan:** AuraGPT reads every line live, with a thinking orb, a terminal log, a highlighter sweep, verdict stamps (W, BASED, MID, L, CAP, NEPO, GLAZE, LARP, TOURIST) and points flying into a counter and graph.
+5. **Score:** a count-up, a rank from "certified npc" to "mogging the whole batch", a roast, rizz (6-7/10 only when earned), and the **AuraGPT breakdown**: yap level, nepo index, delulu meter, grind, touch grass and a cap detector, each scored 0–10 from what's actually in your resume.
+6. **Pick your 5:** describe yourself in 5 stickers, choosing from text stickers and meme stickers mixed together (try a 6th: "this isn't 6-7, twin").
+7. **Swipe:** 12 red-flag listings in a new order every visit. Swipe right to apply, left to ghost them first.
+8. **Apply:** the Apply button runs away from your cursor, then gives up and becomes a press-and-hold ring.
+9. **Boss fight:** a turn-based fight against that company's HR boss. You're dealt 3 random moves from a pool of 11 each turn, plus "ask about salary" (always there, always backfires). Dodge, stun and 2× charge effects; HR enters rage mode below 40 HP.
+10. **Win:** the meme slam. Memes slam onto the screen faster and faster until they cover it, then "OFFER UNLOCKED", then an offer letter and a typewriter "humbled and honoured" post.
+11. **Lose:** the app drains to grey, "HR is typing" forever, then "HR said:" shatters and a hand flips you off.
 
 ## Features
 
 | Feature | What it does |
 | --- | --- |
-| **"LinkedOut" intro** | A believable fake professional-network feed gets crossed out with a red marker, stickered, scrambled into brainrot and wiped away to reveal AuraHire |
-| **Scroll-story landing page** | Smooth scrolling (Lenis) with GSAP ScrollTrigger scenes: parallax stickers, a marquee that skews with your scroll speed, a pinned aura counter, job cards that flip away, a scrubbed boss fight and a sticker storm |
-| **AuraGPT resume scanner** | Paste your resume (or upload a .txt) and a rule-based scorer judges every line: a thinking orb, a live terminal log, a highlighter sweep, verdict stamps (W, CAP, NEPO, GLAZE…), points flying into a live counter and graph |
-| **Aura Score reveal** | Animated count-up, confetti, a rank from "certified npc" to "mogging the whole batch", and a copy-to-clipboard flex |
-| **Pick your 5 stickers** | Dating-app style: choose exactly 5 brainrot stickers that describe you (try picking a 6th) |
-| **Swipeable job feed** | Drag cards right to apply or left to ghost them first. Listings include "Cracked Intern, zero yapping" and "Senior Vibe Engineer, must have 7x7=49 energy" |
-| **The Apply button runs away** | It flees your cursor with taunts, then gives up and becomes a "hold to apply" ring |
-| **Boss fight** | A playable turn-based fight against HR with real HP, random damage and crits. Mention Excel, glaze the manager, never ask about salary |
-| **Offer or Ghosted** | Win for confetti and a generated "humbled and honoured" post. Lose and the whole app drains to grey; hold to check your status and "HR said:" shatters as a hand flips you off |
+| **AuraGPT** | A rule-based resume scorer (regex rules + roasts per line) and a 0–10 breakdown across six factors. No servers, no API keys, runs in your browser |
+| **Swipe feed** | Drag-to-swipe card stack with APPLY / GHOST stamps; 12 listings, each with its own boss and signature attack (BOMBARDIRO CROCODILO, FANUM TAX, SKIBIDI DOP DOP…) |
+| **Boss fight** | Real HP, random damage, crits, a reshuffled hand every turn, status effects and rage mode |
+| **Meme slam** | On a win, memes slam in on a shuffled grid sized to your screen (about 30 on a phone), each gap 86% of the last, until the screen is covered |
+| **HR chat** | HR replies in context: each meme gets its own reaction (often a meme back), typed messages get keyword replies, and HR notices repeats, reads your answer to its opening question, and logs off once at "4:30pm" |
+| **The batch** | A leaderboard of you + 5 fictional classmates. On their profiles: a mog check against your aura, cap-or-fax votes on each resume line, a diss thread with a diss generator where they clap back, and "larp as them" predicted posts. Your disses and votes are saved |
+| **Your profile** | A LinkedIn-style circle in the top-left (pick a colour and an emoji face), your 5 stickers, your post and sticker reactions |
 | **Sticker ratings** | Drag and drop stickers (RED FLAG, COOKED, MID…) onto a company; the rating bars update live |
-| **Sticker-only HR chat** | A tiny rule-based chatbot. Reply with the "no thanks I use AI" meme, or type and HR answers with keyword replies ("salary" → "it's a learning opportunity") |
-| **Profile** | Your 5 stickers, aura, editable name, your post and clickable sticker reactions |
-| **5 switchable vibes** | Clean Clout, Wrapped Mode, Pastel Bento, AI Slop Chrome and Corporate Deadpan. Every colour and font comes from CSS variables |
-| **Motion extras** | Scramble-text headings, a springy custom cursor and 3D tilt cards (desktop), with everything turned off for people who prefer reduced motion |
+| **5 vibes** | Clean Clout, Wrapped Mode, Pastel Bento, AI Slop Chrome and Corporate Deadpan. Switch from the topbar or from live previews on the landing page; every colour and font is a CSS variable |
+| **Motion** | Scramble-text headings, a springy cursor and 3D tilt cards on desktop, haptics on phones, and a full reduced-motion fallback |
+
+### The landing page (all GSAP ScrollTrigger)
+
+1. Hero: scramble-text logo, parallax stickers, a title that lifts away as you scroll.
+2. A marquee that skews and speeds up with your scroll velocity.
+3. "Your resume, rated in aura" (pinned): the counter scrubs 0 → 4,200 while lines get judged.
+4. "Every listing is a red flag" (pinned): job cards flip away one by one.
+5. "Applying is a boss fight" (pinned): the HP bar drains, damage numbers pop, "OFFER UNLOCKED".
+6. "HR only replies in stickers": a sticker storm flies in and assembles into a wall.
+7. "Pick your vibe": the 5 themes as live previews; tapping one switches the whole site.
+8. "Everything else in the grind": a bento grid of features, each with a tiny demo, linking to the feature.
+9. Finale: "your aura is waiting."
+
+## For the judges
+
+| Criterion | Where to look |
+| --- | --- |
+| **Creativity & Originality (25%)** | A job portal where applying is a boss fight and HR replies in memes. Original copy, characters, listings and stickers, built on current brainrot (Italian brainrot, 6-7, aura farming, fanum tax, skibidi, clanker) |
+| **Functionality & Implementation (25%)** | Nothing is faked: AuraGPT scoring and breakdown (`js/aura-engine.js`), the swipe stack, the dodge button and hold ring, the boss fight (`js/screens/boss.js`), the context-aware chat (`js/screens/chat.js`), cap/fax and disses that persist, drag-and-drop ratings, a live theme switcher |
+| **UI/UX & Visual Design (20%)** | 5 complete themes from one set of design tokens (`css/themes.css`), die-cut stickers, a clean single-column app with a tab bar, and chaos kept to copy and interactions |
+| **Code Quality & Structure (15%)** | No framework, no build step. One file per screen, all copy in `js/data.js`, small single-purpose modules, CSS variables for theming, every screen cleans up its timers and animations, user text is escaped |
+| **Deployment & Responsiveness (10%)** | Live on Vercel (auto-deploys on push). Phone-first app screens, a wide landing page on desktop, tested at 375px, 390px and 1440px. Mobile-specific performance work: no smooth-scroll library on touch, no heavy blur filters, pinned scenes sized to fit a small phone |
+| **Theme Interpretation (5%)** | Brainrot as the language of the whole product: aura points instead of skills, stickers instead of messages, memes instead of feedback |
 
 ## Tech
 
 - Plain **HTML, CSS and JavaScript (ES modules)**. No framework and no build step.
 - **GSAP 3** (ScrollTrigger, ScrambleText) and **Lenis**, bundled locally in `vendor/`.
 - A small **hash router** (`js/router.js`), so it works on any static host.
-- State is saved in **localStorage**, so your aura survives a refresh.
-- Responsive: phone-first app screens, and a wide scroll-story landing page on desktop.
+- State is saved in **localStorage** (aura, name, avatar, stickers, disses, theme), wrapped in try/catch.
+- Accessibility: real buttons, aria labels on icon-only controls, alt text on every meme, toasts in a `role="status"` region, and a `prefers-reduced-motion` fallback.
 
 ## Project structure
 
 ```
-index.html            app shell
+index.html            app shell: topbar, screen, tab bar, vibe sheet, toast
 css/
-  themes.css          the 5 vibes (design tokens)
-  base.css            layout, type, buttons, vibe sheet
+  themes.css          the 5 vibes (all colours, radii and fonts)
+  base.css            layout, type, buttons, tab bar, avatar, toast
   components.css      stickers, bars, chips, confetti, motion helpers
   screens.css         styles for each screen
   landing.css         scroll-story landing page, cursor, tilt
-  intro.css           the fake "LinkedOut" intro
+  intro.css           the LinkedIn intro (fixed palette on purpose)
 js/
-  main.js             entry point: vibes, aura pill, routes
-  router.js           hash router
+  main.js             entry point: routes, vibe sheet, aura pill, tabs
+  router.js           hash router (each screen returns a cleanup function)
   state.js            app state + localStorage
+  theme.js            switching vibes
   motion.js           Lenis + ScrollTrigger setup, scramble text, cursor, tilt
-  intro.js            the "LinkedOut gets crossed out" intro
+  intro.js            the "LinkedIn gets crossed out" intro
+  aura-engine.js      AuraGPT: per-line scoring + the 0-10 breakdown
+  identity.js         funny surname generator + profile circle
+  memes.js            meme sticker helper + mixing memes with text stickers
+  slam.js             the accelerating meme slam
   hold.js             press-and-hold ring
   hand.js             the "HR said:" hand moment
-  fx.js               helpers: toast, confetti, count-up, typewriter
-  aura-engine.js      AuraGPT: rule-based resume scoring
-  data.js             all the jokes, jobs, stickers and replies
+  fx.js               helpers: toast, confetti, count-up, typewriter, shuffle
+  data.js             all the copy: jobs, stickers, memes, replies, personas
   screens/            one file per screen
 vendor/               GSAP, ScrollTrigger, ScrambleText, Lenis
-assets/               images
+assets/stickers/      the meme stickers (320px)
+tools/make_sticker.py turns an image into a die-cut sticker
 ```
 
 ## Run it locally
@@ -67,34 +112,15 @@ assets/               images
 ES modules need a local server (opening the file directly won't work):
 
 ```bash
-cd aurahire
 python3 -m http.server 8000
-# then open http://localhost:8000
 ```
 
-or `npx serve .`
+Then open http://localhost:8000.
 
-## Put it on GitHub and deploy it
+## Deployment
 
-1. Create a new **public** repository on GitHub called `aurahire`.
-2. In this folder, run:
-   ```bash
-   git init
-   git add .
-   git commit -m "AuraHire for NEBULITH"
-   git branch -M main
-   git remote add origin https://github.com/YOUR-USERNAME/aurahire.git
-   git push -u origin main
-   ```
-3. Deploy one of these ways (all free):
-   - **GitHub Pages:** repo **Settings → Pages →** Source: *Deploy from a branch*, Branch: `main` / root → Save. Your site will be at `https://YOUR-USERNAME.github.io/aurahire/`.
-   - **Netlify:** drag this folder onto [app.netlify.com/drop](https://app.netlify.com/drop).
-   - **Vercel:** *Add New → Project*, import the repo, and keep the default settings.
-
-## Keep building with Claude Code
-
-Open a terminal in this folder and run `claude`. Example asks: "add a new job listing to data.js", "make the boss fight harder", "add a sound effect when a sticker is slapped".
+The site is deployed on **Vercel**, connected to this repo: every push to `main` redeploys https://aurahire-nebulith.vercel.app/ automatically. Because it's a static site with a hash router, it also runs on GitHub Pages or Netlify with no configuration.
 
 ## Credits
 
-Built for NEBULITH '26. GSAP by GreenSock (free for everyone, including its plugins). Lenis by darkroom.engineering. AuraHire is a parody and isn't affiliated with any real job platform. Legally distinct, please do not sue.
+Built for NEBULITH '26. GSAP by GreenSock (free for everyone, including its plugins). Lenis by darkroom.engineering. Meme images are popular internet reaction memes, used here for parody. The intro and copy parody LinkedIn culture; AuraHire isn't affiliated with LinkedIn or any real company. Legally distinct, please do not sue.
