@@ -5,7 +5,6 @@
 import { esc, sticker, rand } from "./fx.js";
 import { gsap, pauseScroll, resumeScroll } from "./motion.js";
 
-const SEEN_KEY = "aurahire:intro-seen";
 
 const POSTS = [
   {
@@ -28,12 +27,13 @@ const POSTS = [
   },
 ];
 
-export const shouldPlayIntro = () => {
-  try { return !sessionStorage.getItem(SEEN_KEY); } catch { return true; }
-};
+// Plays once per page load: opening or refreshing the site shows it again,
+// but going back to the landing page from inside the app doesn't.
+let played = false;
+export const shouldPlayIntro = () => !played;
 
 function markSeen() {
-  try { sessionStorage.setItem(SEEN_KEY, "1"); } catch { /* ignore */ }
+  played = true;
 }
 
 // A hand-drawn-ish red X sized to the screen in real pixels (so the marker stroke stays even)

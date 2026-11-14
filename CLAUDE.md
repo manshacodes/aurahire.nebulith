@@ -88,7 +88,7 @@ tools/make_sticker.py turns any image into a die-cut sticker PNG (needs: pip ins
 
 ## User flow (screens)
 
-**Intro (first visit per session, `js/intro.js` + `css/intro.css`):** a believable fake LinkedIn feed (the name in text, no real logo image) gets a red marker X, "nah.", stickers slapped on the posts, the post text scrambled into brainrot, a shake and grey-out, then an acid-lime circle wipe reveals AuraHire. Skippable, and replayable from the landing footer.
+**Intro (every page load, `js/intro.js` + `css/intro.css`):** a believable fake LinkedIn feed (the name in text, no real logo image) gets a red marker X, "nah.", stickers slapped on the posts, the post text scrambled into brainrot, a shake and grey-out, then an acid-lime circle wipe reveals AuraHire. Skippable, and replayable from the landing footer.
 
 `#/` **home**: scroll-story landing page.
 → `#/upload`: type your first name (AuraGPT assigns a funny surname like "Grindwala", reroll-able), then paste your resume, upload a .txt (only .txt is accepted), or pick one of 6 demo personas (`DEMO_RESUMES` in data.js: hackathon tourist, nepo intern, dsa monk, linkedin lunatic, founder (19), club president), each tuned to land in a different aura tier.
