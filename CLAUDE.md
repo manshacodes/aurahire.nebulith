@@ -90,7 +90,7 @@ tools/make_sticker.py turns any image into a die-cut sticker PNG (needs: pip ins
 **Intro (first visit per session, `js/intro.js` + `css/intro.css`):** a believable fake "LinkedOut" feed (parody name, no real logo) gets a red marker X, "nah.", stickers slapped on the posts, the post text scrambled into brainrot, a shake and grey-out, then an acid-lime circle wipe reveals AuraHire. Skippable, and replayable from the landing footer.
 
 `#/` **home**: scroll-story landing page.
-→ `#/upload`: paste your resume, upload a .txt, or use the demo.
+→ `#/upload`: paste your resume, upload a .txt, or pick one of 6 demo personas (`DEMO_RESUMES` in data.js: hackathon tourist, nepo intern, dsa monk, linkedin lunatic, founder (19), club president), each tuned to land in a different aura tier.
 → `#/scan`: AuraGPT v6.7 judges line by line: a sticky HUD with a thinking orb (turns green or pink per verdict) and a live counter + sparkline, a terminal log of its "thoughts", a highlighter sweep on each line, verdict stamps slamming on (W, BASED, MID, L, CAP, NEPO, GLAZE, LARP, TOURIST), points flying into the counter, a shake on big Ls, confetti on big Ws, a "SCAN COMPLETE" stamp, and a skip button.
 → `#/score`: count-up, confetti, rank tier, roast, stats, "copy my flex".
 → `#/stickers`: pick exactly 5 personality stickers (a 6th shakes: "this isn't 6-7, twin").
@@ -120,6 +120,7 @@ Side screens: `#/people` (batch leaderboard: you + 3 mock classmates ranked by a
 - **Known GSAP gotchas we hit:**
   - Pinning inside a flex parent disables pin spacing, so the landing `<section>` is `display: block`.
   - Don't GSAP-animate the `transform` of `.stk` or `.tag`, because they already use CSS transform and transition. Animate a wrapper element instead, or use `fromTo` with `transition: none`.
+  - Mobile: Lenis is skipped on touch devices (`isTouch` in motion.js); the landing page turns on `ScrollTrigger.normalizeScroll` only while it's open, and `ignoreMobileResize` stops address-bar resizes from re-measuring pins. Pinned chapters must fit in one phone screen (test at 375×667), and landing heights use `svh`, not `dvh`.
   - Elements with the `hidden` attribute need `[hidden] { display: none !important; }`, already in base.css.
 - **Accessibility:** real `<button>`s, `aria-label`s on icon-only controls, a `prefers-reduced-motion` fallback, and toasts in a `role="status"` element.
 - **Mobile first:** app screens use a max-width 460px column. The landing page goes wide (max-width 1180px) on desktop. Test at 390px and 1440px widths.

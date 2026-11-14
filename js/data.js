@@ -12,21 +12,98 @@ export const THEMES = [
 
 export const SLANG = ["aura farming", "6-7", "mogging", "crash out", "glazing", "twin", "unc", "7x7=49", "navy blue", "for the huzz", "womp womp", "chopped", "delulu is the solulu"];
 
-export const DEMO_RESUME = [
-  "Won Smart India Hackathon (internal round)",
-  "Participated in 14 hackathons",
-  "Core member of 6 clubs",
-  "Solved 400 LeetCode problems",
-  "Proficient in MS Word and PowerPoint",
-  "Hello World in 7 languages",
-  "Contributed to open source (fixed a typo)",
-  "Completed 23 free certificate courses",
-  "Summer internship at uncle's startup",
-  "Passionate, hardworking team player",
-  "Full-stack developer (made a to-do app)",
-  "9.1 CGPA",
-  "Plays cricket on weekends",
-].join("\n");
+// Demo personas on the upload screen. Each one is written to land in a different aura tier.
+export const DEMO_RESUMES = [
+  {
+    id: "tourist", name: "the hackathon tourist", tag: "14 hackathons, 0 sleep", c: "lime",
+    lines: [
+      "Won Smart India Hackathon (internal round)",
+      "Participated in 14 hackathons",
+      "Core member of 6 clubs",
+      "Solved 400 LeetCode problems",
+      "Proficient in MS Word and PowerPoint",
+      "Hello World in 7 languages",
+      "Contributed to open source (fixed a typo)",
+      "Completed 23 free certificate courses",
+      "Summer internship at uncle's startup",
+      "Passionate, hardworking team player",
+      "Full-stack developer (made a to-do app)",
+      "9.1 CGPA",
+      "Plays cricket on weekends",
+    ],
+  },
+  {
+    id: "nepo", name: "the nepo intern", tag: "it's not who you know. ok it is.", c: "pink",
+    lines: [
+      "Summer internship at dad's company",
+      "Research intern under family friend (professor)",
+      "Founder of uncle's NGO's instagram page",
+      "Proficient in Excel (my cousin set it up)",
+      "Passionate about building generational wealth",
+      "Detail-oriented go-getter",
+      "Made a weather app",
+      "Certificate in Leadership from a 2 hr Udemy course",
+      "Linkedin following: 3,000 (mostly relatives)",
+    ],
+  },
+  {
+    id: "monk", name: "the dsa monk", tag: "has not seen sunlight since sem 2", c: "black",
+    lines: [
+      "Solved 1,200 LeetCode problems",
+      "Codeforces Expert, CodeChef 5 star",
+      "9.8 CGPA",
+      "Winner, ICPC regional (1st place)",
+      "Contributed to open source: 40 merged PRs on GitHub",
+      "Fluent in C++, Java and Python",
+      "GSoC contributor",
+      "Summer intern, backend team",
+      "Hobbies: more DSA",
+    ],
+  },
+  {
+    id: "lunatic", name: "the linkedin lunatic", tag: "humbled and honoured, daily", c: "sky",
+    lines: [
+      "LinkedIn Top Voice (self-nominated)",
+      "12,000 LinkedIn followers, 4 likes per post",
+      "Core member of 9 clubs",
+      "Passionate, motivated, hardworking team player",
+      "Full-stack developer (todo app + calculator)",
+      "Proficient in MS Word, PowerPoint and Excel",
+      "Completed 47 Coursera certificate courses",
+      "Influencer in the tech space",
+      "Hello World in 12 languages",
+      "Participated in 22 hackathons",
+      "Posts \"open to work\" on LinkedIn every day",
+    ],
+  },
+  {
+    id: "founder", name: "the founder (19)", tag: "uber for chai. pre-revenue.", c: "orange",
+    lines: [
+      "Founder & CEO of a stealth startup (AI for chai)",
+      "Runner-up, college pitch competition (2 teams)",
+      "Built an LLM wrapper with 3 users (all co-founders)",
+      "Startup incubated at our college's e-cell",
+      "Python and React developer",
+      "Head of the entrepreneurship club",
+      "Gym every day at 5am",
+      "Machine learning enthusiast",
+    ],
+  },
+  {
+    id: "president", name: "the club president", tag: "calendar fully booked till 2029", c: "lilac",
+    lines: [
+      "President of the coding society",
+      "Coordinator, annual tech fest",
+      "NSS volunteer, 120 hours",
+      "Lead organiser, 2 hackathons",
+      "Also in 7 clubs",
+      "Attendance: 61% (meetings)",
+    ],
+  },
+];
+
+// The first persona doubles as the fallback when a file can't be read
+export const DEMO_RESUME = DEMO_RESUMES[0].lines.join("\n");
 
 export const SCAN_STATUS = [
   "consulting the council of seniors…",

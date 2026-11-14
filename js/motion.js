@@ -7,6 +7,8 @@ import { reducedMotion } from "./fx.js";
 const gsap = window.gsap;
 const ScrollTrigger = window.ScrollTrigger;
 export const hasGsap = Boolean(gsap && ScrollTrigger);
+// Phones and tablets: native touch scrolling is already smooth, so we skip Lenis there
+export const isTouch = matchMedia("(pointer: coarse)").matches;
 let lenis = null;
 
 export function initMotion() {
@@ -14,8 +16,11 @@ export function initMotion() {
   if (hasGsap) {
     gsap.registerPlugin(ScrollTrigger);
     if (window.ScrambleTextPlugin) gsap.registerPlugin(window.ScrambleTextPlugin);
+    // On phones the address bar shows/hides while you scroll, which resizes the screen.
+    // Don't recalculate every pin when that happens (it makes pinned chapters jump).
+    ScrollTrigger.config({ ignoreMobileResize: true });
   }
-  if (hasGsap && window.Lenis && !reducedMotion()) {
+  if (hasGsap && window.Lenis && !reducedMotion() && !isTouch) {
     // Lenis runs off GSAP's ticker so it and ScrollTrigger never disagree about scroll position
     lenis = new window.Lenis({ duration: 1.1, easing: (t) => Math.min(1, 1.001 - 2 ** (-10 * t)), smoothWheel: true });
     lenis.on("scroll", ScrollTrigger.update);

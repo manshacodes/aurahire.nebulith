@@ -5,7 +5,7 @@
 import { go } from "../router.js";
 import { $, $$, sticker, signed, rand } from "../fx.js";
 import { SLANG, JOBS, STICKERS } from "../data.js";
-import { gsap, ScrollTrigger, hasGsap, scrollTo } from "../motion.js";
+import { gsap, ScrollTrigger, hasGsap, isTouch, scrollTo } from "../motion.js";
 import { reducedMotion } from "../fx.js";
 import { playIntro, shouldPlayIntro } from "../intro.js";
 
@@ -135,6 +135,10 @@ export default function home(root) {
   $("#replay", root).addEventListener("click", () => { window.scrollTo(0, 0); playIntro().then(heroIn); });
   if (shouldPlayIntro()) playIntro().then(heroIn); else heroIn();
 
+  // On touch screens, let GSAP drive scrolling on this page so pinned chapters don't
+  // jitter (mobile browsers scroll on a separate thread). Turned off again when you leave.
+  if (isTouch) ScrollTrigger.normalizeScroll(true);
+
   const ctx = gsap.context(() => {
     // Hero: stickers drift at their own speeds, title lifts away as you scroll
     $$("[data-speed]", root).forEach((el) => {
@@ -163,21 +167,21 @@ export default function home(root) {
     const num = $("#demoNum", root);
     const counter = { v: 0 };
     num.textContent = "+0";
-    gsap.timeline({ scrollTrigger: { trigger: ".ch-score", start: "top top", end: "+=1400", scrub: 1, pin: true } })
+    gsap.timeline({ scrollTrigger: { trigger: ".ch-score", start: "top top", end: "+=1400", scrub: 1, pin: true, anticipatePin: 1 } })
       .to(counter, { v: 4200, ease: "none", duration: 1, onUpdate: () => { num.textContent = signed(counter.v); } }, 0)
       .from(".demo-line", { opacity: 0, x: 40, stagger: 0.14, duration: 0.2 }, 0)
       .fromTo(".demo-line .tag", { scale: 0 }, { scale: 1, stagger: 0.14, duration: 0.15, ease: "back.out(3)" }, 0.08);
 
     // Chapter 2: job cards flip away one by one (top card first)
     const cards = $$(".flip-card", root).reverse();
-    const flip = gsap.timeline({ scrollTrigger: { trigger: ".ch-flip", start: "top top", end: `+=${cards.length * 380}`, scrub: 1, pin: true } });
+    const flip = gsap.timeline({ scrollTrigger: { trigger: ".ch-flip", start: "top top", end: `+=${cards.length * 380}`, scrub: 1, pin: true, anticipatePin: 1 } });
     cards.slice(0, -1).forEach((card) => {
       flip.to(card, { rotateX: -88, y: -60, opacity: 0, transformOrigin: "50% 0%", ease: "power2.in", duration: 1 });
     });
 
     // Chapter 3: scrub through a boss fight
     const hp = { v: 100 };
-    gsap.timeline({ scrollTrigger: { trigger: ".ch-boss", start: "top top", end: "+=1300", scrub: 1, pin: true } })
+    gsap.timeline({ scrollTrigger: { trigger: ".ch-boss", start: "top top", end: "+=1300", scrub: 1, pin: true, anticipatePin: 1 } })
       .to(hp, { v: 0, ease: "none", duration: 1, onUpdate: () => {
         $("#demoHp", root).style.width = `${hp.v}%`;
         $("#hpLabel", root).textContent = `${Math.round(hp.v)} hp`;
@@ -199,5 +203,5 @@ export default function home(root) {
       scrollTrigger: { trigger: ".final", start: "top 95%", end: "top 35%", scrub: true } });
   }, root);
 
-  return () => { alive = false; ctx.revert(); };
+  return () => { alive = false; ctx.revert(); if (isTouch) ScrollTrigger.normalizeScroll(false); };
 }

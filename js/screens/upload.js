@@ -1,7 +1,7 @@
 import { go } from "../router.js";
 import * as S from "../state.js";
-import { $, esc, toast, shake } from "../fx.js";
-import { DEMO_RESUME } from "../data.js";
+import { $, $$, esc, toast, shake, sticker } from "../fx.js";
+import { DEMO_RESUME, DEMO_RESUMES } from "../data.js";
 
 export default function upload(root) {
   root.innerHTML = `
@@ -20,10 +20,18 @@ export default function upload(root) {
       <textarea id="text" aria-label="Your resume, one line per achievement"
         placeholder="Won a hackathon&#10;Core member of 6 clubs&#10;Proficient in MS Word">${esc(S.get().resume)}</textarea>
 
-      <div class="row">
-        <button class="btn btn-ghost" id="demo">use demo resume</button>
-        <button class="btn btn-cta" id="scan">scan my aura</button>
+      <div>
+        <p class="or" style="margin-bottom:10px">no resume? be someone else for a bit</p>
+        <div class="personas" id="personas">
+          ${DEMO_RESUMES.map((p, i) => `
+            <button class="persona" data-id="${p.id}" aria-pressed="false">
+              ${sticker(p.name, p.c, { rot: i % 2 ? 2 : -2, size: "sm" })}
+              <small>${esc(p.tag)}</small>
+            </button>`).join("")}
+        </div>
       </div>
+
+      <button class="btn btn-cta btn-xl" id="scan">scan my aura</button>
       <p class="fine">by uploading, you agree to be judged. AuraGPT runs on vibes and regex, entirely in your browser.</p>
     </section>`;
 
@@ -50,10 +58,22 @@ export default function upload(root) {
     readFile(e.dataTransfer.files[0]);
   });
 
-  $("#demo", root).addEventListener("click", () => {
-    text.value = DEMO_RESUME;
-    toast("demo resume loaded. it's giving 14 hackathons.");
+  // Pick a demo persona: fills the textarea with their resume
+  const personaBtns = $$(".persona", root);
+  const markPicked = (id) => personaBtns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.id === id)));
+  $("#personas", root).addEventListener("click", (e) => {
+    const btn = e.target.closest(".persona");
+    if (!btn) return;
+    const p = DEMO_RESUMES.find((x) => x.id === btn.dataset.id);
+    text.value = p.lines.join("\n");
+    markPicked(p.id);
+    toast(`loaded ${p.name}. ${p.tag}`);
   });
+  // Typing your own resume un-picks the persona
+  text.addEventListener("input", () => markPicked(null));
+  // Coming back with a persona's resume loaded? Show it as picked.
+  const current = DEMO_RESUMES.find((p) => p.lines.join("\n") === text.value.trim());
+  if (current) markPicked(current.id);
 
   $("#scan", root).addEventListener("click", () => {
     const resume = text.value.trim();

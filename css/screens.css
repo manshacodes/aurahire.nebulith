@@ -30,6 +30,11 @@
 .dropzone:hover, .dropzone.over { border-color: var(--ink); transform: scale(1.015); }
 .dz-icon { display: grid; place-items: center; width: 52px; height: 52px; margin-bottom: 6px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); font-size: 24px; font-weight: 900; animation: bob 2s ease-in-out infinite; }
 @keyframes bob { 50% { transform: translateY(-6px); } }
+.personas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.persona { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 14px 12px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); text-align: left; transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s; backdrop-filter: var(--glass); }
+.persona small { font-size: 12px; font-weight: 600; line-height: 1.3; color: var(--sub); }
+.persona:hover { transform: translateY(-2px); border-color: var(--ink); }
+.persona[aria-pressed="true"] { border-color: var(--ink); box-shadow: 0 0 0 2px var(--ink); }
 .or { font-size: 13px; font-weight: 600; color: var(--sub); text-align: center; }
 textarea {
   width: 100%;
