@@ -24,6 +24,7 @@ export default function jobs(root) {
       <nav class="mini-links" aria-label="More">
         <a href="#/rate">rate companies</a>
         <a href="#/chat">hr chat <span class="dot" aria-label="1 new message"></span></a>
+        <a href="#/people">people</a>
         <a href="#/profile">profile</a>
       </nav>
     </section>`;

@@ -41,6 +41,7 @@ export default function profile(root) {
         <a class="btn btn-ghost" href="#/chat">hr chat (1)</a>
         <a class="btn btn-ghost" href="#/rate">rate companies</a>
       </div>
+      <a class="btn btn-ghost btn-block" href="#/people">batch leaderboard: people you may mog →</a>
       <button class="btn btn-cta btn-xl" id="grind">back to the grind</button>
       <button class="link-btn" id="reset">start over (reset aura)</button>
     </section>`;

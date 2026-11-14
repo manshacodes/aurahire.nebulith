@@ -126,6 +126,9 @@ export const GHOST_TOASTS = [
 export const YOUR_HP = 120;
 export const BOSS_HP = 100;
 
+// Every move returns what happened. Optional fields:
+//   dmg (to the boss), self (to you), heal (to you), effect: "dodge" | "stun" | "charge"
+// You get a hand of 3 random moves each turn, plus "ask about salary" (always there, never a good idea).
 export const MOVES = [
   { id: "excel", name: "mention excel", hint: "10–18 dmg", run: () => ({ dmg: rand(10, 18), text: "you mentioned excel. the boss is mildly impressed." }) },
   {
@@ -135,8 +138,46 @@ export const MOVES = [
       : { dmg: rand(28, 40), text: "CRITICAL HIT. it actually says \"winner\"." }),
   },
   { id: "glaze", name: "glaze the manager", hint: "30 dmg · costs dignity", run: () => ({ dmg: 30, self: 10, text: "\"sir, your podcast changed my life.\" 30 dmg. −10 dignity." }) },
+  {
+    id: "github", name: "drop your github link", hint: "depends on your commits",
+    run: () => (Math.random() < 0.5
+      ? { dmg: 24, text: "green squares everywhere. HR squints. 24 dmg." }
+      : { dmg: 6, text: "3 forks and a todo app. 6 dmg. HR is unimpressed." }),
+  },
+  { id: "learner", name: "\"i'm a quick learner\"", hint: "+22 hp", run: () => ({ heal: 22, text: "you said it with your whole chest. you believed it. +22 hp." }) },
+  { id: "lag", name: "pretend your wifi died", hint: "dodge next attack", run: () => ({ effect: "dodge", text: "\"sorry, you're breaking up…\" HR's next attack will hit a frozen frame." }) },
+  { id: "reverse", name: "\"any questions for me?\"", hint: "8 dmg · HR skips a turn", run: () => ({ dmg: 8, effect: "stun", text: "you flipped the interview. HR is buffering. 8 dmg." }) },
+  { id: "farm", name: "aura farm", hint: "next hit does 2×", run: () => ({ effect: "charge", text: "you stared into the middle distance in silence. aura charging…" }) },
+  {
+    id: "six7", name: "say 6-7", hint: "6 or 7 dmg (or…?)",
+    run: () => (Math.random() < 0.12
+      ? { dmg: 67, text: "HR laughed so hard they lost 67 hp. the meme still works." }
+      : { dmg: rand(6, 7), text: "6-7. HR is unc, they didn't get it." }),
+  },
+  {
+    id: "startup", name: "pitch your startup idea", hint: "40 dmg or backfire",
+    run: () => (Math.random() < 0.5
+      ? { dmg: 40, text: "\"uber for chai.\" HR is quietly investing. 40 dmg." }
+      : { self: 15, text: "\"tinder but for class notes.\" HR blocked you on linkedin. 15 dmg to you." }),
+  },
+  {
+    id: "gpt", name: "use chatgpt live", hint: "20 dmg · might get caught",
+    run: () => (Math.random() < 0.3
+      ? { self: 20, text: "you said \"as an AI language model\" out loud. 20 dmg to you." }
+      : { dmg: 20, text: "the answer was perfect. suspiciously perfect. 20 dmg." }),
+  },
   { id: "salary", name: "ask about salary", hint: "trust me bro", run: () => ({ self: 35, text: "HR used \"it's a learning opportunity\". it bounced back. 35 dmg to you." }) },
 ];
+
+// Fight copy that isn't a move or an attack
+export const FIGHT_TEXT = {
+  opener: (boss) => `${boss} wants to know your expected stipend. choose wisely.`,
+  charged: (dmg) => `aura farm doubled it: ${dmg} dmg total.`,
+  dodged: "…but your wifi \"died\". it missed.",
+  stunned: (boss) => `${boss} is still buffering. they skipped their turn.`,
+  rage: (boss) => `${boss} entered unpaid-overtime mode. attacks hit harder now.`,
+  fx: { dodge: "wifi \"down\"", charge: "2× charged", stun: "buffering", rage: "rage mode" },
+};
 
 export const BOSS_ATTACKS = [
   { name: "AWKWARD SILENCE", text: "it's super effective.", min: 8, max: 14 },
@@ -190,3 +231,49 @@ export const HR_TEXT_REPLIES = [
 // ---------- the ghosted hand ----------
 // Path to your own hand image/GIF (e.g. "assets/hand.png"). Leave null to use the built-in cartoon hand.
 export const HAND_IMAGE = null;
+
+// ---------- mock profiles (the "batch leaderboard") ----------
+// Fictional classmates. Sticker colours use the fixed sticker palette.
+export const MOCK_PROFILES = [
+  {
+    id: "kabir", name: "kabir.exe", color: "#C8FF2E", ink: "#10200A", aura: 2140,
+    headline: "hackathon tourist | 14 participation certs | ex-intern at a startup that pivoted 6 times",
+    stickers: [["HACKATHON TOURIST", "lime"], ["CERTIFIED YAPPER", "pink"], ["3AM DEBUGGER", "black"], ["NO THANKS I USE AI", "yellow"], ["DELULU BUT DEDICATED", "lilac"]],
+    stats: [["certificates", "14"], ["hackathons won", "0"], ["energy drinks", "∞"]],
+    endorsed: "endorsed for \"fixing the projector\" by 12 people",
+    post: "humbled and honoured to share that i participated in my 14th hackathon 🙏\n\nwe did not win. we did not finish. the wifi did not work.\n\nbut the real prize was the free t-shirt we made along the way.\n\n#grateful #hackathon #nosleep",
+    reactions: { W: 14, DELULU: 22, WOMP: 9 },
+  },
+  {
+    id: "tanvi", name: "tanvi | core ×6", color: "#CDBEFF", ink: "#1E1340", aura: 3780,
+    headline: "president of 3 clubs | vp of 2 | core member of the 6th | networking is my love language",
+    stickers: [["MAIN CHARACTER", "lilac"], ["LINKEDIN LUNATIC", "pink"], ["GROUP PROJECT CARRIER", "yellow"], ["7x7=49 ENERGY", "lime"], ["CRASHES OUT POLITELY", "orange"]],
+    stats: [["clubs", "6"], ["meetings / week", "23"], ["sleep", "4h"]],
+    endorsed: "endorsed for \"making a google form for everything\" by 67 people",
+    post: "what being core member of 6 societies taught me about leadership 🧵\n\n1. calendars are a social construct\n2. every meeting could have been a whatsapp poll\n3. i have not attended a class since august\n\nagree?",
+    reactions: { AURA: 49, GLAZER: 31, CRASH: 7 },
+  },
+  {
+    id: "rohan", name: "rohan (day 412)", color: "#FF8A3D", ink: "#2A1200", aura: 940,
+    headline: "day 412 of learning dsa | 5am club | building in public (nobody asked)",
+    stickers: [["AURA FARMER", "black"], ["UNC AT 19", "grey"], ["CHAI > COFFEE", "orange"], ["TOUCHES GRASS (RARELY)", "grey"], ["RIZZ IN EXCEL", "sky"]],
+    stats: [["streak", "412d"], ["problems solved", "9"], ["cold plunges", "87"]],
+    endorsed: "endorsed for \"waking up early\" by 5 people (all at 5am)",
+    post: "day 412 of learning dsa.\n\ntoday i solved two sum.\nagain.\n\nconsistency > talent. see you tomorrow at 5am.\n\n#100daysofcode (it has been 412)",
+    reactions: { UNC: 41, WOMP: 19, SIGMA: 6 },
+  },
+];
+
+// Mog check: compare your aura with theirs
+export const MOG_VERDICTS = {
+  win: "you mog them. respectfully.",
+  tie: "dead even. it's giving twin.",
+  lose: "you got mogged. it's ok, unc.",
+  none: "scan your resume first. you can't mog with 0 aura.",
+};
+
+export const CONNECT_TOASTS = [
+  "request sent. they'll accept in 6-7 business days.",
+  "they viewed your profile and left. classic.",
+  "pending. like your internship applications.",
+];

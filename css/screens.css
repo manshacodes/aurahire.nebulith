@@ -166,6 +166,18 @@ textarea {
 .move:disabled { opacity: 0.45; transform: none; cursor: wait; }
 .move[data-id="salary"] { background: #FF5FC1; color: #fff; border-color: transparent; }
 .move[data-id="salary"] small { color: #fff; opacity: 0.85; }
+.moves-label { margin-bottom: -4px; }
+.moves.deal .move { animation: deal 0.35s cubic-bezier(.2,.9,.3,1) both; }
+.moves.deal .move:nth-child(2) { animation-delay: 0.05s; }
+.moves.deal .move:nth-child(3) { animation-delay: 0.1s; }
+.moves.deal .move:nth-child(4) { animation-delay: 0.15s; }
+@keyframes deal { from { opacity: 0; transform: translateY(10px) scale(0.96); } }
+/* status effect chips under the HP bars */
+.fx-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.fx-row:not(:empty) { margin-top: 8px; }
+.fx { padding: 3px 8px; border-radius: 999px; font-size: 11px; font-weight: 800; background: var(--accent); color: var(--accent-ink); }
+.fx-rage { background: #FF3B5C; color: #fff; animation: blink 1.2s infinite; }
+.fx-stun { background: var(--accent-2); color: var(--accent-2-ink); }
 
 /* ---------- offer ---------- */
 .letter { display: grid; grid-template-columns: auto 1fr; gap: 10px 14px; }
@@ -224,6 +236,24 @@ body[data-route="ghosted"] .app { animation: drain 1.6s ease forwards; }
 .reactions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
 .reactions .stk b { font-weight: 700; opacity: 0.8; }
 .empty { padding: 18px; border: 1px dashed var(--line); border-radius: var(--radius-sm); text-align: center; color: var(--sub); font-weight: 600; }
+
+/* ---------- people (leaderboard + mock profiles) ---------- */
+.people { display: grid; gap: 10px; padding: 0; list-style: none; }
+.person-row { display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 14px; color: inherit; text-decoration: none; transition: transform 0.15s, border-color 0.15s; }
+.person-row:hover { transform: translateY(-2px); border-color: var(--ink); }
+.person-row.is-you { outline: 2px solid var(--accent); outline-offset: -2px; }
+.rank { font-family: var(--font-display); font-weight: var(--display-weight); font-size: 18px; color: var(--sub); }
+.avatar-sm { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--accent-2); color: var(--accent-2-ink); font-weight: 900; font-size: 15px; }
+.person-meta { min-width: 0; }
+.person-meta b { display: block; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.person-meta small { display: block; font-size: 12px; color: var(--sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.person-aura { font-weight: 800; text-align: right; }
+.person-name { font-family: var(--font-display); font-weight: var(--display-weight); font-size: 30px; letter-spacing: -0.04em; line-height: 1.1; }
+.back-link { align-self: flex-start; font-weight: 700; font-size: 14px; color: var(--sub); text-decoration: none; }
+.back-link:hover { color: var(--ink); }
+.mog-bar { display: grid; grid-template-columns: 64px 1fr auto; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 13px; font-weight: 800; }
+.mog-bar > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mog-verdict { margin-top: 6px; font-weight: 800; font-size: 17px; letter-spacing: -0.01em; }
 
 /* ---------- hold ring zone + "HR said:" hand moment ---------- */
 .hold-zone { position: relative; height: 170px; }

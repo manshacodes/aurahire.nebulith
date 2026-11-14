@@ -16,6 +16,8 @@ import job from "./screens/job.js";
 import boss from "./screens/boss.js";
 import offer from "./screens/offer.js";
 import ghosted from "./screens/ghosted.js";
+import people from "./screens/people.js";
+import person from "./screens/person.js";
 import rate from "./screens/rate.js";
 import chat from "./screens/chat.js";
 import profile from "./screens/profile.js";
@@ -98,5 +100,7 @@ route("/ghosted/:how", withMotion(ghosted));   // "/ghosted/lost" auto-plays the
 route("/rate", withMotion(rate));
 route("/chat", withMotion(chat));
 route("/profile", withMotion(profile));
+route("/people", withMotion(people));
+route("/u/:id", withMotion(person));
 
 start($("#screen"));
