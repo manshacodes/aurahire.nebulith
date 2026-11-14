@@ -5,6 +5,7 @@ const KEY = "aurahire:v1";
 const defaults = {
   theme: "clean",
   name: "Aarav Grindwala",
+  muted: false,          // sound effects on/off (the 🔊 button)
   surnameRoll: 0,        // how many times you rerolled your AuraGPT-assigned surname
   avatar: { color: "lilac", emoji: "" },   // your profile circle
   social: {},            // per mock profile: { disses: [...], votes: { lineIndex: "cap"|"fax" } }

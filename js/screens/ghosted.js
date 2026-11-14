@@ -3,10 +3,11 @@ import * as S from "../state.js";
 import { $, sticker } from "../fx.js";
 import { mountHold } from "../hold.js";
 import { playHand } from "../hand.js";
+import { earn } from "../aura.js";
 
 // params.how === "lost" means we came straight from losing the boss fight
 export default function ghosted(root, params = {}) {
-  S.addAura(-800);
+  earn("ghosted");
   let stopHold = null, stopHand = null, autoTimer = null;
 
   root.innerHTML = `

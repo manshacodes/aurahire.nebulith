@@ -2,6 +2,7 @@ import { go } from "../router.js";
 import * as S from "../state.js";
 import { $, $$, esc, rand, toast, sticker } from "../fx.js";
 import { JOBS, STICKERS } from "../data.js";
+import { earn } from "../aura.js";
 
 const TRAY = ["W", "L", "MID", "COOKED", "RED_FLAG", "GREEN_FLAG", "NPC", "MOGGED", "CRASH", "SEVEN", "CHOPPED", "WOMP"];
 
@@ -40,7 +41,7 @@ export default function rate(root) {
   function slap(id, x, y) {
     ratings[id] = (ratings[id] || 0) + 1;
     S.set({ ratings });
-    S.addAura(5);
+    earn("rate");
     const wrap = document.createElement("span");
     wrap.className = "placed";
     wrap.innerHTML = sticker(STICKERS[id].label, STICKERS[id].c, { rot: rand(-18, 18), size: "sm" });

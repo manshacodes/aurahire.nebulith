@@ -8,6 +8,7 @@ import { $, $$, esc, sticker, toast, rand } from "../fx.js";
 import { THEMES, LANDING_VIBES as V, LANDING_FEATURES as F, CAP_FAX } from "../data.js";
 import { memeImg } from "../memes.js";
 import { setTheme } from "../theme.js";
+import { earn } from "../aura.js";
 
 export function extrasHTML() {
   const current = S.get().theme;
@@ -81,6 +82,7 @@ export function bindExtras(root) {
     const card = e.target.closest(".vibe-card");
     if (!card) return;
     setTheme(card.dataset.id);
+    earn("vibe");
     $$(".vibe-card", root).forEach((c) => c.setAttribute("aria-pressed", String(c === card)));
     toast(V.picked);
   });

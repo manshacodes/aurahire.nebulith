@@ -328,9 +328,96 @@ export const POST_TEMPLATES = [
 ];
 
 // ---------- HR chat bot ----------
-export const HR_OPENERS = [
-  "Hi! Quick q: can you solve a DSA problem live, with no help?",
+// HR's interview questions. One opens the chat (random each visit), and HR asks another every
+// few messages. `chips` = quick replies you can tap. `answers` are checked in order (first match
+// wins), `other` is for anything else. Parts: { text }, { stk: STICKERS id }, { img: MEMES id }.
+const YES = /\b(yes|yeah|ya|yep|yup|sure|ofc|of course|obviously|absolutely|always|can|i can)\b|!!/i;
+const NO = /\b(no|nah|nope|never|can'?t|cannot|absolutely not)\b/i;
+const AI = /chatgpt|\bai\b|gpt|claude|copilot|gemini/i;
+export const HR_QUESTIONS = [
+  {
+    q: "Hi! Quick q: can you solve a DSA problem live, with no help?",
+    chips: ["yes obviously", "no 💀", "can i use chatgpt"],
+    answers: [
+      [AI, [{ img: "erm" }, { text: "using AI in the interview? bold. still no." }]],
+      [NO, [{ text: "honesty. we hate that here." }, { img: "skill" }]],
+      [YES, [{ text: "great. reverse a linked list. in your head. now." }, { img: "loading" }]],
+    ],
+    other: [{ text: "that wasn't a yes or a no. very managerial of you." }],
+  },
+  {
+    q: "where do you see yourself in 5 years?",
+    chips: ["in your seat", "on a beach", "still here, unpaid"],
+    answers: [
+      [/seat|chair|job|ceo|boss|your role/i, [{ text: "bold. HR has flagged you as a threat." }, { img: "stare" }]],
+      [/beach|vacation|retire|chill|travel/i, [{ text: "we don't offer leave. or beaches." }, { img: "chillin" }]],
+      [/here|unpaid|intern|same/i, [{ text: "perfect answer. we'll extend your internship by 5 years." }, { img: "slay" }]],
+    ],
+    other: [{ text: "wrong. the answer was \"here, grateful\"." }, { stk: "MID" }],
+  },
+  {
+    q: "what's your biggest weakness?",
+    chips: ["i work too hard", "i'm a perfectionist", "honestly? waking up"],
+    answers: [
+      [/too hard|perfection|care too much|overwork/i, [{ img: "erm" }, { text: "classic. we've heard that 4,000 times today." }]],
+      [/wak|sleep|morning|lazy|bed/i, [{ text: "honesty. we hate that here." }, { img: "gn" }]],
+    ],
+    other: [{ text: "noted. that's now your performance review." }, { img: "skill" }],
+  },
+  {
+    q: "are you comfortable working weekends?",
+    chips: ["yes!!", "absolutely not", "define weekend"],
+    answers: [
+      [/define|what.*weekend|weekend\?/i, [{ text: "a weekend is two extra workdays with no meetings." }]],
+      [NO, [{ img: "shook" }, { text: "not a culture fit. we're a family here." }]],
+      [YES, [{ text: "great. sundays are optional. (mandatory)" }, { img: "crazy" }]],
+    ],
+    other: [{ text: "we'll take that as a yes." }, { img: "slay" }],
+  },
+  {
+    q: "how many hackathons have you won?",
+    chips: ["0, but 14 certificates", "won SIH", "i'm built different"],
+    answers: [
+      [/\b0\b|zero|certif|participat|none/i, [{ text: "participation certificates are not a personality." }, { img: "skill" }]],
+      [/won|winner|sih|first|1st/i, [{ text: "the internal round doesn't count, bestie." }, { img: "hmm" }]],
+      [/different|sigma|aura|him|her/i, [{ img: "erm" }, { text: "erm, what the sigma." }]],
+    ],
+    other: [{ text: "we'll verify that with your linkedin." }, { img: "stare" }],
+  },
+  {
+    q: "why should we hire you over 11,204 other applicants?",
+    chips: ["aura", "i'll work for free", "i'm him"],
+    answers: [
+      [/free|unpaid|no stipend|exposure/i, [{ text: "you're hired." }, { text: "(you were always going to be unpaid)" }, { img: "yippee" }]],
+      [/aura|vibe|rizz/i, [{ text: "aura isn't a skill. (it's 40% of the score)" }, { stk: "AURA" }]],
+      [/\bhim\b|\bher\b|goat|best/i, [{ text: "everyone says that. 11,204 people said that." }, { img: "unimpressed" }]],
+    ],
+    other: [{ text: "interesting. HR will think about it. (HR will not)" }],
+  },
+  {
+    q: "what's your expected stipend?",
+    chips: ["₹50k", "whatever you think is fair", "6-7"],
+    answers: [
+      [/6-?7|six seven/i, [{ text: "6-7 rupees? we can stretch to 5." }, { img: "six7" }]],
+      [/fair|whatever|anything|exposure/i, [{ text: "fair is ₹0 + a hoodie (size S)." }, { img: "chillin" }]],
+      [/\d|k\b|lpa|lakh|₹/i, [{ img: "shook" }, { text: "HR had to sit down." }]],
+    ],
+    other: [{ text: "it's a learning opportunity." }],
+  },
+  {
+    q: "tell me about a time you showed leadership.",
+    chips: ["i made the google form", "i carried the group project", "i don't lead, i vibe"],
+    answers: [
+      [/google form|form|poll/i, [{ text: "visionary. truly a ceo moment." }, { img: "slay" }]],
+      [/carr|group project|did everything/i, [{ text: "and the others got the same marks. leadership." }, { img: "crying" }]],
+      [/vibe|chill|don'?t lead/i, [{ text: "honestly? management material." }, { img: "zen" }]],
+    ],
+    other: [{ text: "so... never. got it." }, { stk: "NPC" }],
+  },
 ];
+// Quick replies shown when HR isn't waiting on an answer
+export const HR_QUICK_CHIPS = ["what's the stipend?", "any update on my application?", "can i work from home?", "can i take a day off?"];
+export const HR_ASK_EVERY = 3;   // HR asks a new question after this many of your messages
 
 // Reply to a sticker you send. stk = sticker HR sends back, text = message.
 export const HR_STICKER_REPLIES = {
@@ -351,12 +438,6 @@ export const HR_STICKER_REPLIES = {
 
 export const HR_DEFAULT_REPLIES = [[{ stk: "NPC" }], [{ text: "per my last email…" }], [{ stk: "MID" }], [{ text: "noted. (it was not noted)" }]];
 
-// Your first typed answer to HR's opener ("can you solve a DSA problem live?")
-export const HR_OPENER_ANSWERS = [
-  [/\b(yes|yeah|ya|yep|sure|ofc|of course|obviously|can)\b/i, [{ text: "great. reverse a linked list. in your head. now." }, { img: "loading" }]],
-  [/\b(no|nah|nope|can'?t|cannot)\b/i, [{ text: "honesty. we hate that here." }, { img: "skill" }]],
-  [/chatgpt|\bai\b|gpt|claude|copilot/i, [{ img: "erm" }, { text: "using AI in the interview? bold. still no." }]],
-];
 
 // Reply to text you type (words are "banned", but HR answers anyway). Last rule catches everything.
 export const HR_TEXT_REPLIES = [
@@ -613,4 +694,45 @@ export const LANDING_FEATURES = {
   meters: [["yap level", 9], ["nepo index", 10], ["grind", 2]],
   names: [["Aarav", "Grindwala"], ["Riya", "Rizzvi"], ["Kabir", "Mogwani"]],
   diss: "the only thing kabir has shipped is a linkedin post",
+};
+
+// ---------- aura farming ----------
+// Everything you do earns (or costs) aura. [amount, reason shown in the "+12 aura" pop]
+export const AURA_EARN = {
+  ghost:   [10, "ghosted them first"],
+  meme:    [13, "meme diplomacy"],
+  aiMeme:  [49, "no thanks i use ai"],
+  sticker: [7, "sticker reply"],
+  answer:  [15, "survived an HR question"],
+  diss:    [5, "courage"],
+  cap:     [3, "fact-checked"],
+  larp:    [2, "method acting"],
+  react:   [1, "engagement farming"],
+  connect: [4, "networking"],
+  endorse: [2, "endorsed for breathing"],
+  lockIn:  [67, "vibe locked in"],
+  vibe:    [6, "re-skinned"],
+  reroll:  [-5, "identity crisis"],
+  rate:    [5, "rated a company"],
+  bossWin: [1000, "beat HR"],
+  ghosted: [-800, "ghosted. womp womp"],
+};
+
+// Leaderboard copy ({name}, {rank}, {gap} get filled in)
+export const AURA_RANK = {
+  passed: "you just passed {name}. you're #{rank} in the batch.",
+  top: "#1 in the batch. you are mogging everyone.",
+  lost: "{name} just passed you. womp womp. you're #{rank}.",
+  next: "{gap} aura to pass {name}",
+  tipsTitle: "how to farm aura",
+  tips: [
+    "beat an HR boss fight: +1,000",
+    "send HR the \"no thanks i use ai\" meme: +49",
+    "answer HR's interview questions: +15 each",
+    "lock in your 5 stickers: +67",
+    "send memes (+13) and stickers (+7) in HR chat",
+    "ghost a job before it ghosts you: +10",
+    "call cap, diss and larp on the batch's profiles",
+    "getting ghosted: −800 (avoid)",
+  ],
 };

@@ -5,6 +5,7 @@ import { PERSONALITY, STICKERS, AVATAR_COLORS, AVATAR_EMOJI, MEMES } from "../da
 import { memeImg, isMemePick, memeIdOf } from "../memes.js";
 import { tierFor } from "../aura-engine.js";
 import { avatarHTML } from "../identity.js";
+import { earn } from "../aura.js";
 
 export default function profile(root) {
   const s = S.get();
@@ -80,6 +81,7 @@ export default function profile(root) {
     if (!btn) return;
     const id = btn.dataset.id;
     const reactions = { ...S.get().reactions, [id]: S.get().reactions[id] + 1 };
+    earn("react");
     S.set({ reactions });
     btn.textContent = `${STICKERS[id].label} ${reactions[id]}`;
     btn.classList.remove("pop");

@@ -6,6 +6,7 @@ import * as S from "../state.js";
 import { $, $$, esc, signed, sleep, confetti, shake, reducedMotion } from "../fx.js";
 import { scoreResume, BASE_AURA } from "../aura-engine.js";
 import { gsap } from "../motion.js";
+import { sfx } from "../sound.js";
 
 const STEP_MS = 850;
 
@@ -118,6 +119,11 @@ export default function scan(root) {
     if (cancelled) return;
 
     el.classList.add("tagged", "stamped");      // tag pops + stamp slams
+    if (!fast) {
+      sfx.thunk();
+      if (line.points >= 100) setTimeout(sfx.ding, 120);
+      else if (line.points <= -100) setTimeout(sfx.womp, 150);
+    }
     orb.className = `orb ${line.points >= 0 ? "happy" : "angry"}`;
     flyPoints(el, line.points);
     totals.push(totals[totals.length - 1] + line.points);

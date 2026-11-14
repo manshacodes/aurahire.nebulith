@@ -420,3 +420,19 @@ body[data-route="chat"] .app { padding-bottom: 120px; }
 .slam-meme { position: absolute; max-width: 260px; aspect-ratio: 1; object-fit: cover; border-radius: 16px; box-shadow: 0 0 0 5px #fff, 0 12px 30px rgba(0,0,0,0.35); will-change: transform; }
 .slam-finale { position: absolute; inset: 0; display: grid; place-items: center; }
 .slam-finale .stk { font-size: clamp(30px, 9vw, 72px); padding: 0.35em 0.6em; border-radius: 0.4em; box-shadow: 0 0 0 8px #fff, 0 20px 50px rgba(0,0,0,0.4); }
+
+/* chat quick replies */
+.quick-row { display: flex; gap: 8px; overflow-x: auto; padding: 2px 2px 4px; scrollbar-width: none; }
+.quick-row::-webkit-scrollbar { display: none; }
+.quick-row:empty { display: none; }
+.quick-chip { flex: none; padding: 8px 13px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface-2); font-size: 13px; font-weight: 700; white-space: nowrap; transition: transform 0.15s, border-color 0.15s; }
+.quick-chip:hover { transform: translateY(-1px); border-color: var(--ink); }
+
+/* the batch: climb card */
+.climb-card { display: grid; gap: 10px; }
+.climb-top { display: flex; align-items: baseline; gap: 8px; }
+.climb-rank { font-family: var(--font-display); font-weight: var(--display-weight); font-size: 40px; line-height: 1; letter-spacing: -0.05em; }
+.climb-of { font-size: 13px; font-weight: 700; color: var(--sub); }
+.climb-next { font-weight: 800; }
+.farm-tips summary { cursor: pointer; font-size: 13px; font-weight: 800; color: var(--sub); }
+.farm-tips ul { display: grid; gap: 6px; margin-top: 10px; padding-left: 18px; font-size: 13px; font-weight: 600; }

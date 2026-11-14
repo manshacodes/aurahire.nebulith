@@ -2,13 +2,14 @@ import { go } from "../router.js";
 import * as S from "../state.js";
 import { $, esc, pick, confetti, typewriter, sticker } from "../fx.js";
 import { JOBS, POST_TEMPLATES } from "../data.js";
+import { earn } from "../aura.js";
 
 export default function offer(root) {
   const j = JOBS.find((x) => x.id === S.get().currentJob) || JOBS[0];
   let alive = true;
   let post = "";
 
-  S.addAura(1000);
+  earn("bossWin");
   confetti(120);
 
   root.innerHTML = `

@@ -4,6 +4,8 @@ import { $, esc, pick, rand, sleep, floatText, confetti, reducedMotion } from ".
 import { JOBS, MOVES, BOSS_ATTACKS, BOSS_HP, YOUR_HP, FIGHT_TEXT } from "../data.js";
 import { hasGsap } from "../motion.js";
 import { memeSlam, preloadMemes } from "../slam.js";
+import { sfx } from "../sound.js";
+import { startMusic, stopMusic, setRage } from "../music.js";
 
 const HAND = 3;            // random moves dealt per turn (plus "ask about salary")
 const RAGE_AT = 40;        // boss HP that triggers rage mode
@@ -63,6 +65,7 @@ export default function boss(root, { id }) {
   }
 
   function hit(fighter, amount) {
+    amount >= 28 ? sfx.crit() : sfx.hit();   // big numbers get the crunchy crit sound
     fighter.classList.remove("hit");
     void fighter.offsetWidth;
     fighter.classList.add("hit");
@@ -72,6 +75,7 @@ export default function boss(root, { id }) {
   async function finish(won) {
     if (!alive) return;
     setButtons(false);
+    stopMusic();   // KO: the music cuts, the win slam / ghosting takes over
     if (won) {
       log(`${j.boss} has 0 HP left. HR is drafting your offer…`);
       S.set({ currentJob: j.id });
@@ -130,6 +134,8 @@ export default function boss(root, { id }) {
     // Low on HP? The boss gets angry once.
     if (!fx.rage && bossHp <= RAGE_AT) {
       fx.rage = true;
+      sfx.rumble();
+      setRage(true);   // final-round music: faster, with a lead on top
       log(FIGHT_TEXT.rage(j.boss));
       paint();
       await sleep(1100);
@@ -156,7 +162,8 @@ export default function boss(root, { id }) {
 
   renderHand();
   preloadMemes();   // so the win slam is instant
+  startMusic();     // arcade battle music for the whole fight
   paint();
 
-  return () => { alive = false; };
+  return () => { alive = false; stopMusic(); };
 }

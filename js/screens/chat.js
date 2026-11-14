@@ -1,29 +1,34 @@
-// HR chat: you reply in stickers and memes, HR replies in context (sometimes with a meme back).
-// Context it keeps: your answer to its opening question, repeats, and how long you've been chatting.
-import * as S from "../state.js";
-import { $, esc, pick, sleep, sticker } from "../fx.js";
+// HR chat: an interview over memes and stickers. HR opens with a random question, asks another
+// every few messages, and replies in context (often with a meme back).
+// Context it keeps: the question it's waiting on, repeats, and how long you've been chatting.
+// Quick-reply chips under the thread let you answer in one tap.
+import { $, esc, pick, sleep, sticker, shuffle } from "../fx.js";
 import {
-  STICKERS, MEMES, HR_OPENERS, HR_STICKER_REPLIES, HR_DEFAULT_REPLIES, HR_TEXT_REPLIES,
-  HR_OPENER_ANSWERS, HR_MEME_REPLIES, HR_REPEAT_REPLY, HR_LOGOFF, HR_BACK,
+  STICKERS, MEMES, HR_QUESTIONS, HR_QUICK_CHIPS, HR_ASK_EVERY, HR_STICKER_REPLIES, HR_DEFAULT_REPLIES,
+  HR_TEXT_REPLIES, HR_MEME_REPLIES, HR_REPEAT_REPLY, HR_LOGOFF, HR_BACK,
 } from "../data.js";
 import { memeImg, mix } from "../memes.js";
+import { earn } from "../aura.js";
 
 const TRAY = ["SIX7", "W", "L", "COOKED", "TWIN", "UNC", "SEVEN", "DELULU", "CRASH", "GLAZER", "HUZZ", "WOMP"];
 const AI_MEME_SRC = "assets/no-thanks-i-use-ai.png";
-const LOGOFF_AFTER = 7;   // HR "logs off" once after this many of your messages
+const LOGOFF_AFTER = 9;   // HR "logs off" once after this many of your messages
 
 export default function chat(root) {
   let alive = true, typing = false;
-  let sent = 0, last = null, answeredOpener = false, loggedOff = false;
+  let sent = 0, sinceQuestion = 0, last = null, loggedOff = false;
+  const questions = shuffle(HR_QUESTIONS);   // a different interview every visit
+  let pending = null;                        // the question HR is waiting on
 
   root.innerHTML = `
     <section>
       <div class="chat-head">
         <span class="avatar">HR</span>
-        <div><b>HR unc · Ohio Ventures</b><small>replies only in stickers (mostly)</small></div>
+        <div><b>HR unc · Ohio Ventures</b><small>interviewing you. in memes.</small></div>
       </div>
       <div class="chat-thread" id="thread" aria-live="polite"></div>
       <div class="card composer">
+        <div class="quick-row" id="quick" aria-label="Quick replies"></div>
         <p class="label">stickers + memes · words are banned</p>
         <div class="tray-row tray-mixed" id="tray">
           ${mix(
@@ -50,6 +55,12 @@ export default function chat(root) {
     return el;
   }
 
+  // Quick replies: answers to the current question, or general asks when HR isn't waiting
+  function renderQuick() {
+    const chips = pending ? pending.chips : HR_QUICK_CHIPS;
+    $("#quick", root).innerHTML = chips.map((c) => `<button class="quick-chip" data-text="${esc(c)}">${esc(c)}</button>`).join("");
+  }
+
   const rot = () => pick([-6, -3, 4, 7]);
   const aiMeme = () => `<img class="meme" src="${AI_MEME_SRC}" alt="No thanks, I use AI meme" style="--rot:3deg" />`;
   // One chat message part: a sticker, a meme, or text
@@ -72,20 +83,50 @@ export default function chat(root) {
     typing = false;
   }
 
+  // HR asks the next question from this visit's shuffled list
+  async function ask() {
+    const next = questions.shift();
+    if (!next) return;
+    pending = next;
+    sinceQuestion = 0;
+    await hrSay([{ text: next.q }]);
+    if (alive) renderQuick();
+  }
+
   // Decide HR's reply from what you sent + the conversation so far
-  async function respond(key, defaultParts) {
+  async function respond(key, parts) {
     sent += 1;
+    sinceQuestion += 1;
     const repeat = key === last;
     last = key;
-    if (repeat) return hrSay(HR_REPEAT_REPLY);
-    await hrSay(defaultParts);
+    await hrSay(repeat ? HR_REPEAT_REPLY : parts);
+    if (!alive) return;
     // After a while HR logs off (once), then grudgingly comes back
-    if (alive && sent >= LOGOFF_AFTER && !loggedOff) {
+    if (sent >= LOGOFF_AFTER && !loggedOff) {
       loggedOff = true;
       await hrSay(HR_LOGOFF);
       await sleep(1600);
       if (alive) add(HR_BACK, "hint");
     }
+    // Every few messages, HR moves on to its next interview question
+    if (alive && !pending && sinceQuestion >= HR_ASK_EVERY) await ask();
+  }
+
+  // Your typed (or quick-reply) message: an answer if HR asked something, else keyword replies
+  function sendText(text) {
+    if (!text || typing) return;
+    add(esc(text), "me");
+    let parts;
+    if (pending) {
+      const match = pending.answers.find(([re]) => re.test(text));
+      parts = match ? match[1] : pending.other;
+      pending = null;
+      earn("answer");
+    } else {
+      parts = HR_TEXT_REPLIES.find(([re]) => re.test(text))[1];
+    }
+    renderQuick();
+    respond(`text:${text.toLowerCase()}`, parts);
   }
 
   // One tray, two kinds of buttons: memes (data-meme) and text stickers (data-id)
@@ -95,36 +136,35 @@ export default function chat(root) {
     const meme = btn.dataset.meme, id = btn.dataset.id;
     if (meme === "AI") {
       add(aiMeme(), "me", "sticker");
-      S.addAura(49);
+      earn("aiMeme");
       respond("AI", HR_STICKER_REPLIES.MEME);
     } else if (meme) {
       add(memeImg(meme, "meme", rot()), "me", "sticker");
-      S.addAura(13);
+      earn("meme");
       respond(meme, pick(HR_MEME_REPLIES[meme]));
     } else {
       add(sticker(STICKERS[id].label, STICKERS[id].c, { rot: rot(), size: "lg" }), "me", "sticker");
-      S.addAura(7);
+      earn("sticker");
       respond(id, HR_STICKER_REPLIES[id] || pick(HR_DEFAULT_REPLIES));
     }
   });
 
-  // Typed messages: your first one is read as the answer to HR's opening question
+  $("#quick", root).addEventListener("click", (e) => {
+    const chip = e.target.closest(".quick-chip");
+    if (chip) sendText(chip.dataset.text);
+  });
+
   $("#form", root).addEventListener("submit", (e) => {
     e.preventDefault();
     const input = $("#input", root);
     const text = input.value.trim();
-    if (!text || typing) return;
-    add(esc(text), "me");
     input.value = "";
-    const opener = !answeredOpener && HR_OPENER_ANSWERS.find(([re]) => re.test(text));
-    answeredOpener = true;
-    const parts = opener ? opener[1] : HR_TEXT_REPLIES.find(([re]) => re.test(text))[1];
-    respond(`text:${text.toLowerCase()}`, parts);
+    sendText(text);
   });
 
   (async () => {
-    await hrSay([{ text: HR_OPENERS[0] }]);
-    if (alive) add("tip: answer with a meme. or type yes/no if you're brave", "hint");
+    await ask();
+    if (alive) add("tip: tap a reply, send a meme, or type if you're brave", "hint");
   })();
 
   return () => { alive = false; };

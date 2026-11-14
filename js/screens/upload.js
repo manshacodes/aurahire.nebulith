@@ -3,6 +3,7 @@ import * as S from "../state.js";
 import { $, $$, esc, pick, toast, shake, sticker } from "../fx.js";
 import { DEMO_RESUMES, SURNAME_LINES, DEFAULT_FIRST } from "../data.js";
 import { surnameFor, cleanFirst } from "../identity.js";
+import { earn } from "../aura.js";
 
 export default function upload(root) {
   // Your saved name is "First Surname"; we only ask for the first part
@@ -68,6 +69,7 @@ export default function upload(root) {
   });
   $("#reroll", root).addEventListener("click", () => {
     roll += 1;
+    earn("reroll");
     saveName();
     $("#nameLine", root).textContent = pick(SURNAME_LINES);
     const b = $("#fullName", root);

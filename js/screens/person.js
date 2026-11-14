@@ -7,6 +7,7 @@ import { $, esc, pick, rand, signed, sticker, toast, sleep } from "../fx.js";
 import { MOCK_PROFILES, STICKERS, MOG_VERDICTS, CONNECT_TOASTS, CAP_FAX, DISSES, DISS_REPLIES } from "../data.js";
 import { tierFor } from "../aura-engine.js";
 import { initials, avatarHTML } from "../identity.js";
+import { earn } from "../aura.js";
 
 // Same profile + line -> same "% of the batch agreed" every time
 const pctFor = (id, i) => 40 + ([...id].reduce((h, c) => h + c.charCodeAt(0), 0) * (i + 3)) % 55;
@@ -114,11 +115,13 @@ export default function person(root, { id }) {
   // ---------- connect + endorse ----------
   $("#connect", root).addEventListener("click", (e) => {
     toast(pick(CONNECT_TOASTS));
+    earn("connect");
     e.currentTarget.textContent = "pending…";
     e.currentTarget.disabled = true;
   });
   $("#endorse", root).addEventListener("click", () => {
     endorsements += 1;
+    earn("endorse");
     $("#endorsed", root).textContent = p.endorsed.replace(/by \d+/, `by ${endorsements}`);
     toast("endorsed. they will not endorse you back.");
   });
@@ -138,6 +141,7 @@ export default function person(root, { id }) {
     const li = btn.closest(".claim");
     showVote(li, btn.dataset.vote);
     saveSocial({ votes: { ...social().votes, [li.dataset.k]: btn.dataset.vote } });
+    earn("cap");
   });
 
   // ---------- sticker reactions ----------
@@ -146,6 +150,7 @@ export default function person(root, { id }) {
     if (!btn) return;
     const sid = btn.dataset.id;
     reactions[sid] += 1;
+    earn("react");
     btn.textContent = `${STICKERS[sid].label} ${reactions[sid]}`;
     btn.classList.remove("pop");
     void btn.offsetWidth;
@@ -172,7 +177,7 @@ export default function person(root, { id }) {
     saveSocial({ disses: [...social().disses, { from: "me", text }] });
     renderThread();
     toast("diss posted. +5 aura for courage.");
-    S.addAura(5);
+    earn("diss");
     await sleep(rand(900, 1500));
     if (!alive) return;
     saveSocial({ disses: [...social().disses, { from: "them", ...pick(DISS_REPLIES) }] });
@@ -184,6 +189,7 @@ export default function person(root, { id }) {
     $("#larpOut", root).hidden = false;
     $("#larpText", root).textContent = p.larps[larpIndex % p.larps.length];
     larpIndex += 1;
+    earn("larp");
     $("#larp", root).textContent = "larp again 🎭";
   });
 

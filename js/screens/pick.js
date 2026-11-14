@@ -3,6 +3,7 @@ import * as S from "../state.js";
 import { $, $$, toast, shake, esc } from "../fx.js";
 import { PERSONALITY, MEMES } from "../data.js";
 import { memeImg, mixGroups } from "../memes.js";
+import { earn } from "../aura.js";
 
 const MAX = 5;
 const ROTATIONS = [-4, 3, -2, 5, -5, 2, -3, 4, -2, 3, -4, 2, 5, -3, 3, -5];
@@ -76,6 +77,7 @@ export default function pick(root) {
       return;
     }
     S.set({ stickers: [...chosen] });
+    earn("lockIn");
     toast("vibe locked. recruiters have been notified.");
     go("/jobs");
   });

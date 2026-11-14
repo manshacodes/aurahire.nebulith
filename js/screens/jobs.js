@@ -2,6 +2,8 @@ import { go } from "../router.js";
 import * as S from "../state.js";
 import { $, esc, pick, shuffle, toast } from "../fx.js";
 import { JOBS, GHOST_TOASTS } from "../data.js";
+import { sfx } from "../sound.js";
+import { earn } from "../aura.js";
 
 const THRESHOLD = 110; // px you need to drag to count as a swipe
 
@@ -53,6 +55,7 @@ export default function jobs(root) {
   function swipe(card, direction) {
     if (busy) return;
     busy = true;
+    sfx.whoosh(direction);
     const x = direction === "right" ? 600 : -600;
     card.style.transition = "transform 0.35s ease-in";
     card.style.transform = `translate(${x}px, 40px) rotate(${x / 20}deg)`;
@@ -62,7 +65,7 @@ export default function jobs(root) {
         S.set({ currentJob: card.dataset.id });
         go(`/job/${card.dataset.id}`);
       } else {
-        S.addAura(10);
+        earn("ghost");
         toast(pick(GHOST_TOASTS));
         index++;
         render();

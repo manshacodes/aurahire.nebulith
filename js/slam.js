@@ -4,6 +4,8 @@
 import { gsap } from "./motion.js";
 import { rand, reducedMotion, shuffle, sticker, confetti, sleep, buzz } from "./fx.js";
 import { MEMES, memeSrc } from "./data.js";
+import { sfx } from "./sound.js";
+import { playVictory } from "./music.js";
 
 const FIRST_GAP = 420;   // ms before the 2nd slam
 const SPEED_UP = 0.86;   // each gap is 86% of the one before -> the pace keeps increasing
@@ -54,6 +56,7 @@ export async function memeSlam({ finale = "OFFER UNLOCKED", color = "lime" } = {
       { scale: 1, rotation: rand(-14, 14), opacity: 1, duration: 0.22, ease: "power4.in" });
     gsap.fromTo(layer, { x: rand(-10, 10), y: rand(-8, 8) }, { x: 0, y: 0, duration: 0.18, ease: "power2.out", delay: 0.2 });
     buzz(8);
+    sfx.slap();
 
     await sleep(gap);
     gap = Math.max(MIN_GAP, gap * SPEED_UP);
@@ -65,9 +68,10 @@ export async function memeSlam({ finale = "OFFER UNLOCKED", color = "lime" } = {
   gsap.fromTo(layer.querySelector(".slam-finale"), { scale: 5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: "power4.in" });
   gsap.fromTo(layer, { x: -18 }, { x: 0, duration: 0.5, ease: "elastic.out(1, 0.3)", delay: 0.33 });
   buzz([30, 40, 60]);
+  playVictory();   // happy chiptune victory jingle with the confetti
   await sleep(350);
   confetti(70);
-  await sleep(1300);
+  await sleep(2600);
 
   await gsap.to(layer, { opacity: 0, scale: 1.08, duration: 0.4, ease: "power2.in" });
   layer.remove();

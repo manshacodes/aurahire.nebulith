@@ -7,6 +7,8 @@ import { THEMES } from "./data.js";
 import { initMotion, afterRender } from "./motion.js";
 import { avatarHTML } from "./identity.js";
 import { applyTheme, setTheme } from "./theme.js";
+import { isMuted, setMuted } from "./sound.js";
+import { earn } from "./aura.js";
 
 import home from "./screens/home.js";
 import upload from "./screens/upload.js";
@@ -47,9 +49,23 @@ function setupVibes() {
     const opt = e.target.closest(".vibe-opt");
     if (!opt) return;
     setTheme(opt.dataset.id);
+    earn("vibe");
     render();
     setTimeout(close, 250);
   });
+}
+
+// ---------- sound on/off ----------
+function setupSound() {
+  const btn = $("#soundBtn");
+  const paint = () => {
+    const on = !isMuted();
+    btn.textContent = on ? "🔊" : "🔇";
+    btn.setAttribute("aria-pressed", String(on));
+    btn.setAttribute("aria-label", on ? "Sound effects on (tap to mute)" : "Sound effects off (tap to unmute)");
+  };
+  paint();
+  btn.addEventListener("click", () => { setMuted(!isMuted()); paint(); });
 }
 
 // ---------- your profile circle (top left, like LinkedIn) ----------
@@ -104,6 +120,7 @@ setupVibes();
 setupAuraPill();
 setupMeLink();
 setupTabs();
+setupSound();
 
 route("/", withMotion(home));
 route("/upload", withMotion(upload));

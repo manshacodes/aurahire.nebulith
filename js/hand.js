@@ -4,7 +4,8 @@
 
 import { HAND_IMAGE } from "./data.js";
 import { gsap } from "./motion.js";
-import { rand, reducedMotion } from "./fx.js";
+import { rand, reducedMotion, buzz } from "./fx.js";
+import { sfx } from "./sound.js";
 
 // Six shards that together cover the whole "HR said:" text (clip-path polygons, in %)
 const SHARDS = [
@@ -84,7 +85,9 @@ export function playHand({ onClose, onRevenge }) {
     .from(".hr-label", { y: 20, opacity: 0, duration: 0.3 }, 0.15)
     .from(".hr-text", { scale: 1.6, opacity: 0, duration: 0.4, ease: "back.out(2.2)" }, 0.2)
     .to(".cracks path", { strokeDashoffset: 0, duration: 0.22, stagger: 0.06, ease: "power1.in" }, 0.9)
+    .call(() => sfx.thunk(), null, 0.9)          // the first crack
     .addLabel("slam", 1.35)
+    .call(() => sfx.shatter(), null, "slam")     // "HR said:" shatters as the hand slams up
     .fromTo(".hand", { yPercent: 120, rotation: -12 }, { yPercent: 0, rotation: 0, duration: 0.45, ease: "back.out(1.7)" }, "slam")
     .to(".shard", {
       x: () => rand(-320, 320), y: () => rand(-260, 120), rotation: () => rand(-120, 120),
@@ -96,7 +99,7 @@ export function playHand({ onClose, onRevenge }) {
     .to(".hand", { rotation: 4, yoyo: true, repeat: 3, duration: 0.12, ease: "sine.inOut" }, "slam+=0.5")
     .from(".hr-after", { y: 30, opacity: 0, duration: 0.4 }, "slam+=0.9");
 
-  if (navigator.vibrate) setTimeout(() => navigator.vibrate([60, 40, 120]), 1400);
+  setTimeout(() => buzz([60, 40, 120]), 1400);
 
   return () => { tl.kill(); el.remove(); };
 }

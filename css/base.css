@@ -292,3 +292,22 @@ body:is([data-route="jobs"], [data-route="people"], [data-route="u"], [data-rout
 
 /* toasts sit above the bottom tab bar on screens that have it */
 body:is([data-route="jobs"], [data-route="people"], [data-route="u"], [data-route="chat"], [data-route="rate"], [data-route="profile"]) .toast { bottom: calc(100px + env(safe-area-inset-bottom)); }
+
+/* sound toggle: a round icon button next to the vibe button */
+.sound-btn { width: 36px; padding: 0; font-size: 15px; }
+.aura-pill, .icon-btn { white-space: nowrap; flex: none; }
+/* small phones: tighter topbar so avatar, logo, aura, sound and vibe fit on one row */
+@media (max-width: 400px) {
+  .topbar { gap: 7px; }
+  .logo { font-size: 19px; }
+  .aura-pill { padding: 6px 10px; font-size: 12px; }
+  .icon-btn { padding: 0 11px; }
+  .sound-btn { width: 34px; padding: 0; }
+  .av-top { width: 32px; height: 32px; font-size: 12px; }
+}
+
+/* "+12 aura · reason" pops under the aura pill */
+.aura-pop { position: fixed; z-index: 120; padding: 5px 10px; border-radius: 999px; background: var(--accent); color: var(--accent-ink); font-size: 12px; font-weight: 800; white-space: nowrap; pointer-events: none; box-shadow: 0 6px 16px rgba(0,0,0,0.15); animation: auraPop 1.6s cubic-bezier(.2,.9,.3,1.2) forwards; }
+.aura-pop.neg { background: #FF3B5C; color: #fff; }
+@keyframes auraPop { 0% { opacity: 0; transform: translateY(-8px) scale(0.8); } 12% { opacity: 1; transform: translateY(0) scale(1); } 80% { opacity: 1; } 100% { opacity: 0; transform: translateY(14px); } }
+@media (prefers-reduced-motion: reduce) { .aura-pop { animation: none; } }
