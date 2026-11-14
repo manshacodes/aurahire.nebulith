@@ -1,0 +1,123 @@
+/* Five "vibes". Every colour, radius and font in the app reads from these tokens,
+   so switching data-theme on <html> restyles everything instantly. */
+
+:root,
+[data-theme="clean"] {
+  --bg: #F6F5F0;
+  --surface: #FFFFFF;
+  --surface-solid: #FFFFFF;
+  --surface-2: #EFEDE6;
+  --ink: #0E0E0E;
+  --sub: #6B6B66;
+  --line: rgba(14, 14, 14, 0.09);
+  --accent: #C8FF2E;
+  --accent-ink: #0E0E0E;
+  --accent-2: #CDBEFF;
+  --accent-2-ink: #1E1340;
+  --cta: #0E0E0E;
+  --cta-ink: #C8FF2E;
+  --num: #0E0E0E;
+  --radius: 28px;
+  --radius-sm: 16px;
+  --font-display: "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-label: "Inter", system-ui, sans-serif;
+  --display-weight: 900;
+  --shadow: 0 18px 40px rgba(0, 0, 0, 0.07);
+  --glass: none;
+  --blob-1: transparent;
+  --blob-2: transparent;
+  --meta: #F6F5F0;
+}
+
+[data-theme="wrapped"] {
+  --bg: #0A0A0C;
+  --surface: rgba(255, 255, 255, 0.07);
+  --surface-solid: #18171D;
+  --surface-2: rgba(255, 255, 255, 0.06);
+  --ink: #FFFFFF;
+  --sub: #A1A1AA;
+  --line: rgba(255, 255, 255, 0.14);
+  --accent: #D9FF3F;
+  --accent-ink: #0A0A0C;
+  --accent-2: #B794FF;
+  --accent-2-ink: #1B0B3A;
+  --cta: linear-gradient(90deg, #D9FF3F, #9EF01A);
+  --cta-ink: #0A0A0C;
+  --num: linear-gradient(120deg, #D9FF3F, #B794FF);
+  --shadow: none;
+  --glass: blur(16px);
+  --blob-1: #7C3AED;
+  --blob-2: #6DD11A;
+  --meta: #0A0A0C;
+}
+
+[data-theme="bento"] {
+  --bg: #FFF4E6;
+  --surface: #FFFFFF;
+  --surface-solid: #FFFFFF;
+  --surface-2: #FFE9D6;
+  --ink: #2A1E14;
+  --sub: #8A7563;
+  --line: rgba(42, 30, 20, 0.1);
+  --accent: #FFD6C2;
+  --accent-ink: #5A2410;
+  --accent-2: #CFE3FF;
+  --accent-2-ink: #0E3060;
+  --cta: #2A1E14;
+  --cta-ink: #FFF4E6;
+  --num: #2A1E14;
+  --radius: 26px;
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-body: "Space Grotesk", system-ui, sans-serif;
+  --font-label: "Space Grotesk", system-ui, sans-serif;
+  --display-weight: 700;
+  --shadow: none;
+  --meta: #FFF4E6;
+}
+
+[data-theme="chrome"] {
+  --bg: linear-gradient(160deg, #FFB3E1 0%, #C7B8FF 50%, #9DF3FF 100%) fixed;
+  --surface: rgba(255, 255, 255, 0.45);
+  --surface-solid: #F3EAFF;
+  --surface-2: rgba(255, 255, 255, 0.55);
+  --ink: #160F2E;
+  --sub: #4B3F73;
+  --line: rgba(255, 255, 255, 0.85);
+  --accent: #FF5FC1;
+  --accent-ink: #FFFFFF;
+  --accent-2: #7B61FF;
+  --accent-2-ink: #FFFFFF;
+  --cta: #160F2E;
+  --cta-ink: #FFFFFF;
+  --num: linear-gradient(180deg, #FFFFFF 0%, #8E8AA8 47%, #FFFFFF 53%, #5B5675 100%);
+  --radius: 30px;
+  --font-label: "Silkscreen", monospace;
+  --shadow: 0 12px 30px rgba(91, 61, 181, 0.12);
+  --glass: blur(18px);
+  --blob-1: rgba(255, 255, 255, 0.8);
+  --blob-2: #FF8AD8;
+  --meta: #E3C6F5;
+}
+
+[data-theme="deadpan"] {
+  --bg: #FFFFFF;
+  --surface: #FFFFFF;
+  --surface-solid: #FFFFFF;
+  --surface-2: #F8FAFC;
+  --ink: #0F172A;
+  --sub: #64748B;
+  --line: #E2E8F0;
+  --accent: #2563EB;
+  --accent-ink: #FFFFFF;
+  --accent-2: #EFF6FF;
+  --accent-2-ink: #1D4ED8;
+  --cta: #2563EB;
+  --cta-ink: #FFFFFF;
+  --num: #2563EB;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --display-weight: 700;
+  --shadow: none;
+  --meta: #FFFFFF;
+}

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en" data-theme="clean">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>AuraHire — stop applying. start aura farming.</title>
+  <meta name="description" content="A brainrot job portal where your resume is rated in aura points, applying is a boss fight, and HR only replies in stickers." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%230E0E0E'/%3E%3Ctext x='32' y='45' font-size='36' font-family='Arial Black,Arial' font-weight='900' text-anchor='middle' fill='%23C8FF2E'%3Ea%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&family=Silkscreen&family=Comic+Neue:wght@700&family=Playfair+Display:ital,wght@1,900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="vendor/lenis.css" />
+  <link rel="stylesheet" href="css/themes.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/screens.css" />
+  <link rel="stylesheet" href="css/landing.css" />
+  <link rel="stylesheet" href="css/intro.css" />
+</head>
+<body>
+  <div class="blobs" aria-hidden="true"><span></span><span></span></div>
+  <div class="side-marquee left" aria-hidden="true"><div>aura farming · 6-7 · mogging · crash out · aura farming · 6-7 · mogging · crash out ·</div></div>
+  <div class="side-marquee right" aria-hidden="true"><div>7x7=49 · twin · unc · womp womp · 7x7=49 · twin · unc · womp womp ·</div></div>
+
+  <div class="app">
+    <header class="topbar">
+      <a href="#/" class="logo" aria-label="AuraHire home">aurahire</a>
+      <a href="#/profile" class="aura-pill" id="auraPill" aria-label="Your aura, open profile">aura: 0</a>
+      <button class="icon-btn" id="vibeBtn" aria-label="Change vibe (theme)" aria-expanded="false">vibe</button>
+    </header>
+
+    <main id="screen" class="screen" aria-live="polite"></main>
+  </div>
+
+  <div class="scrim" id="scrim" hidden></div>
+  <aside class="sheet" id="vibeSheet" aria-label="Choose a vibe" hidden>
+    <div class="sheet-handle" aria-hidden="true"></div>
+    <p class="label">pick your vibe</p>
+    <h2 class="h2">the app, but in your aura.</h2>
+    <div class="vibe-list" id="vibeList"></div>
+  </aside>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <noscript><p style="padding:24px">AuraHire needs JavaScript. Your aura without it: -1000.</p></noscript>
+  <!-- GSAP (free, incl. plugins) and Lenis are bundled locally in /vendor -->
+  <script src="vendor/gsap.min.js"></script>
+  <script src="vendor/ScrollTrigger.min.js"></script>
+  <script src="vendor/ScrambleTextPlugin.min.js"></script>
+  <script src="vendor/lenis.min.js"></script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
