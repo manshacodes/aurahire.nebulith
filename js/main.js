@@ -6,6 +6,7 @@ import { $, signed } from "./fx.js";
 import { THEMES } from "./data.js";
 import { initMotion, afterRender } from "./motion.js";
 import { avatarHTML } from "./identity.js";
+import { applyTheme, setTheme } from "./theme.js";
 
 import home from "./screens/home.js";
 import upload from "./screens/upload.js";
@@ -24,13 +25,6 @@ import chat from "./screens/chat.js";
 import profile from "./screens/profile.js";
 
 // ---------- vibes ----------
-function applyTheme(id) {
-  document.documentElement.dataset.theme = id;
-  let meta = document.querySelector('meta[name="theme-color"]');
-  if (!meta) { meta = document.createElement("meta"); meta.name = "theme-color"; document.head.appendChild(meta); }
-  meta.content = getComputedStyle(document.documentElement).getPropertyValue("--meta").trim();
-}
-
 function setupVibes() {
   const btn = $("#vibeBtn"), sheet = $("#vibeSheet"), scrim = $("#scrim"), list = $("#vibeList");
 
@@ -52,8 +46,7 @@ function setupVibes() {
   list.addEventListener("click", (e) => {
     const opt = e.target.closest(".vibe-opt");
     if (!opt) return;
-    S.set({ theme: opt.dataset.id });
-    applyTheme(opt.dataset.id);
+    setTheme(opt.dataset.id);
     render();
     setTimeout(close, 250);
   });

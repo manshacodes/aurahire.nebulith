@@ -532,3 +532,29 @@ export const HR_REPEAT_REPLY = [{ text: "you sent that already. HR is documentin
 // After a few messages HR "logs off" (once)
 export const HR_LOGOFF = [{ img: "gn" }, { text: "HR has logged off for the day. (it's 4:30pm)" }];
 export const HR_BACK = "HR is back online. unfortunately.";
+
+// ---------- landing page: extra sections ----------
+export const LANDING_VIBES = {
+  label: "05 · the vibe",
+  title: "pick your vibe.",
+  sub: "five themes. same chaos. tap one and the whole site switches. (also in the topbar, anytime.)",
+  picked: "vibe switched. your aura has been re-skinned.",
+};
+
+// Bento grid of the other features. `go` = where tapping the card takes you.
+export const LANDING_FEATURES = {
+  label: "06 · everything else",
+  title: "everything else<br>in the grind.",
+  cards: [
+    { id: "breakdown", title: "the AuraGPT breakdown", line: "yap level, nepo index, delulu meter, grind, touch grass and a cap detector. all 0-10. all personal.", go: "/upload" },
+    { id: "batch", title: "roast the batch", line: "stalk 5 classmates. call cap on their resume, post a diss, and watch them clap back.", go: "/people" },
+    { id: "chat", title: "HR replies in memes", line: "send a meme, get a meme back. HR remembers everything. HR forgives nothing.", go: "/chat" },
+    { id: "names", title: "AuraGPT names you", line: "type your first name. the council assigns a surname. reroll if you dare.", go: "/upload" },
+    { id: "circle", title: "your profile circle", line: "pick a colour and a face. it's giving linkedin, but unserious.", go: "/profile" },
+    { id: "slam", title: "win = meme avalanche", line: "beat HR and the memes slam in faster and faster until the screen gives up.", go: "/jobs" },
+  ],
+  // the mini demo inside each card
+  meters: [["yap level", 9], ["nepo index", 10], ["grind", 2]],
+  names: [["Aarav", "Grindwala"], ["Riya", "Rizzvi"], ["Kabir", "Mogwani"]],
+  diss: "the only thing kabir has shipped is a linkedin post",
+};

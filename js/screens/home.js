@@ -8,6 +8,7 @@ import { SLANG, JOBS, STICKERS } from "../data.js";
 import { gsap, ScrollTrigger, hasGsap, scrollTo } from "../motion.js";
 import { reducedMotion } from "../fx.js";
 import { playIntro, shouldPlayIntro } from "../intro.js";
+import { extrasHTML, bindExtras, animateExtras } from "./home-extras.js";
 
 const HERO_STICKERS = [
   ["W", "lime", -14, "lg", 1.8, "8%", "6%"],
@@ -111,6 +112,8 @@ export default function home(root) {
         </div>
       </div>
 
+      ${extrasHTML()}
+
       <div class="final">
         <h2 class="final-text">your aura<br>is waiting.</h2>
         <button class="btn btn-cta btn-xl" id="start2">enter the grind →</button>
@@ -122,6 +125,7 @@ export default function home(root) {
   $("#start", root).addEventListener("click", () => go("/upload"));
   $("#start2", root).addEventListener("click", () => go("/upload"));
   $("#how", root).addEventListener("click", () => scrollTo("#ch-score"));
+  bindExtras(root);   // vibe cards switch the theme (works even without animations)
 
   if (!hasGsap || reducedMotion()) return;
 
@@ -193,6 +197,9 @@ export default function home(root) {
       { x: () => rand(-320, 320), y: () => rand(120, 420), rotation: () => rand(-200, 200), scale: 0.3, opacity: 0 },
       { x: 0, y: 0, rotation: 0, scale: 1, opacity: 1, ease: "power3.out", stagger: { each: 0.03, from: "random" },
         scrollTrigger: { trigger: ".ch-storm", start: "top 85%", end: "center 55%", scrub: 1 } });
+
+    // Chapters 5 + 6: vibe cards and the feature bento (in home-extras.js)
+    animateExtras(gsap);
 
     // Finale zooms in
     gsap.from(".final-text", { scale: 0.55, opacity: 0, ease: "none",

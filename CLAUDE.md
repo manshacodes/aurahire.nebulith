@@ -112,7 +112,9 @@ Side screens: `#/people` ("the batch": you + 5 mock classmates ranked by aura), 
 4. "Every listing is a red flag" (pinned): job cards flip away one by one (rotateX).
 5. "Applying is a boss fight" (pinned): the HP bar drains, damage numbers pop, "OFFER UNLOCKED".
 6. "HR only replies in stickers": a sticker storm flies in and assembles into a wall.
-7. Finale: "your aura is waiting." zooms in, plus the CTA.
+7. "Pick your vibe" (`home-extras.js`): the 5 themes as live mini previews (each card has its own `data-theme`); tapping one really switches the site theme (`setTheme` in `js/theme.js`). Cards deal in on scroll.
+8. "Everything else in the grind": a bento grid of 6 features (breakdown, roast the batch, meme HR chat, AuraGPT surname, profile circle, meme slam), each with a tiny demo and a link to the feature. Tiles pop in as they scroll into view (no pinning, cheap on phones).
+9. Finale: "your aura is waiting." zooms in, plus the CTA.
 
 ## Conventions (please follow)
 
