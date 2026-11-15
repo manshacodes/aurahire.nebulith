@@ -11,7 +11,10 @@ import { sfx } from "../sound.js";
 const STEP_MS = 850;
 
 // Pick a stamp for a judged line
-function stampFor({ points, roast }) {
+const KIND_STAMPS = { nepo: ["NEPO", "red"], glaze: ["GLAZE", "pink"], cap: ["CAP", "red"], larp: ["LARP", "orange"], tourist: ["TOURIST", "sky"] };
+function stampFor({ points, roast, kind }) {
+  if (KIND_STAMPS[kind]) return KIND_STAMPS[kind];
+  // older saved scans have no `kind`, so fall back to reading the roast
   if (/nepotism/.test(roast)) return ["NEPO", "red"];
   if (/glazing/.test(roast)) return ["GLAZE", "pink"];
   if (/impossible/.test(roast)) return ["CAP", "red"];
