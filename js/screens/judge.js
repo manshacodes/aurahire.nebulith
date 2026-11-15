@@ -4,7 +4,7 @@ import { go } from "../router.js";
 import * as S from "../state.js";
 import { $, esc, signed, sticker, toast, shake, countUp } from "../fx.js";
 import { JUDGE_TEXT as T, AVATAR_COLORS } from "../data.js";
-import { scoreResume, analyzeResume } from "../aura-engine.js";
+import { scoreResume, analyzeResume, toneOf, isCrashOut } from "../aura-engine.js";
 import { readResumeFile, autoGrow } from "../resume-file.js";
 import { breakdownHTML, fillBreakdown, rizzText } from "../breakdown.js";
 import { earn } from "../aura.js";
@@ -68,8 +68,8 @@ export default function judge(root) {
     if (!name) { shake($("#friendName", root)); toast(T.emptyName); return; }
     if (!resume) { shake(text); toast(T.emptyResume); return; }
 
-    const { lines, total, tier } = scoreResume(resume);
-    const { scores, rizz } = analyzeResume(lines);
+    const { lines, allLines, total, tier } = scoreResume(resume);
+    const { scores, rizz } = analyzeResume(allLines);   // the breakdown reads the whole resume
     const worst = [...lines].sort((a, b) => a.points - b.points).slice(0, 3);
     result = { name, aura: total, lines, scores, rizz };
     earn("judge");
@@ -85,14 +85,14 @@ export default function judge(root) {
         <div class="stats" style="margin-top:12px">
           <div class="stat"><small>rizz</small><b>${rizzText(rizz)}</b></div>
           <div class="stat"><small>lines</small><b>${lines.length}</b></div>
-          <div class="stat"><small>crash outs</small><b>${lines.filter((l) => l.points < 0).length}</b></div>
+          <div class="stat"><small>crash outs</small><b>${lines.filter(isCrashOut).length}</b></div>
         </div>
       </div>
       <div class="card">${breakdownHTML(scores)}</div>
       <div class="card">
         <p class="label" style="margin-bottom:12px">${esc(T.worstTitle)}</p>
         <ul class="judged-lines">${worst.map((l) => `
-          <li><span>${esc(l.text)}</span><b class="${l.points < 0 ? "minus" : "plus"}">${signed(l.points)}</b><small>${esc(l.roast)}</small></li>`).join("")}</ul>
+          <li><span>${esc(l.text)}</span><b class="${toneOf(l)}">${signed(l.points)}</b><small>${esc(l.roast)}</small></li>`).join("")}</ul>
       </div>
       <div class="row">
         <button class="btn btn-ghost" id="again">${esc(T.again)}</button>

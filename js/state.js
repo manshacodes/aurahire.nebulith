@@ -13,7 +13,8 @@ const defaults = {
   social: {},            // per mock profile: { disses: [...], votes: { lineIndex: "cap"|"fax" } }
   resume: "",
   aura: 0,
-  lines: [],
+  lines: [],             // the 14 lines the scan showed
+  allLines: [],          // every judged line of your resume (the breakdown meters read these)
   tierName: "",
   stickers: [],          // the 5 personality stickers you picked
   currentJob: null,      // id of the job you're fighting for

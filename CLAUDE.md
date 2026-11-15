@@ -87,7 +87,7 @@ js/
   aura.js             earn(id): aura for every action (AURA_EARN in data.js), "+N aura" pops, leaderboard overtakes
   memes.js            meme sticker <img> helper + mix/mixGroups for mixing memes with text stickers
   fx.js               $, $$, esc, toast, confetti, countUp, typewriter, shake, floatText, sticker()
-  aura-engine.js      "AuraGPT": tidyLines() rejoins wrapped lines and drops headers; every signal that matches a line adds up (+ roast, capped per line); judges the 11 loudest + 3 weakest lines; analyzeResume() gives the 0-10 breakdown
+  aura-engine.js      "AuraGPT": tidyLines() rejoins wrapped lines and drops headers; scoreLine() stacks signals (best in full, extras at 40%, bad ones in full); contextPass() grades each society by type, role and what you did there (5+ societies taxes the extras) and discounts repeated flexes; the scan shows 14 lines with the same W/BASED/MID/L mix as the whole resume; verdictOf/toneOf colour lines (MID is grey); analyzeResume() gives the 0-10 breakdown from the whole resume
   data.js             ALL copy: jobs, stickers, slang, boss moves, HR chat replies, post templates
   screens/            one file per screen (see the flow below)
 vendor/               gsap, ScrollTrigger, ScrambleTextPlugin, lenis (+ lenis.css)

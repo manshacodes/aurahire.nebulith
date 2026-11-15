@@ -4,7 +4,7 @@
 import { go } from "../router.js";
 import * as S from "../state.js";
 import { $, $$, esc, signed, sleep, confetti, shake, reducedMotion } from "../fx.js";
-import { scoreResume, BASE_AURA } from "../aura-engine.js";
+import { scoreResume, BASE_AURA, verdictOf, toneOf } from "../aura-engine.js";
 import { gsap } from "../motion.js";
 import { sfx } from "../sound.js";
 
@@ -20,10 +20,7 @@ function stampFor({ points, roast, kind }) {
   if (/impossible/.test(roast)) return ["CAP", "red"];
   if (/larping/.test(roast)) return ["LARP", "orange"];
   if (/tourist/.test(roast)) return ["TOURIST", "sky"];
-  if (points >= 300) return ["W", "lime"];
-  if (points >= 100) return ["BASED", "lime"];
-  if (points <= -100) return ["L", "red"];
-  return ["MID", "grey"];
+  return { W: ["W", "lime"], BASED: ["BASED", "lime"], L: ["L", "red"], MID: ["MID", "grey"] }[verdictOf(points)];
 }
 
 // What AuraGPT "thinks" while judging a line
@@ -61,9 +58,9 @@ export default function scan(root) {
           ${result.lines.map((l) => {
             const [stamp, c] = stampFor(l);
             return `
-              <li class="line ${l.points >= 0 ? "good" : "bad"}">
+              <li class="line ${toneOf(l)}">
                 <span class="line-text"><mark>${esc(l.text)}</mark></span>
-                <span class="tag ${l.points >= 0 ? "plus" : "minus"}">${signed(l.points)} aura <em>${esc(l.roast)}</em></span>
+                <span class="tag ${toneOf(l)}">${signed(l.points)} aura <em>${esc(l.roast)}</em></span>
                 <span class="stamp-wrap"><span class="stk lg stamp-stk" data-c="${c}" style="--rot:${l.text.length % 2 ? -12 : 10}deg">${stamp}</span></span>
               </li>`;
           }).join("")}
@@ -91,11 +88,11 @@ export default function scan(root) {
   };
 
   // A "+500" that flies from the line up into the counter
-  function flyPoints(fromEl, points) {
+  function flyPoints(fromEl, points, tone) {
     if (!gsap || fast) return;
     const a = fromEl.getBoundingClientRect(), b = hudNum.getBoundingClientRect();
     const fly = document.createElement("span");
-    fly.className = `fly-pts ${points >= 0 ? "good" : "bad"}`;
+    fly.className = `fly-pts ${tone}`;
     fly.textContent = signed(points);
     fly.style.left = `${a.left + 20}px`;
     fly.style.top = `${a.top}px`;
@@ -127,8 +124,9 @@ export default function scan(root) {
       if (line.points >= 100) setTimeout(sfx.ding, 120);
       else if (line.points <= -100) setTimeout(sfx.womp, 150);
     }
-    orb.className = `orb ${line.points >= 0 ? "happy" : "angry"}`;
-    flyPoints(el, line.points);
+    const tone = toneOf(line);
+    orb.className = `orb ${{ good: "happy", mid: "meh", bad: "angry" }[tone]}`;
+    flyPoints(el, line.points, tone);
     totals.push(totals[totals.length - 1] + line.points);
     drawSpark();
     S.addAura(line.points);
@@ -142,7 +140,7 @@ export default function scan(root) {
   async function finish() {
     if (cancelled) return;
     cancelled = true;
-    S.set({ aura: result.total, lines: result.lines, tierName: result.tier.name });
+    S.set({ aura: result.total, lines: result.lines, allLines: result.allLines, tierName: result.tier.name });
     $("#complete", root).classList.add("show");
     orb.className = "orb done";
     log(`> verdict: ${result.tier.name}. ${signed(result.total)} aura.`);
