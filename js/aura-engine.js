@@ -8,7 +8,8 @@
 //   4. scoreResume() shows 14 lines with the same mix of W / BASED / MID / L as the whole resume
 
 // ---------- line scoring ----------
-// Each signal: { re, points, roast, kind? }. `kind` picks a special stamp on the scan screen.
+// Each signal: { re, points, roast, kind?, loud? }. `kind` picks a special stamp on the scan screen;
+// `loud` means its roast always wins on that line (so every certificate line still gets roasted).
 // A few signals are functions of the match (m) so numbers can change the verdict.
 // Calibration: a typical project bullet should be BASED (100-299), a W (300+) needs a win,
 // a real internship, real users, or a project that stacks several strong signals.
@@ -19,7 +20,7 @@ const SIGNALS = [
   { re: /\b(won|winners?|1st|first place|champions?|gold medal)\b/i, points: 450, roast: "actual W. respect." },
   { re: /\b(runner.?up|2nd|3rd|second place|third place|finalists?|top \d+|silver|bronze)\b/i, points: 220, roast: "podium aura" },
   { re: /out of (\d+)\+? teams/i, rule: (m) => (Number(m[1]) >= 50 ? { points: 100, roast: `beat ${m[1]} teams. respect.` } : { points: -100, roast: `out of ${m[1]} teams is a group project`, kind: "cap" }) },
-  { re: /\bintern(ship)?s?\b/i, points: 350, roast: "a real job. HR is shaking." },
+  { re: /\bintern(ship)?s?\b/i, points: 350, roast: "under investigation" },
   { re: /open.?source|\bgsoc\b|merged (prs|pull)|pull requests?|\bprs\b/i, points: 320, roast: "open source mogger" },
   { re: /leetcode|\bdsa\b|codeforces|codechef|\bicpc\b/i, points: 200, roast: "dsa grind. unc behaviour, respect" },
   { re: /(\d[\d,]*)\+?\s*(leetcode\s+)?problems|\b[4-7]\s*star|expert|specialist|candidate master/i,
@@ -55,16 +56,16 @@ const SIGNALS = [
   // --- leadership & clubs ---
   { re: /(\d+)\s*(?:more\s+)?(?:college\s+)?(clubs?|societ(y|ies))/i,
     rule: (m) => (Number(m[1]) > 3
-      ? { points: -300, roast: `${m[1]} ${m[2]}. larping as everyone's teammate.`, kind: "larp" }
-      : { points: 40, roast: "a normal amount of clubs. suspicious." }) },
-  { re: /president|\bhead\b|\blead(er)?\b|captain|founded the|started the initiative/i, points: 140, roast: "main character (club edition)" },
-  { re: /coordinator|organi[sz]er|\bvp\b|secretary|core member/i, points: 70, roast: "title farming (respectfully)" },
+      ? { points: -300, roast: `${m[1]} ${m[2]} is physically impossible`, kind: "larp" }
+      : { points: 40, roast: "club aura" }) },
+  { re: /president|\bhead\b|\blead(er)?\b|captain|founded the|started the initiative/i, points: 140, roast: "title farming" },
+  { re: /coordinator|organi[sz]er|\bvp\b|secretary|core member/i, points: 70, roast: "title farming" },
   { re: /\b(team )?member\b|\bteam\b,/i, points: 0, roast: "member #47 of the team" },
   { re: /\bhackathons?\b/i, points: 40, roast: "showed up. respect, kind of." },
   { re: /organi[sz](ed|er|ing).*hackathon|hackathon.*organi[sz](ed|er)/i, points: 320, roast: "ran a whole hackathon. that's a W." },
   { re: /\bparticipated\b/i, points: -40, roast: "participation trophy unlocked" },
   { re: /\b(\d{2,})\s*hackathons?/i, points: -150, roast: "hackathon tourist detected", kind: "tourist" },
-  { re: /startup|founder|\bceo\b/i, points: 100, roast: "founder arc" },
+  { re: /startup|founder|\bceo\b/i, points: 100, roast: "founder of a startup with 0 users" },
   { re: /stealth|pre.?revenue|idea stage|future founder|aspiring/i, points: -200, roast: "idea stage is not a stage", kind: "cap" },
 
   // --- skills that count for a little ---
@@ -74,15 +75,16 @@ const SIGNALS = [
   { re: /figma|ui\/?ux|photograph\w*|illustrat\w*|brand identity|after effects|animation/i, points: 60, roast: "has taste. rare in cse." },
   { re: /volunteer|\bngo\b|\bnss\b|special school|charity|fundrais|teaching drive/i, points: 80, roast: "kind aura" },
   { re: /\b(dance|singing|singer|sports|cricket|football|basketball|gym|marathon|trek\w*|theatre|band)\b/i, points: 80, roast: "touches grass. rare." },
-  { re: /certificat|\bcourses?\b|udemy|coursera|nptel/i, points: 0, roast: "they were 2 hrs long, twin" },
-  { re: /\b(\d{2,})\s*(free\s+)?(\w+\s+)?(certificat\w*|courses?)/i, points: -180, roast: "certificate collector. none were read." },
+  { re: /certificat|\bcourses?\b|udemy|coursera|nptel/i, points: 0, roast: "they were 2 hrs long, twin", loud: true },
+  { re: /\b(\d{2,})\s*(free\s+)?(\w+\s+)?(certificat\w*|courses?)/i, points: -180, roast: "certificate collector. they were 2 hrs long, twin", loud: true },
 
   // --- the Ls ---
   { re: /uncle|aunt|dad'?s|papa|mom'?s|cousin|family friend|relatives/i, points: -250, roast: "nepotism detected", kind: "nepo" },
   { re: /ms word|microsoft word|ms office|powerpoint|\bexcel\b/i, points: -120, roast: "proficient in word. groundbreaking." },
   { re: /hello world/i, points: -100, roast: "7 languages, 0 projects" },
   { re: /full.?stack|mern stack/i, points: -150, roast: "larping as full-stack", kind: "larp" },
-  { re: /to.?do app|calculator|weather app|tic.?tac.?toe|portfolio website using html|library management|student management|house prices?|titanic|kaggle dataset/i,
+  { re: /to.?do app|calculator|weather app|tic.?tac.?toe/i, points: -150, roast: "the to-do app strikes again" },
+  { re: /portfolio website using html|library management|student management|house prices?|titanic|kaggle dataset/i,
     points: -150, roast: "the college project starter pack" },
   { re: /passionate|hard.?working|team player|motivated|go.?getter|detail.?oriented|enthusiast|self.?starter|quick learner/i,
     points: -120, roast: "glazing yourself detected", kind: "glaze" },
@@ -136,9 +138,12 @@ export function scoreLine(text) {
   if (flagged) good /= 4;
   const points = round5(Math.max(LINE_MIN, Math.min(LINE_MAX, good + neg)));
 
-  // The roast comes from whichever signal mattered most, but a special "kind" (nepo, cap…) always wins
+  // The roast comes from whichever signal mattered most, but a special "kind" (nepo, cap…) always wins,
+  // then a `loud` one (certificates)
+  const byLoudness = (list) => [...list].sort((a, b) => Math.abs(b.points) - Math.abs(a.points))[0];
   const loudest = hits.find((h) => h.kind && h.points < 0)
-    || [...hits].sort((a, b) => Math.abs(b.points) - Math.abs(a.points))[0];
+    || byLoudness(hits.filter((h) => h.loud))
+    || byLoudness(hits);
   const roast = pos.length >= 3 && points >= 300 ? `stacked W: ${loudest.roast}` : loudest.roast;
   return { points, roast, signal: String(loudest.re), ...(loudest.kind && loudest.points < 0 ? { kind: loudest.kind } : {}) };
 }
@@ -161,8 +166,8 @@ const SOCIETY_KEEP = 4;   // your best 4 societies count in full; 5+ and the res
 function scoreSociety(line, did) {
   const t = line.text;
   let points, roast;
-  if (ROLE_LEADER.test(t)) [points, roast] = [300, "runs the whole society. actual main character"];
-  else if (ROLE_TITLE.test(t)) [points, roast] = did ? [110, "has a title (and receipts)"] : [50, "has a title. no receipts tho"];
+  if (ROLE_LEADER.test(t)) [points, roast] = [300, "title farming, but it's a W. runs the whole society"];
+  else if (ROLE_TITLE.test(t)) [points, roast] = did ? [110, "title farming (with receipts)"] : [50, "title farming. no receipts tho"];
   else if (ROLE_MAKER.test(t)) [points, roast] = [90, "the member who actually builds stuff"];
   else [points, roast] = [20, "member #47 of the team"];
   if (BIG_SOCIETY.test(t)) { points += 60; roast = `${roast}, big-name society too`; }
