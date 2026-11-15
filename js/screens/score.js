@@ -1,21 +1,21 @@
 import { go } from "../router.js";
 import * as S from "../state.js";
 import { $, esc, signed, countUp, confetti, toast, sticker } from "../fx.js";
-import { tierFor, analyzeResume } from "../aura-engine.js";
+import { tierFor, analyzeResume, isW, isCrashOut } from "../aura-engine.js";
 import { breakdownHTML, fillBreakdown, rizzText } from "../breakdown.js";
 
 export default function score(root) {
-  const { aura, lines } = S.get();
+  const { aura, lines, allLines } = S.get();
   if (!lines.length) { go("/upload"); return; }
 
   const tier = tierFor(aura);
-  const crashOuts = lines.filter((l) => l.points < 0).length;
-  const ws = lines.filter((l) => l.points >= 100).length;
+  const crashOuts = lines.filter(isCrashOut).length;
+  const ws = lines.filter(isW).length;
   const best = [...lines].sort((a, b) => b.points - a.points)[0];
   const worst = [...lines].sort((a, b) => a.points - b.points)[0];
 
-  // AuraGPT breakdown: every factor scored 0-10 from what's actually in your resume
-  const { scores, rizz } = analyzeResume(lines);
+  // AuraGPT breakdown: every factor scored 0-10 from your whole resume (older saves only have the 14 lines)
+  const { scores, rizz } = analyzeResume(allLines?.length ? allLines : lines);
 
   root.innerHTML = `
     <section>

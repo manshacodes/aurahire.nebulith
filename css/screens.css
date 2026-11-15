@@ -75,8 +75,9 @@ textarea {
   transition: transform 0.35s cubic-bezier(.2,.9,.3,1.6);
 }
 .line.tagged .tag { transform: scale(1); }
-.tag.plus { background: #C8FF2E; color: #10200A; }
-.tag.minus { background: #FF5FC1; color: #fff; }
+.tag.good, .tag.plus { background: #C8FF2E; color: #10200A; }
+.tag.mid { background: #E4E4DE; color: #2A2A2A; }   /* MID is grey, even when its points are positive */
+.tag.bad, .tag.minus { background: #FF5FC1; color: #fff; }
 .tag em { font-style: normal; font-weight: 600; opacity: 0.85; }
 .status { min-height: 24px; font-weight: 700; color: var(--sub); text-align: center; }
 
@@ -349,6 +350,8 @@ body[data-route="ghosted"] .app { animation: drain 1.6s ease forwards; }
 .orb.happy { background: radial-gradient(circle at 35% 30%, #fff, #C8FF2E 40%, #3FA30B 80%); box-shadow: 0 0 30px rgba(140, 230, 30, 0.7); }
 .orb.angry { background: radial-gradient(circle at 35% 30%, #fff, #FF8FA3 35%, #E0123A 80%); box-shadow: 0 0 30px rgba(255, 40, 80, 0.7); animation: shake 0.4s; }
 .orb.angry .orb-eye { transform: scaleY(0.45); }
+.orb.meh { background: radial-gradient(circle at 35% 30%, #fff, #D6D6D0 40%, #8C8C86 80%); box-shadow: 0 0 22px rgba(140, 140, 134, 0.5); }
+.orb.meh .orb-eye { transform: scaleY(0.7) translateY(3px); }
 .orb.done .orb-eye { transform: scaleY(0.15); }
 @keyframes breathe { 50% { transform: scale(1.07); } }
 @keyframes look { 0%, 100% { transform: translateX(-6px); } 50% { transform: translateX(6px); } }
@@ -364,6 +367,7 @@ body[data-route="ghosted"] .app { animation: drain 1.6s ease forwards; }
 .scan .line { position: relative; padding-right: 64px; }
 .scan .line mark { background: linear-gradient(var(--hl), var(--hl)) no-repeat 0 85% / 0% 45%; color: inherit; transition: background-size 0.35s ease-out; }
 .scan .line.good { --hl: rgba(200, 255, 46, 0.75); }
+.scan .line.mid { --hl: rgba(170, 170, 160, 0.4); }
 .scan .line.bad { --hl: rgba(255, 95, 193, 0.55); }
 .scan .line.marked mark { background-size: 100% 45%; }
 .stamp-wrap { position: absolute; right: 0; top: 0; }
@@ -375,6 +379,7 @@ body[data-route="ghosted"] .app { animation: drain 1.6s ease forwards; }
 .complete.show .stk { transform: rotate(var(--rot)) scale(1.1); }
 .fly-pts { position: fixed; z-index: 95; font-weight: 900; font-size: 22px; pointer-events: none; text-shadow: 0 2px 0 #fff; }
 .fly-pts.good { color: #2FA80F; }
+.fly-pts.mid { color: #8C8C86; }
 .fly-pts.bad { color: #E0123A; }
 
 /* ---------- AuraGPT breakdown (score screen) ---------- */
@@ -495,8 +500,9 @@ body[data-route="chat"] .app { padding-bottom: 120px; }
 .judged-lines li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 10px; padding: 10px 12px; border-radius: var(--radius-sm); background: var(--surface-2); }
 .judged-lines span { font-size: 14px; font-weight: 700; }
 .judged-lines b { font-weight: 900; font-variant-numeric: tabular-nums; }
-.judged-lines b.minus { color: #FF3B5C; }
-.judged-lines b.plus { color: #22B33A; }
+.judged-lines b.bad { color: #FF3B5C; }
+.judged-lines b.mid { color: #8C8C86; }
+.judged-lines b.good { color: #22B33A; }
 .judged-lines small { grid-column: 1 / -1; font-size: 12px; font-weight: 600; color: var(--sub); }
 textarea[data-lenis-prevent] { overflow-y: auto; resize: none; }
 

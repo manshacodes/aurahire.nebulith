@@ -3,7 +3,7 @@ import { go } from "../router.js";
 import * as S from "../state.js";
 import { $, esc, signed, toast } from "../fx.js";
 import { JUDGE_TEXT as T, MOG_VERDICTS } from "../data.js";
-import { tierFor } from "../aura-engine.js";
+import { tierFor, toneOf } from "../aura-engine.js";
 import { initials } from "../identity.js";
 import { breakdownHTML, fillBreakdown, rizzText } from "../breakdown.js";
 
@@ -49,7 +49,7 @@ export default function friend(root, { id }) {
       <div class="card">
         <p class="label" style="margin-bottom:12px">${esc(T.linesTitle)}</p>
         <ul class="judged-lines">${f.lines.map((l) => `
-          <li><span>${esc(l.text)}</span><b class="${l.points < 0 ? "minus" : "plus"}">${signed(l.points)}</b><small>${esc(l.roast)}</small></li>`).join("")}</ul>
+          <li><span>${esc(l.text)}</span><b class="${toneOf(l)}">${signed(l.points)}</b><small>${esc(l.roast)}</small></li>`).join("")}</ul>
       </div>
 
       <button class="link-btn" id="remove">${esc(T.remove)}</button>

@@ -1,7 +1,9 @@
 // Reading resumes from files: plain .txt, or PDF (text pulled out with Mozilla's pdf.js).
 // pdf.js is only downloaded the first time someone picks a PDF, so it never slows the site down.
-// PDF resumes come with headers, contact details and section titles, so we keep only the
-// lines that look like achievements before AuraGPT judges them.
+// PDF resumes come with headers, contact details, section titles and wrapped lines, so
+// tidyLines (in aura-engine.js) cleans them up before AuraGPT judges them.
+
+import { tidyLines } from "./aura-engine.js";
 
 const PDFJS_VERSION = "3.11.174";
 const PDFJS = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${PDFJS_VERSION}/pdf.min.js`;
@@ -42,30 +44,11 @@ async function pdfLines(file) {
   return lines;
 }
 
-// Keep lines that look like achievements; drop contact info, links and section headings
-const HEADING = /^(education|experience|work experience|projects?|skills|technical skills|achievements|certifications?|summary|objective|profile|contact|interests|hobbies|languages|positions? of responsibility|extra.?curricular|activities|awards|publications|references|coursework)\b/i;
-export function cleanResumeLines(lines) {
-  const seen = new Set();
-  return lines
-    .map((l) => l.replace(/^[\s•●▪◦\-*·–—]+/, "").replace(/\s+/g, " ").trim())
-    .filter((l) => {
-      if (l.length < 12 || l.length > 180) return false;                  // too short to judge, or a paragraph
-      if (/@|https?:|www\.|linkedin\.com|github\.com/i.test(l)) return false;   // contact + links
-      if (/(\+?\d[\d\s-]{8,}\d)/.test(l)) return false;                   // phone numbers
-      if (HEADING.test(l) && l.split(" ").length <= 4) return false;      // section titles
-      if (l === l.toUpperCase() && l.split(" ").length <= 4) return false; // ALL CAPS headers
-      const key = l.toLowerCase();
-      if (seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    });
-}
-
 // Read a resume file → text with one achievement per line. Throws a friendly Error for other types.
 export async function readResumeFile(file) {
   if (/\.txt$/i.test(file.name) || file.type === "text/plain") return (await file.text()).trim();
   if (/\.pdf$/i.test(file.name) || file.type === "application/pdf") {
-    const lines = cleanResumeLines(await pdfLines(file));
+    const lines = tidyLines(await pdfLines(file));
     if (!lines.length) throw new Error("couldn't find any text in that PDF (is it a scan?). paste it instead.");
     return lines.join("\n");
   }
