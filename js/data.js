@@ -257,7 +257,7 @@ export const GHOST_TOASTS = [
 
 // ---------- boss fight ----------
 export const YOUR_HP = 120;
-export const BOSS_HP = 100;
+export const BOSS_HP = 120;
 
 // Every move returns what happened. Optional fields:
 //   dmg (to the boss), self (to you), heal (to you), effect: "dodge" | "stun" | "charge"
@@ -310,7 +310,16 @@ export const FIGHT_TEXT = {
   stunned: (boss) => `${boss} is still buffering. they skipped their turn.`,
   rage: (boss) => `${boss} entered unpaid-overtime mode. attacks hit harder now.`,
   slamFinale: "OFFER UNLOCKED",   // the big sticker at the end of the win meme slam
-  fx: { dodge: "wifi \"down\"", charge: "2× charged", stun: "buffering", rage: "rage mode" },
+  fx: { dodge: "wifi \"down\"", charge: "2× charged", stun: "buffering", rage: "rage mode", ghost: "ghosting you", takehome: "take-home due" },
+  // HR's special moves (instead of a normal attack, sometimes)
+  special: {
+    takehome: { name: "TAKE-HOME ASSIGNMENT", text: "unpaid. due in 3 turns. you lose 6 hp a turn doing it." },
+    ghost: { name: "GHOSTING", text: "HR left you on read. your next attack hits nothing." },
+  },
+  takehomeTick: (dmg, left) => `take-home assignment: −${dmg} hp. ${left ? `${left} more turn${left > 1 ? "s" : ""} of unpaid work.` : "submitted. no feedback, obviously."}`,
+  ghostWhiff: "HR is ghosting you. your attack hit an empty zoom call.",
+  chai: (boss) => `${boss} took a chai break. +20 hp. you were not offered chai.`,
+  ultNoFarm: "(you can't aura farm your aura farm.)",
   // fighting-game moments
   round: "ROUND 1",
   fight: "FIGHT!",
@@ -333,7 +342,8 @@ export const FIGHT_TEXT = {
   // aura ultimate: fills as you deal and take damage
   meterLabel: "aura",
   ultReady: "ULTIMATE READY",
-  ult: { name: "AURA FARM ULTIMATE", hint: "45–60 dmg · it's giving main character", text: "you stared into the camera like a sigma edit. HR's whole department felt it." },
+  ult: { name: "AURA FARM ULTIMATE", hint: "30–40 dmg · once per fight", text: "you stared into the camera like a sigma edit. HR's whole department felt it." },
+  ultSpent: "aura spent. no second ultimate, twin.",
 };
 
 // What HR says right before attacking (speech bubble over the boss)
