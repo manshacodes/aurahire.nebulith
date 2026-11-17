@@ -198,6 +198,13 @@ body[data-route="home"] .screen > section { animation: none; }
 .notif-wrap:hover .notif { transform: translateY(-2px) scale(1.01); }
 .notif-wrap:nth-child(2) .notif { margin-left: 14px; }
 .notif-icon { grid-row: span 2; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 10px; background: #111; color: #C8FF2E; font-weight: 900; font-size: 18px; }
+/* the "your aura card is ready" icon: a tiny tilted aura card */
+.ni-card { background: var(--accent); }
+.ni-mini { display: block; padding: 3px 4px 4px; border-radius: 5px; background: #fff; color: #111; font-size: 9px; font-weight: 900; letter-spacing: -0.04em; line-height: 1;
+  transform: rotate(-8deg); box-shadow: 0 3px 6px rgba(0,0,0,.25); }
+.ni-mini i { display: block; height: 3px; margin-top: 2px; border-radius: 2px; background: #C8FF2E; }
+/* the challenge icon: the challenger's profile circle */
+.ni-person { border-radius: 50%; background: var(--c-bg); color: var(--c-ink); font-size: 16px; box-shadow: 0 0 0 2px #fff; }
 .notif-meta { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: var(--sub); }
 .notif-text { font-size: 14px; font-weight: 600; line-height: 1.3; }
 .notif-text b { font-weight: 900; }
@@ -223,6 +230,8 @@ body[data-route="home"] .screen > section { animation: none; }
   .notifs { gap: 6px; margin-top: 0; }
   .notif { grid-template-columns: 28px 1fr; gap: 0 9px; padding: 7px 10px; border-radius: 16px; align-items: center; }
   .notif-icon { width: 28px; height: 28px; border-radius: 8px; font-size: 14px; }
+  .ni-person { border-radius: 50%; font-size: 13px; }
+  .ni-mini { font-size: 7px; padding: 2px 3px 3px; }
   .notif-meta { display: none; }
   .notif-text { font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .notif-wrap:nth-child(2) .notif { margin-left: 10px; }

@@ -836,10 +836,11 @@ export const LANDING_SCORE = {
   sub: "W, BASED, MID, L. AuraGPT reads every line. no mercy, all regex.",
   target: 4606,
   tier: "certified linkedin sigma",
-  // the add-ons, as phone notifications that pop in after the score: [time, message (**bold**), where tapping goes]
+  // the add-ons, as phone notifications that pop in after the score:
+  // [time, message (**bold**), where tapping goes, icon]. icon "card:+4.6k" = a tiny aura card, "person:R:lilac" = a profile circle
   notifs: [
-    ["now", "your aura card is ready ↗ **+4,606**. post it. let them cope.", "/upload"],
-    ["2m ago", "**riya** challenged you: **+3,980**. think you can mog that?", "/upload"],
+    ["now", "your aura card is ready ↗ **+4,606**. post it. let them cope.", "/upload", "card:+4.6k"],
+    ["2m ago", "**riya** challenged you: **+3,980**. think you can mog that?", "/upload", "person:R:lilac"],
   ],
   notifApp: "AuraHire",
   lines: [

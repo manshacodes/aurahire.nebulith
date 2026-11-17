@@ -20,11 +20,18 @@ const HERO_STICKERS = [
   ["CRASH OUT", "orange", 10, "sm", 0.6, "92%", "64%"],
 ];
 
-// Chapter 01 add-ons: they pop in like phone notifications from "AuraHire" (**text** = bold)
+// Chapter 01 add-ons: they pop in like phone notifications from "AuraHire" (**text** = bold).
+// Each has its own icon: a tiny aura card, or the profile circle of whoever challenged you.
+const notifIcon = (spec) => {
+  const [kind, a, b] = spec.split(":");
+  return kind === "person"
+    ? `<span class="notif-icon ni-person av" data-c="${esc(b)}" aria-hidden="true">${esc(a)}</span>`
+    : `<span class="notif-icon ni-card" aria-hidden="true"><span class="ni-mini">${esc(a)}<i></i></span></span>`;
+};
 const bold = (text) => esc(text).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
 const notifsHTML = () => `
-  <div class="notifs">${LS.notifs.map(([time, msg, href]) => `
-    <a class="notif-wrap" href="#${href}"><span class="notif"><span class="notif-icon" aria-hidden="true">a</span>
+  <div class="notifs">${LS.notifs.map(([time, msg, href, icon]) => `
+    <a class="notif-wrap" href="#${href}"><span class="notif">${notifIcon(icon)}
       <span class="notif-meta"><span>${esc(LS.notifApp)}</span><span>${esc(time)}</span></span>
       <span class="notif-text">${bold(msg)}</span></span></a>`).join("")}
   </div>`;
