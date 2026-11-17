@@ -66,7 +66,7 @@ This doc is the plan for AuraHire after the NEBULITH hackathon. It's written so 
 
 ## 3. Planned features
 
-Suggested order: **A → B → C → D → E**, then **F** later. Each one is independent once A exists.
+Suggested order: **A → B → C → D → E**, then **F** and **G** later. Each one is independent once A exists.
 
 ### A. Shareable aura card + "beat my aura" challenge link (build these together) — ✅ DONE
 
@@ -170,6 +170,30 @@ Pure comedy, small.
 
 ---
 
+### G. Not just BTech: personalise the site for other degrees (later)
+
+**Why:** right now everything assumes a BTech/CSE student: the job listings (SDE-1, prompt engineer…), the 5 mock classmates in "the batch", the HR chat questions, the boss attacks ("IS THIS YOUR FINAL CGPA?"), the demo personas and most AuraGPT signals (LeetCode, GitHub, hackathons). The owner wants BBA, B.Com, design, law, medical, arts, science and other students to get a version that roasts *their* world.
+
+**What exists already:** `eduFacts(resume)` in `js/aura-engine.js` detects the branch and degree (B.Tech branches, plus BCA, BBA, B.Com, B.Sc, B.Des, B.Arch, BA, MBA, MCA, M.Tech) and the grad year. It drives the profile headline today ("CSE-AI '30"). It's the natural place to derive a **sector**.
+
+**Proposal**
+1. **Sectors:** `tech` (default, today's content), `business` (BBA, B.Com, MBA), `design` (B.Des, B.Arch, fine arts), `law`, `medical`, `science` (B.Sc), `arts` (BA, humanities). Map each degree/branch to a sector, and let people pick or override it on the upload screen ("not a btech? pick your world"), since many resumes won't say.
+2. **Content per sector in `data.js`,** keeping today's content as `tech`:
+   - **Job listings + HR bosses.** business: "brand strategy intern (unpaid, but it's for the brand)" at a D2C startup, boss "the LinkedIn growth coach"; design: "junior designer (must know 14 tools)", boss "the client who wants it to pop"; law: "legal intern (photocopy division)", boss "senior partner who bills in 6-minute units"; medical: "intern on a 36-hour shift", boss "the HOD on rounds".
+   - **The batch** (`#/people`): 5 mock classmates per sector.
+   - **HR chat questions:** "walk me through your case competition", "why law? and don't say Suits".
+   - **Boss attacks and HR lines** per sector (keep the shared generic ones).
+   - **Demo personas** for each sector (the case competition tourist, the moot court monk, the Behance portfolio larper…).
+3. **AuraGPT signals per sector,** added alongside the tech ones so mixed resumes still work:
+   - business: case competitions, CFA/CA levels, internships at the Big 4, "managed ₹X budget", marketing campaigns with numbers
+   - design: portfolio links, Behance/Dribbble, clients, exhibitions
+   - law: moot courts, MUNs, publications, internships at firms/chambers
+   - science/medical: research papers, labs, olympiads, NEET/AIIMS mentions
+   - Re-run the multi-resume benchmark per sector so tiers stay fair across sectors (a strong BBA resume should be able to reach the top tier).
+4. **Keep it one site:** the same screens and flow; only the copy and data swap by `state.sector`. A sector switcher on the profile page.
+
+**Open questions for the owner:** which sectors first (probably business + design), whether people pick their sector or it's auto-detected (or both), and whether rivals from other sectors can appear in the batch.
+
 ## 4. Other ideas we discussed (not chosen yet)
 
 - **Offer letter collection:** a wall of the 12 companies showing which you've beaten, lost to or not fought, plus badges.
@@ -179,4 +203,5 @@ Pure comedy, small.
 - **Liquid glass vibe:** a 6th theme (see `CLAUDE.md`, "Next up" #2).
 - **Visitor stats:** turn on Vercel Web Analytics in the Vercel dashboard (Analytics tab), and add `<script defer src="/_vercel/insights/script.js"></script>` before `</body>` in `index.html`. Hash routes may only count as home page views.
 - **Phone polish pass:** tap targets, swipe feel, and the fight in all 5 vibes. HR's speech bubble covers HR's HP bar for a second or two while it talks.
+- **Profile headline bug (fixed):** the profile always said "CSE '29". It now reads the branch and grad year from the resume with `eduFacts` (e.g. "CSE-AI '30"), and shows "branch: vibes '??" when they're not there.
 - **Housekeeping:** `CLAUDE.md` still says the upload screen only accepts `.txt` (PDF works). The README's features section predates the scorer rewrite and the fight changes.

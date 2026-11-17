@@ -806,6 +806,12 @@ export const AURA_EARN = {
   share:   [25, "posted your aura"],
 };
 
+// Profile headline: your branch + grad year from your resume ("CSE-AI '30"), or a joke if it's not there
+export const EDU_TEXT = {
+  unknown: "branch: vibes '??",
+  noYear: (branch) => `${branch} '??`,
+};
+
 // ---------- share my aura + "beat my aura" challenge links ----------
 export const SHARE_TEXT = {
   button: "share my aura",
