@@ -1,11 +1,19 @@
 import { go } from "../router.js";
 import * as S from "../state.js";
 import { $, esc, signed, sticker, toast } from "../fx.js";
-import { PERSONALITY, STICKERS, AVATAR_COLORS, AVATAR_EMOJI, MEMES } from "../data.js";
+import { PERSONALITY, STICKERS, AVATAR_COLORS, AVATAR_EMOJI, MEMES, EDU_TEXT, RECORD_TEXT } from "../data.js";
 import { memeImg, isMemePick, memeIdOf } from "../memes.js";
-import { tierFor } from "../aura-engine.js";
+import { tierFor, eduFacts } from "../aura-engine.js";
 import { avatarHTML } from "../identity.js";
 import { earn } from "../aura.js";
+
+// "CSE-AI '30" from your resume's education line; a joke when it's not on there
+function eduLabel(resume) {
+  const { branch, degree, gradYear } = eduFacts(resume);
+  const name = branch || degree;
+  if (!name) return EDU_TEXT.unknown;
+  return gradYear ? `${name} '${String(gradYear).slice(-2)}` : EDU_TEXT.noYear(name);
+}
 
 export default function profile(root) {
   const s = S.get();
@@ -18,9 +26,9 @@ export default function profile(root) {
       <div class="avatar-lg-wrap" id="bigAv">${avatarHTML(s, "av-lg")}</div>
       <div>
         <input class="name-input" id="name" value="${esc(s.name)}" aria-label="Your name" maxlength="28" />
-        <p class="headline">CSE '29 | ${s.aura >= 3300 ? "certified sigma" : "aspiring sigma"} | ${signed(s.aura)} aura | open to work (desperately)</p>
+        <p class="headline">${esc(eduLabel(s.resume))} | ${s.aura >= 3300 ? "certified sigma" : "aspiring sigma"} | ${signed(s.aura)} aura | open to work (desperately)</p>
       </div>
-      <span class="pill">${tierFor(s.aura).name}</span>
+      <div class="chips"><span class="pill">${tierFor(s.aura).name}</span><span class="pill alt">${esc(s.record?.w || s.record?.l ? RECORD_TEXT.record(s.record.w, s.record.l) : RECORD_TEXT.none)}</span></div>
 
       <div class="card">
         <p class="label" style="margin-bottom:12px">your profile circle</p>

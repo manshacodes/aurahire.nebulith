@@ -1,14 +1,14 @@
 import { go } from "../router.js";
 import * as S from "../state.js";
 import { $, esc, signed, countUp, confetti, toast, sticker } from "../fx.js";
-import { SHARE_TEXT } from "../data.js";
+import { SHARE_TEXT, PERK_MOVES, PERK_TEXT } from "../data.js";
 import { shareAura } from "../share-card.js";
 import { earn } from "../aura.js";
-import { tierFor, analyzeResume, isW, isCrashOut } from "../aura-engine.js";
+import { tierFor, analyzeResume, isW, isCrashOut, perksFor } from "../aura-engine.js";
 import { breakdownHTML, fillBreakdown, rizzText } from "../breakdown.js";
 
 export default function score(root) {
-  const { aura, lines, allLines, challenge, name, avatar } = S.get();
+  const { aura, lines, allLines, challenge, name, avatar, perks: saved } = S.get();
   if (!lines.length) { go("/upload"); return; }
 
   const tier = tierFor(aura);
@@ -37,6 +37,16 @@ export default function score(root) {
         <button class="btn btn-cta h2h-back" id="shareBack">${esc(H.back)}</button>
       </div>`;
 
+  // The fight moves your resume unlocked (older saves didn't store them, so work them out)
+  const perks = (saved?.length ? saved : perksFor(allLines?.length ? allLines : lines)).filter((id) => PERK_MOVES[id]);
+  const perksHTML = `
+      <div class="card perks-card">
+        <p class="label" style="margin-bottom:12px">${esc(PERK_TEXT.title)}</p>
+        ${perks.length ? `<ul class="perk-list">${perks.map((id) => `
+          <li class="perk"><b>${esc(PERK_MOVES[id].name)}</b><small>${esc(PERK_MOVES[id].hint)} · ${esc(PERK_TEXT.from(PERK_MOVES[id].from))}</small></li>`).join("")}</ul>`
+          : `<p class="sub" style="margin:0">${esc(PERK_TEXT.none)}</p>`}
+      </div>`;
+
   root.innerHTML = `
     <section>
       <p class="label">step 3 of 3 · your aura score is</p>
@@ -63,6 +73,7 @@ export default function score(root) {
         <p class="label" style="margin-bottom:14px">AuraGPT breakdown</p>
         ${breakdownHTML(scores)}
       </div>
+      ${perksHTML}
 
       </div></div>
       <button class="btn share-btn" id="share">${esc(SHARE_TEXT.button)} ↗</button>

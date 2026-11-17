@@ -4,11 +4,14 @@
 // An aura meter fills as you deal and take damage; when full it unlocks the AURA FARM ULTIMATE (once per fight).
 // Sometimes HR uses a special instead of attacking: a take-home assignment (damage over 3 turns)
 // or ghosting (your next attack misses). At rage mode HR takes one chai break (+20 hp).
-// Tuned with a simulation so a normal player wins about 6 fights in 10.
+// Your resume can unlock special moves (PERK_MOVES); one shows up in your hand about 30% of turns.
+// Tuned with a simulation: a "normal" simulated player wins about 4 in 10 (real people do better),
+// and a strong resume only adds a few percent.
 import { go } from "../router.js";
 import * as S from "../state.js";
 import { $, esc, pick, rand, sleep, floatText, confetti, reducedMotion } from "../fx.js";
-import { JOBS, MOVES, BOSS_ATTACKS, BOSS_HP, YOUR_HP, FIGHT_TEXT, BOSS_TAUNTS, HR_LINES } from "../data.js";
+import { JOBS, MOVES, BOSS_ATTACKS, BOSS_HP, YOUR_HP, FIGHT_TEXT, BOSS_TAUNTS, HR_LINES, PERK_MOVES } from "../data.js";
+import { perksFor } from "../aura-engine.js";
 import { hasGsap } from "../motion.js";
 import { memeSlam, preloadMemes } from "../slam.js";
 import { sfx } from "../sound.js";
@@ -20,9 +23,10 @@ const HAND = 3;            // random moves dealt per turn (plus "ask about salar
 const RAGE_AT = 40;        // boss HP that triggers rage mode
 const RAGE_MULT = 1.3;     // rage attacks hit this much harder
 const ATK_MULT = 1.45;     // all HR attacks hit this much harder than the numbers in data.js
-const SPECIAL_CHANCE = 0.3;            // how often HR uses a special move instead of attacking
+const SPECIAL_CHANCE = 0.35;           // how often HR uses a special move instead of attacking
 const TAKEHOME = { dmg: 6, turns: 3 }; // take-home assignment: 6 hp a turn for 3 turns
-const CHAI_HEAL = 20;                  // HR's one chai break when rage mode starts
+const CHAI_HEAL = 25;                  // HR's one chai break when rage mode starts
+const PERK_CHANCE = 0.3;               // how often one of your resume moves is in your hand
 // Aura meter: how much each source fills it
 const METER_DEALT = 0.5, METER_TAKEN = 0.6, METER_PERFECT = 15;
 const LOW_BOSS = 30, LOW_YOU = 35;     // hp at which HR's "low hp" lines kick in (once each)
@@ -37,10 +41,20 @@ const BLOCK_CHANCE = 0.25, BLOCK_AT_LEAST_EVERY = 4;
 // The ultimate is a move like the others, so it uses the same code path
 const ULT = { id: "ult", name: FIGHT_TEXT.ult.name, hint: FIGHT_TEXT.ult.hint, ult: true, run: () => ({ dmg: rand(30, 40), text: FIGHT_TEXT.ult.text }) };
 
-// Deal a fresh hand: 3 random moves + the cursed salary button
-function deal() {
+// Deal a fresh hand: 3 random moves + the cursed salary button.
+// Sometimes one of the 3 is swapped for a move your resume unlocked.
+function deal(perks) {
   const pool = MOVES.filter((m) => m.id !== "salary").sort(() => Math.random() - 0.5);
-  return [...pool.slice(0, HAND), MOVES.find((m) => m.id === "salary")];
+  const hand = pool.slice(0, HAND);
+  if (perks.length && Math.random() < PERK_CHANCE) hand[rand(0, HAND - 1)] = pick(perks);
+  return [...hand, MOVES.find((m) => m.id === "salary")];
+}
+
+// Your resume moves, as move objects (older saves didn't store perks, so work them out)
+function myPerks() {
+  const s = S.get();
+  const ids = s.perks?.length ? s.perks : perksFor(s.allLines || []);
+  return ids.filter((id) => PERK_MOVES[id]).map((id) => ({ id, perk: true, ...PERK_MOVES[id] }));
 }
 
 export default function boss(root, { id }) {
@@ -48,9 +62,11 @@ export default function boss(root, { id }) {
   let bossHp = BOSS_HP, you = YOUR_HP, busy = true, alive = true, turn = 1, meter = 0;
   let attacks = 0, sinceBlock = 0;   // for deciding when the block minigame shows up
   let ultUsed = false, chaiUsed = false, takehome = 0;   // takehome = turns of take-home damage left
+  const perks = myPerks();
   // Status effects: dodge (block next attack), charge (2× next hit), stun (boss skips a turn), rage,
   // ghost (HR is ghosting you: your next attack misses)
-  const fx = { dodge: false, charge: false, stun: false, rage: false, ghost: false };
+  // scared (HR can't use a special next turn, from the robot arm)
+  const fx = { dodge: false, charge: false, stun: false, rage: false, ghost: false, scared: false };
   const ultReady = () => meter >= METER_MAX && !ultUsed;
   const said = { lowBoss: false, lowYou: false };   // the one-off "low hp" lines
   const say = (text) => taunt(enemy, text);
@@ -72,7 +88,7 @@ export default function boss(root, { id }) {
     if (Math.random() > TAUNT_CHANCE) return null;
     return j.taunts && Math.random() < 0.6 ? pick(j.taunts) : pick(BOSS_TAUNTS);
   }
-  let hand = deal();
+  let hand = deal(perks);
 
   root.innerHTML = `
     <section class="boss">
@@ -108,7 +124,7 @@ export default function boss(root, { id }) {
     const cards = ultReady() ? [ULT, ...hand] : hand;
     $("#turnLabel", root).textContent = ultReady() ? FIGHT_TEXT.ultReady
       : `turn ${turn} · ${ultUsed ? FIGHT_TEXT.ultSpent : "your hand reshuffles every turn"}`;
-    movesEl.innerHTML = cards.map((m) => `<button class="move${m.ult ? " move-ult" : ""}" data-id="${m.id}"><b>${esc(m.name)}</b><small>${esc(m.hint)}</small></button>`).join("");
+    movesEl.innerHTML = cards.map((m) => `<button class="move${m.ult ? " move-ult" : ""}${m.perk ? " move-perk" : ""}" data-id="${m.id}">${m.perk ? `<i class="perk-tag">${esc(FIGHT_TEXT.perkTag)}</i>` : ""}<b>${esc(m.name)}</b><small>${esc(m.hint)}</small></button>`).join("");
     movesEl.classList.remove("deal");
     void movesEl.offsetWidth;   // restart the deal animation
     movesEl.classList.add("deal");
@@ -123,7 +139,7 @@ export default function boss(root, { id }) {
     $("#meter", root).parentElement.classList.toggle("spent", ultUsed);
     const chip = (key) => `<span class="fx fx-${key}">${FIGHT_TEXT.fx[key]}</span>`;
     $("#youFx", root).innerHTML = ["dodge", "charge"].filter((k) => fx[k]).map(chip).join("") + (takehome ? chip("takehome") : "");
-    $("#bossFx", root).innerHTML = ["stun", "rage", "ghost"].filter((k) => fx[k]).map(chip).join("");
+    $("#bossFx", root).innerHTML = ["stun", "rage", "ghost", "scared"].filter((k) => fx[k]).map(chip).join("");
   }
 
   const addMeter = (n) => { if (!ultUsed) meter = Math.min(METER_MAX, meter + n); };   // stops after the one ultimate
@@ -138,6 +154,8 @@ export default function boss(root, { id }) {
 
   async function finish(won) {
     if (!alive) return;
+    const rec = S.get().record || { w: 0, l: 0 };
+    S.set({ record: won ? { ...rec, w: rec.w + 1 } : { ...rec, l: rec.l + 1 } });   // HR record on your profile
     setButtons(false);
     stopMusic();   // the music cuts on the K.O.
     await koSplash(won);
@@ -184,7 +202,9 @@ export default function boss(root, { id }) {
     if (fx.stun) { fx.stun = false; log(FIGHT_TEXT.stunned(j.boss)); return; }
 
     // Sometimes HR plays dirty instead of attacking
-    if (Math.random() < SPECIAL_CHANCE) {
+    const scared = fx.scared;
+    fx.scared = false;   // the robot arm only scares HR for one turn
+    if (!scared && Math.random() < SPECIAL_CHANCE) {
       const kind = pick(["takehome", "ghost"]);
       if (kind === "ghost" || takehome === 0) {
         const s = FIGHT_TEXT.special[kind];
@@ -284,7 +304,7 @@ export default function boss(root, { id }) {
     }
 
     turn += 1;
-    hand = deal();
+    hand = deal(perks);
     renderHand();
     busy = false;
   }

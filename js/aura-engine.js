@@ -257,6 +257,97 @@ export function tidyLines(rawLines) {
   return out.filter((l) => l.split(" ").length > 3 || SIGNALS.some((s) => s.re.test(l)));
 }
 
+// ---------- fight moves your resume unlocks ----------
+// Looks at the judged lines (and their CAP/NEPO/… flags) and returns up to 4 move ids from PERK_MOVES
+// in data.js. A flagged line doesn't unlock the good stuff: "won SIH (internal round)" is not a win.
+const PERK_RULES = [
+  ["winner", /\b(won|winners?|1st|first place|champions?)\b/i],
+  ["intern", /\bintern(ship)?s?\b/i],
+  ["prs", /open.?source|\bgsoc\b|merged (prs|pull)|pull requests?|\bprs\b/i],
+  ["algo", /leetcode|codeforces|codechef|\bicpc\b|\bdsa\b/i],
+  ["tests", /(\d[\d,]*)\s*(automated\s+)?(unit\s+)?tests?\b/i, (m) => Number(m[1].replace(/,/g, "")) >= 50],
+  ["livelink", /\b(live|deployed|vercel|netlify|github pages|play store|app store)\b/i],
+  ["robot", /arduino|raspberry pi|robot\w*|rover|drone|\biot\b|esp32/i],
+  ["redesign", /figma|ui\/?ux|behance|dribbble|after effects|illustrator/i],
+  ["deck", /founder|\bceo\b|(my|own|started a) startup/i, null, true],   // founding one, not interning at one; allowed even on flagged lines
+  ["cgpa", /\bc?gpa\b\s*[:\-]?\s*(\d+(\.\d+)?)|(\d\.\d+)\s*c?gpa/i, (m) => Number(m[1] || m[3]) >= 9],
+];
+const MAX_PERKS = 4;
+
+export function perksFor(lines = []) {
+  const clean = lines.filter((l) => !l.kind);
+  const good = PERK_RULES.filter(([, re, test, anyLine]) => (anyLine ? lines : clean).some((l) => {
+    const m = l.text.match(re);
+    return m && (!test || test(m));
+  })).map(([id]) => id);
+  // the joke moves: 5+ societies, nepotism, glazing (one of these always gets a slot if you earned it)
+  const societies = lines.filter((l) => ORG_LINE.test(l.text)).length > SOCIETY_KEEP
+    || lines.some((l) => { const m = l.text.match(/(\d+)\s*(?:more\s+)?(?:college\s+)?(clubs?|societ)/i); return m && Number(m[1]) > 3; });
+  const jokes = [
+    lines.some((l) => l.kind === "nepo") && "uncle",
+    societies && "clubs",
+    lines.some((l) => l.kind === "glaze") && "teamplayer",
+  ].filter(Boolean);
+  return [...good.slice(0, jokes.length ? MAX_PERKS - 1 : MAX_PERKS), ...jokes].slice(0, MAX_PERKS);
+}
+
+// ---------- branch + graduation year (the profile headline, e.g. "CSE-AI '30") ----------
+// Only lines about your degree are read, so "member, computer science club" doesn't count as a branch.
+const EDU_LINE = /b\.?\s?tech|btech|b\.e\.|bachelor|master|degree|university|college|institute|\biit\b|\bnit\b|iiit|igdtuw|\bdtu\b|nsut|\b(1st|2nd|3rd|4th|first|second|third|fourth|final)[\s-]*year\b|class of|batch of|graduat|\b(bca|bba|mba|mca|b\.?com|b\.?sc|b\.?des|b\.?arch|m\.?tech)\b/i;
+const SCHOOL_LINE = /class (x|xii|10|12)\b|\b(10|12)th\b|cbse|icse|senior secondary|high school|\[board\]/i;
+// [pattern, label], most specific first
+const BRANCHES = [
+  [/artificial intelligence (and|&) machine learning|\baiml\b|\bai ?& ?ml\b/i, "AIML"],
+  [/artificial intelligence (and|&) data science|\bai ?& ?ds\b|\baids\b/i, "AI&DS"],
+  [/(computer science|\bcse\b).{0,40}(artificial intelligence|\(ai\)|-ai\b)/i, "CSE-AI"],
+  [/(computer science|\bcse\b).{0,40}data science/i, "CSE-DS"],
+  [/(computer science|\bcse\b).{0,40}cyber ?security/i, "CSE-CS"],
+  [/computer science|\bcse\b|computer engineering/i, "CSE"],
+  [/information technology|\bIT\b/, "IT"],
+  [/electronics (and|&) communication|\bece\b/i, "ECE"],
+  [/electrical (and|&) electronics|\beee\b/i, "EEE"],
+  [/electrical engineering|\bee\b/i, "EE"],
+  [/mechanical (and|&) automation|\bmae\b/i, "MAE"],
+  [/mechanical|\bmech\b/i, "ME"],
+  [/civil engineering|\bcivil\b/i, "CIVIL"],
+  [/chemical engineering/i, "CHE"],
+  [/biotech/i, "BIOTECH"],
+];
+// [pattern, label, years the degree takes]
+const DEGREES = [
+  [/b\.?\s?tech|btech|b\.e\.|bachelor of (technology|engineering)/i, "B.Tech", 4],
+  [/m\.?\s?tech/i, "M.Tech", 2], [/\bmba\b/i, "MBA", 2], [/\bmca\b/i, "MCA", 2],
+  [/\bbca\b/i, "BCA", 3], [/\bbba\b/i, "BBA", 3], [/b\.?\s?com\b/i, "B.Com", 3], [/b\.?\s?sc\b/i, "B.Sc", 3],
+  [/b\.?\s?des\b/i, "B.Des", 4], [/b\.?\s?arch\b/i, "B.Arch", 5], [/bachelor of arts/i, "BA", 3],
+];
+const YEAR_OF_STUDY = { "1st": 1, first: 1, "2nd": 2, second: 2, "3rd": 3, third: 3, "4th": 4, fourth: 4 };
+
+// → { branch, degree, gradYear } (any of them can be null)
+export function eduFacts(text, now = new Date()) {
+  const raw = String(text || "").split(/\n+/);
+  // tidied lines rejoin PDF wraps; raw lines keep short ones like "ECE, 3rd year" that tidyLines drops
+  const lines = [...new Set([...tidyLines(raw), ...raw.map((l) => l.trim())])].filter((l) => EDU_LINE.test(l) && !SCHOOL_LINE.test(l));
+  const edu = lines.join("\n");
+  const branch = BRANCHES.find(([re]) => re.test(edu))?.[1] || null;
+  const deg = DEGREES.find(([re]) => re.test(edu));
+  const degree = deg?.[1] || null;
+
+  let gradYear = null;
+  const range = edu.match(/(20\d\d)\s*[–—-]\s*(20\d\d)/);                       // "2026 – 2030"
+  const said = edu.match(/(?:class|batch) of\s*'?(?:20)?(\d\d)\b|(?:expected|graduat\w*|pass(?:ing)?[\s-]?out)\D{0,15}(20\d\d)|(20\d\d)\s*\(expected\)/i);
+  const study = edu.match(/\b(1st|2nd|3rd|4th|first|second|third|fourth|final)[\s-]*year\b/i);
+  if (range) gradYear = Number(range[2]);
+  else if (said) gradYear = said[1] ? 2000 + Number(said[1]) : Number(said[2] || said[3]);
+  else if (study) {
+    // "2nd year" → the academic year started this July (or last July, before July)
+    const length = deg?.[2] || 4;
+    const year = study[1].toLowerCase() === "final" ? length : YEAR_OF_STUDY[study[1].toLowerCase()];
+    const started = now.getMonth() >= 6 ? now.getFullYear() : now.getFullYear() - 1;
+    gradYear = started + (length - year) + 1;
+  }
+  return { branch, degree, gradYear };
+}
+
 // ---------- the whole resume ----------
 export const BASE_AURA = 3000; // everyone starts with some aura for existing
 export const MAX_LINES = 14;   // the scan animates each line, so long resumes show a 14-line sample

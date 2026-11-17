@@ -4,7 +4,7 @@
 import { go } from "../router.js";
 import * as S from "../state.js";
 import { $, $$, esc, signed, sleep, confetti, shake, reducedMotion } from "../fx.js";
-import { scoreResume, BASE_AURA, toneOf, stampFor } from "../aura-engine.js";
+import { scoreResume, BASE_AURA, toneOf, stampFor, perksFor } from "../aura-engine.js";
 import { gsap } from "../motion.js";
 import { sfx } from "../sound.js";
 
@@ -127,7 +127,7 @@ export default function scan(root) {
   async function finish() {
     if (cancelled) return;
     cancelled = true;
-    S.set({ aura: result.total, lines: result.lines, allLines: result.allLines, tierName: result.tier.name });
+    S.set({ aura: result.total, lines: result.lines, allLines: result.allLines, tierName: result.tier.name, perks: perksFor(result.allLines) });
     $("#complete", root).classList.add("show");
     orb.className = "orb done";
     log(`> verdict: ${result.tier.name}. ${signed(result.total)} aura.`);
