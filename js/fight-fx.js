@@ -42,9 +42,11 @@ export function vsIntro({ youHTML, youName, bossName }) {
 }
 
 // ---------- HR's speech bubble ----------
-// A big comic bubble next to HR. The text types out while HR's mouth moves,
-// stays long enough to read, and a tap skips it.
-export function taunt(fighterEl, text) {
+// A big comic bubble next to HR. The text types out while HR's mouth moves.
+// It doesn't hold up the fight: the returned promise resolves after `wait` ms, and the bubble
+// stays up a little longer so you can finish reading. A new line replaces the old one; a tap skips it.
+export function taunt(fighterEl, text, { wait = 900 } = {}) {
+  fighterEl._endTaunt?.();   // a new line replaces the one still on screen
   const bubble = document.createElement("div");
   bubble.className = "taunt";
   bubble.setAttribute("aria-live", "polite");
@@ -54,21 +56,25 @@ export function taunt(fighterEl, text) {
 
   return new Promise((resolve) => {
     let typer = 0, timer = 0;
+    const gate = setTimeout(resolve, wait);   // the fight moves on after `wait`
     function done() {
-      clearInterval(typer); clearTimeout(timer);
+      clearInterval(typer); clearTimeout(timer); clearTimeout(gate);
       arena.removeEventListener("click", done);
       fighterEl.classList.remove("talking");
       bubble.remove();
+      if (fighterEl._endTaunt === done) fighterEl._endTaunt = null;
       resolve();
     }
+    fighterEl._endTaunt = done;
     arena.addEventListener("click", done);
-    const hold = Math.min(2600, 1000 + text.length * 30);   // longer lines stay up longer
-    if (reducedMotion()) { bubble.textContent = text; timer = setTimeout(done, hold); return; }
+    const hold = Math.min(1600, 700 + text.length * 16);   // how long it stays after typing
+    if (reducedMotion()) { bubble.textContent = text; timer = setTimeout(done, hold + 400); return; }
     let i = 0;
     typer = setInterval(() => {
-      bubble.textContent = text.slice(0, ++i);
+      i += 2;   // two letters per tick: quick, still readable
+      bubble.textContent = text.slice(0, i);
       if (i >= text.length) { clearInterval(typer); fighterEl.classList.remove("talking"); timer = setTimeout(done, hold); }
-    }, 22);
+    }, 20);
   });
 }
 

@@ -30,7 +30,7 @@ const PERK_CHANCE = 0.3;               // how often one of your resume moves is 
 // Aura meter: how much each source fills it
 const METER_DEALT = 0.5, METER_TAKEN = 0.6, METER_PERFECT = 15;
 const LOW_BOSS = 30, LOW_YOU = 35;     // hp at which HR's "low hp" lines kick in (once each)
-const TAUNT_CHANCE = 0.4;              // how often HR also talks trash right before attacking
+const TAUNT_CHANCE = 0.4;              // how often HR also talks trash before attacking (only if it didn't just react)
 const METER_MAX = 100;     // aura meter: full = ultimate unlocked
 const BLOCK_SWEEP = 900, RAGE_SWEEP = 750;     // how long the block marker takes to cross (ms), faster in rage mode
 const BLOCK_DAMAGE = { perfect: 0, good: 0.5, miss: 1, none: 1 };
@@ -69,6 +69,7 @@ export default function boss(root, { id }) {
   const fx = { dodge: false, charge: false, stun: false, rage: false, ghost: false, scared: false };
   const ultReady = () => meter >= METER_MAX && !ultUsed;
   const said = { lowBoss: false, lowYou: false };   // the one-off "low hp" lines
+  let reacted = false;                              // HR already said something this turn
   const say = (text) => taunt(enemy, text);
 
   // What HR says after your move: about that move, whether it landed or flopped
@@ -85,7 +86,7 @@ export default function boss(root, { id }) {
   function tauntLine() {
     if (!said.lowBoss && bossHp <= LOW_BOSS) { said.lowBoss = true; return pick(HR_LINES.lowBoss); }
     if (!said.lowYou && you <= LOW_YOU) { said.lowYou = true; return pick(HR_LINES.lowYou); }
-    if (Math.random() > TAUNT_CHANCE) return null;
+    if (reacted || Math.random() > TAUNT_CHANCE) return null;   // one random line per turn is plenty
     return j.taunts && Math.random() < 0.6 ? pick(j.taunts) : pick(BOSS_TAUNTS);
   }
   let hand = deal(perks);
@@ -259,7 +260,8 @@ export default function boss(root, { id }) {
     if (bossHp <= 0) { await sleep(1000); return alive && finish(true); }
     // HR reacts to your move (this is also the pause before HR's turn)
     const reaction = reactionTo(move, r, ghosted);
-    if (reaction) await say(reaction); else await sleep(1000);
+    reacted = Boolean(reaction);
+    if (reaction) await say(reaction); else await sleep(900);
     if (!alive) return;
     if (you <= 0) return finish(false);
 
