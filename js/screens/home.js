@@ -20,12 +20,26 @@ const HERO_STICKERS = [
   ["CRASH OUT", "orange", 10, "sm", 0.6, "92%", "64%"],
 ];
 
-// A feature line under a chapter's text: a round badge, a bold title, one line of copy (links to the feature)
-const featureLines = (items) => `
-  <ul class="feature-lines">${items.map(([badge, title, line, href]) => `
-    <li class="feature-line-wrap"><a class="feature-line" href="#${href}"><span class="fl-badge" aria-hidden="true">${esc(badge)}</span>
-      <span class="fl-text"><b>${esc(title)}</b><small>${esc(line)}</small></span><span class="fl-arrow" aria-hidden="true">→</span></a></li>`).join("")}
-  </ul>`;
+// Chapter 01 add-ons: they pop in like phone notifications from "AuraHire" (**text** = bold)
+const bold = (text) => esc(text).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
+const notifsHTML = () => `
+  <div class="notifs">${LS.notifs.map(([time, msg, href]) => `
+    <a class="notif-wrap" href="#${href}"><span class="notif"><span class="notif-icon" aria-hidden="true">a</span>
+      <span class="notif-meta"><span>${esc(LS.notifApp)}</span><span>${esc(time)}</span></span>
+      <span class="notif-text">${bold(msg)}</span></span></a>`).join("")}
+  </div>`;
+
+// Chapter 03 add-on: a row with a live preview (your resume moves dealing in), a title and an arrow
+const movesetHTML = () => {
+  const m = LB.moveset;
+  return `
+  <a class="preview-row" href="#${m.go}">
+    <span class="pr-preview" aria-hidden="true">${m.preview.map((name, i) => `
+      <span class="pr-card-wrap"><span class="pr-card" style="--rot:${i ? 4 : -5}deg"><i>${esc(LB.perkTag)}</i>${esc(name)}</span></span>`).join("")}</span>
+    <span class="pr-text"><b>${esc(m.title)}</b><small>${esc(m.line)}</small></span>
+    <span class="pr-go" aria-hidden="true">→</span>
+  </a>`;
+};
 
 const STORM = ["W", "L", "MID", "COOKED", "RED_FLAG", "GREEN_FLAG", "NPC", "AURA", "DELULU", "SIGMA", "RATIO", "SIX7", "TWIN", "UNC", "MOGGED", "CRASH", "SEVEN", "CHOPPED", "HUZZ", "WOMP"];
 
@@ -56,7 +70,7 @@ export default function home(root) {
           <p class="label">01 · the resume</p>
           <h2 class="display">your resume,<br>rated in aura.</h2>
           <p class="sub">${esc(LS.sub)}</p>
-          ${featureLines(LS.extras)}
+          ${notifsHTML()}
         </div>
         <div class="card score-demo" data-tilt>
           <p class="label">your aura score</p>
@@ -96,7 +110,7 @@ export default function home(root) {
           <p class="label">03 · the application</p>
           <h2 class="display">applying is a<br>boss fight.</h2>
           <p class="sub">${esc(LB.sub)}</p>
-          ${featureLines(LB.extras)}
+          ${movesetHTML()}
         </div>
         <div class="card boss-demo" data-tilt>
           <div class="flex-row"><b>HR unc · lv.99</b><span class="label" id="hpLabel">${LB.hp} hp</span></div>
@@ -184,8 +198,12 @@ export default function home(root) {
       .fromTo(".demo-line .tag", { scale: 0 }, { scale: 1, stagger: 0.13, duration: 0.12, ease: "back.out(3)" }, 0.06)
       .from(".demo-stamp", { scale: 3, opacity: 0, rotation: -25, stagger: 0.13, duration: 0.08, ease: "power4.in" }, 0.1)
       .from(".demo-tier", { scale: 0, rotation: -30, opacity: 0, duration: 0.12, ease: "back.out(2.5)" }, 0.88)
-      // then what you do with it: share it, dare someone
-      .from(".ch-score .feature-line-wrap", { y: 16, opacity: 0, stagger: 0.04, duration: 0.08, ease: "power2.out" }, 0.92);
+      // then the notifications drop in: your card is ready, someone challenged you
+      .from(".notif-wrap", { y: -24, opacity: 0, scale: 0.96, stagger: 0.035, duration: 0.07, ease: "back.out(1.6)" }, 0.9);
+
+    // Chapter 03's moveset row: the two move cards deal into its preview when it comes into view
+    gsap.from(".pr-card-wrap", { y: 30, rotation: -20, opacity: 0, duration: 0.5, stagger: 0.12, ease: "back.out(1.8)",
+      scrollTrigger: { trigger: ".ch-boss", start: "top 60%", toggleActions: "play none none reverse" } });
 
     // Chapter 2: job cards flip away one by one (top card first)
     const cards = $$(".flip-card", root).reverse();

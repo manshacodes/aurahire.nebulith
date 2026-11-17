@@ -836,11 +836,12 @@ export const LANDING_SCORE = {
   sub: "W, BASED, MID, L. AuraGPT reads every line. no mercy, all regex.",
   target: 4606,
   tier: "certified linkedin sigma",
-  // feature lines under the chapter text: [badge, title, line, where tapping goes]
-  extras: [
-    ["↗", "share your aura", "turn your score into a card. post it. let them cope.", "/upload"],
-    ["vs", "beat my aura", "send a challenge link. they scan. someone gets mogged.", "/upload"],
+  // the add-ons, as phone notifications that pop in after the score: [time, message (**bold**), where tapping goes]
+  notifs: [
+    ["now", "your aura card is ready ↗ **+4,606**. post it. let them cope.", "/upload"],
+    ["2m ago", "**riya** challenged you: **+3,980**. think you can mog that?", "/upload"],
   ],
+  notifApp: "AuraHire",
   lines: [
     ["Won Smart India Hackathon (internal round)", -185, "the brackets are doing a lot of work", "cap"],
     ["Exam notice scraper · 169 automated tests · live", 315, "stacked W: 169 tests", ""],
@@ -859,7 +860,9 @@ export const LANDING_BOSS = {
   special: "TAKE-HOME ASSIGNMENT!",
   perk: ["send the live link", "20 dmg"],
   perkTag: "from your resume",
-  extras: [["✦", "your resume is your moveset", "what AuraGPT finds becomes fight moves. even the cringe ones.", "/jobs"]],
+  // the add-on: a row with a live preview of your resume moves dealing in
+  moveset: { title: "your resume is your moveset", line: "what AuraGPT finds becomes fight moves. even the cringe ones.", go: "/jobs",
+    preview: ["run the test suite", "call uncle"] },
   dmg: ["−20", "−24 CRIT", "−36 ULT", "−16"],
 };
 
