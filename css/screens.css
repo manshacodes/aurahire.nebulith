@@ -546,3 +546,12 @@ textarea[data-lenis-prevent] { overflow-y: auto; resize: none; }
 .qte-full.done-perfect { background: color-mix(in srgb, #22B33A 30%, var(--surface-solid)); }
 .qte-full.done-good { background: color-mix(in srgb, #FFE45C 35%, var(--surface-solid)); }
 .qte-full.done-miss { background: color-mix(in srgb, #FF3B5C 30%, var(--surface-solid)); }
+
+/* ---------- "beat my aura" challenge ---------- */
+.vs-card { display: grid; justify-items: center; gap: 12px; padding: 28px 20px; text-align: center; }
+.vs-headline { margin: 0; }
+.vs-cap { margin: 0; padding: 6px 12px; border-radius: 999px; background: #FF3B5C; color: #fff; font-size: 13px; font-weight: 800; }
+.vs-scared { display: block; margin: 14px auto 0; text-align: center; }
+.h2h-card { border: 3px solid var(--ink); }
+.h2h-back { width: 100%; margin-top: 12px; }
+.share-btn { width: 100%; margin: 18px 0 10px; background: var(--accent); color: var(--accent-ink); border-color: transparent; }

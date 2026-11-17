@@ -803,6 +803,47 @@ export const AURA_EARN = {
   bossWin: [1000, "beat HR"],
   ghosted: [-800, "ghosted. womp womp"],
   judge:   [20, "judged a friend"],
+  share:   [25, "posted your aura"],
+};
+
+// ---------- share my aura + "beat my aura" challenge links ----------
+export const SHARE_TEXT = {
+  button: "share my aura",
+  making: "printing your aura…",
+  shared: "aura shared. let them cope.",
+  saved: "card saved + challenge link copied. go post it, twin.",
+  failed: "your browser said no. screenshot it, twin.",
+  // the message that goes with the image
+  message: (name, aura, tier) => `${name} has ${aura} aura on AuraHire (${tier}). think you can mog that?`,
+  // text on the image itself
+  card: {
+    tagline: "stop applying. start aura farming.",
+    judged: "judged by AuraGPT v6.7",
+    points: "aura points",
+    best: "best line",
+    worst: "worst line",
+    cta: "think you can mog that?",
+  },
+  // the screen a friend sees when they open your link
+  vs: {
+    kicker: "you've been challenged",
+    headline: (name) => `${name} thinks they mog you.`,
+    sub: "scan your resume. find out.",
+    scan: "scan my resume →",
+    useLast: "use my last scan",
+    scared: "nah, i'm scared",
+    cap: "edited the link? that's cap. the numbers don't add up.",
+    broken: "this challenge link is chopped. ask for a new one.",
+  },
+  // the head-to-head on your score page after scanning from a challenge
+  h2h: {
+    title: "head-to-head",
+    you: "you",
+    win: (name, gap) => `you mogged ${name} by ${gap} aura. send it back.`,
+    lose: (name, gap) => `${name} mogged you by ${gap} aura. womp womp.`,
+    tie: "dead even. 6-7.",
+    back: "challenge them back",
+  },
 };
 
 // Leaderboard copy ({name}, {rank}, {gap} get filled in)

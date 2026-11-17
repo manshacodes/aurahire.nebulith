@@ -68,7 +68,9 @@ This doc is the plan for AuraHire after the NEBULITH hackathon. It's written so 
 
 Suggested order: **A → B → C → D → E**, then **F** later. Each one is independent once A exists.
 
-### A. Shareable aura card + "beat my aura" challenge link (build these together)
+### A. Shareable aura card + "beat my aura" challenge link (build these together) — ✅ DONE
+
+Built as planned: `js/share-card.js` + `js/screens/vs.js`. The owner chose portrait 4:5, all 6 meters on the card, and the fight result card later. Tested in all 5 vibes and end to end (challenge link → scan → head-to-head; an edited link shows "that's cap"; a broken one goes home). The original plan is kept below for reference.
 
 **What it is**
 - A **"share my aura"** button on the score page (next to "copy my flex"). It makes an image, a card with:

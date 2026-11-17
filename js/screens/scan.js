@@ -4,24 +4,11 @@
 import { go } from "../router.js";
 import * as S from "../state.js";
 import { $, $$, esc, signed, sleep, confetti, shake, reducedMotion } from "../fx.js";
-import { scoreResume, BASE_AURA, verdictOf, toneOf } from "../aura-engine.js";
+import { scoreResume, BASE_AURA, toneOf, stampFor } from "../aura-engine.js";
 import { gsap } from "../motion.js";
 import { sfx } from "../sound.js";
 
 const STEP_MS = 850;
-
-// Pick a stamp for a judged line
-const KIND_STAMPS = { nepo: ["NEPO", "red"], glaze: ["GLAZE", "pink"], cap: ["CAP", "red"], larp: ["LARP", "orange"], tourist: ["TOURIST", "sky"] };
-function stampFor({ points, roast, kind }) {
-  if (KIND_STAMPS[kind]) return KIND_STAMPS[kind];
-  // older saved scans have no `kind`, so fall back to reading the roast
-  if (/nepotism/.test(roast)) return ["NEPO", "red"];
-  if (/glazing/.test(roast)) return ["GLAZE", "pink"];
-  if (/impossible/.test(roast)) return ["CAP", "red"];
-  if (/larping/.test(roast)) return ["LARP", "orange"];
-  if (/tourist/.test(roast)) return ["TOURIST", "sky"];
-  return { W: ["W", "lime"], BASED: ["BASED", "lime"], L: ["L", "red"], MID: ["MID", "grey"] }[verdictOf(points)];
-}
 
 // What AuraGPT "thinks" while judging a line
 function thoughts(line) {

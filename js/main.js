@@ -27,6 +27,7 @@ import friend from "./screens/friend.js";
 import rate from "./screens/rate.js";
 import chat from "./screens/chat.js";
 import profile from "./screens/profile.js";
+import vs from "./screens/vs.js";
 
 // ---------- vibes ----------
 function setupVibes() {
@@ -142,5 +143,6 @@ route("/people", withMotion(people));
 route("/u/:id", withMotion(person));
 route("/judge", withMotion(judge));
 route("/f/:id", withMotion(friend));
+route("/vs/:code", withMotion(vs));      // "beat my aura" challenge links
 
 start($("#screen"));

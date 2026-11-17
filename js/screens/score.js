@@ -1,11 +1,14 @@
 import { go } from "../router.js";
 import * as S from "../state.js";
 import { $, esc, signed, countUp, confetti, toast, sticker } from "../fx.js";
+import { SHARE_TEXT } from "../data.js";
+import { shareAura } from "../share-card.js";
+import { earn } from "../aura.js";
 import { tierFor, analyzeResume, isW, isCrashOut } from "../aura-engine.js";
 import { breakdownHTML, fillBreakdown, rizzText } from "../breakdown.js";
 
 export default function score(root) {
-  const { aura, lines, allLines } = S.get();
+  const { aura, lines, allLines, challenge, name, avatar } = S.get();
   if (!lines.length) { go("/upload"); return; }
 
   const tier = tierFor(aura);
@@ -17,6 +20,23 @@ export default function score(root) {
   // AuraGPT breakdown: every factor scored 0-10 from your whole resume (older saves only have the 14 lines)
   const { scores, rizz } = analyzeResume(allLines?.length ? allLines : lines);
 
+  // Opened a friend's "beat my aura" link? Show the head-to-head (ties within 100 aura)
+  const H = SHARE_TEXT.h2h;
+  const gap = Math.abs(Math.round(aura - (challenge?.aura ?? 0))).toLocaleString("en-US");
+  const h2hVerdict = !challenge ? "" : Math.abs(aura - challenge.aura) <= 100 ? H.tie
+    : aura > challenge.aura ? H.win(challenge.name, gap) : H.lose(challenge.name, gap);
+  const top = Math.max(aura, challenge?.aura ?? 0, 1);
+  const bar = (label, value) => `
+    <div class="mog-bar"><span>${esc(label)}</span><div class="bar"><span style="width:${Math.max(0, (value / top) * 100)}%"></span></div><b>${signed(value)}</b></div>`;
+  const h2hHTML = !challenge ? "" : `
+      <div class="card h2h-card">
+        <p class="label" style="margin-bottom:12px">${esc(H.title)}</p>
+        ${bar(H.you, aura)}
+        ${bar(challenge.name.split(" ")[0], challenge.aura)}
+        <p class="mog-verdict">${esc(h2hVerdict)}</p>
+        <button class="btn btn-cta h2h-back" id="shareBack">${esc(H.back)}</button>
+      </div>`;
+
   root.innerHTML = `
     <section>
       <p class="label">step 3 of 3 · your aura score is</p>
@@ -25,6 +45,7 @@ export default function score(root) {
       <span class="pill" id="rank" style="visibility:hidden">${tier.name}</span>
 
       <div class="split"><div class="split-main">
+      ${h2hHTML}
       <div class="card" data-tilt>
         <span class="card-stk">${sticker(aura >= 3300 ? "W" : "L", aura >= 3300 ? "lime" : "pink", { rot: 10, size: "lg" })}</span>
         <p class="roast">${tier.roast}</p>
@@ -44,6 +65,7 @@ export default function score(root) {
       </div>
 
       </div></div>
+      <button class="btn share-btn" id="share">${esc(SHARE_TEXT.button)} ↗</button>
       <div class="row">
         <button class="btn btn-ghost" id="flex">copy my flex</button>
         <button class="btn btn-cta" id="next">pick my vibe →</button>
@@ -67,5 +89,19 @@ export default function score(root) {
   });
   $("#next", root).addEventListener("click", () => go("/stickers"));
 
-  return () => { alive = false; clearTimeout(fillTimer); };
+  // Share my aura: draw the card and open the share sheet (or download it)
+  const card = { name, avatar, aura, tier: tier.name, best, worst, scores };
+  const share = async (btn) => {
+    const label = btn.textContent;
+    btn.disabled = true; btn.textContent = SHARE_TEXT.making;
+    if (await shareAura(card)) earn("share");
+    if (alive) { btn.disabled = false; btn.textContent = label; }
+  };
+  $("#share", root).addEventListener("click", (e) => share(e.currentTarget));
+  $("#shareBack", root)?.addEventListener("click", (e) => share(e.currentTarget));
+
+  return () => {
+    alive = false; clearTimeout(fillTimer);
+    if (challenge) S.set({ challenge: null });   // the head-to-head shows once, for this result
+  };
 }
