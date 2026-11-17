@@ -8,7 +8,7 @@
 import { go } from "../router.js";
 import * as S from "../state.js";
 import { $, esc, pick, rand, sleep, floatText, confetti, reducedMotion } from "../fx.js";
-import { JOBS, MOVES, BOSS_ATTACKS, BOSS_HP, YOUR_HP, FIGHT_TEXT, BOSS_TAUNTS } from "../data.js";
+import { JOBS, MOVES, BOSS_ATTACKS, BOSS_HP, YOUR_HP, FIGHT_TEXT, BOSS_TAUNTS, HR_LINES } from "../data.js";
 import { hasGsap } from "../motion.js";
 import { memeSlam, preloadMemes } from "../slam.js";
 import { sfx } from "../sound.js";
@@ -25,6 +25,8 @@ const TAKEHOME = { dmg: 6, turns: 3 }; // take-home assignment: 6 hp a turn for 
 const CHAI_HEAL = 20;                  // HR's one chai break when rage mode starts
 // Aura meter: how much each source fills it
 const METER_DEALT = 0.5, METER_TAKEN = 0.6, METER_PERFECT = 15;
+const LOW_BOSS = 30, LOW_YOU = 35;     // hp at which HR's "low hp" lines kick in (once each)
+const TAUNT_CHANCE = 0.4;              // how often HR also talks trash right before attacking
 const METER_MAX = 100;     // aura meter: full = ultimate unlocked
 const BLOCK_SWEEP = 900, RAGE_SWEEP = 750;     // how long the block marker takes to cross (ms), faster in rage mode
 const BLOCK_DAMAGE = { perfect: 0, good: 0.5, miss: 1, none: 1 };
@@ -50,6 +52,26 @@ export default function boss(root, { id }) {
   // ghost (HR is ghosting you: your next attack misses)
   const fx = { dodge: false, charge: false, stun: false, rage: false, ghost: false };
   const ultReady = () => meter >= METER_MAX && !ultUsed;
+  const said = { lowBoss: false, lowYou: false };   // the one-off "low hp" lines
+  const say = (text) => taunt(enemy, text);
+
+  // What HR says after your move: about that move, whether it landed or flopped
+  function reactionTo(move, r, ghosted) {
+    if (ghosted) return pick(HR_LINES.ghosted);
+    if (move.ult) return pick(HR_LINES.ult);
+    const lines = HR_LINES.reactions[move.id];
+    if (!lines) return null;
+    const flopped = r.self || (r.dmg && r.dmg <= 8 && !r.effect);   // backfired, or a tiny hit
+    return pick((flopped && lines.bad) || lines.good || lines.bad);
+  }
+
+  // What HR says right before attacking: a "low hp" line once, else sometimes its own trash talk
+  function tauntLine() {
+    if (!said.lowBoss && bossHp <= LOW_BOSS) { said.lowBoss = true; return pick(HR_LINES.lowBoss); }
+    if (!said.lowYou && you <= LOW_YOU) { said.lowYou = true; return pick(HR_LINES.lowYou); }
+    if (Math.random() > TAUNT_CHANCE) return null;
+    return j.taunts && Math.random() < 0.6 ? pick(j.taunts) : pick(BOSS_TAUNTS);
+  }
   let hand = deal();
 
   root.innerHTML = `
@@ -134,11 +156,12 @@ export default function boss(root, { id }) {
     }
   }
 
-  // Your move: apply damage, healing and effects
+  // Your move: apply damage, healing and effects. Returns what happened, for HR's reaction.
   function applyMove(move) {
     const r = move.run();
-    let text = r.text;
+    let text = r.text, ghosted = false;
     if (r.dmg && fx.ghost) {
+      ghosted = true;
       fx.ghost = false;                 // HR was ghosting you: the attack hits nothing
       text = FIGHT_TEXT.ghostWhiff;
     } else if (r.dmg) {
@@ -153,6 +176,7 @@ export default function boss(root, { id }) {
     if (r.heal) { you = Math.min(YOUR_HP, you + r.heal); floatText(me, `+${r.heal}`, true); }
     if (r.effect) fx[r.effect] = true;
     log(text);
+    return { r, ghosted };
   }
 
   // HR's turn: a taunt, then an attack you can block with a timing tap
@@ -176,8 +200,8 @@ export default function boss(root, { id }) {
     const attack = pick([...j.attacks, ...BOSS_ATTACKS]);
     if (fx.dodge) { fx.dodge = false; log(`${j.boss} used ${attack.name}! ${FIGHT_TEXT.dodged}`); return; }
 
-    await taunt(enemy, pick(BOSS_TAUNTS));
-    if (!alive) return;
+    const line = tauntLine();
+    if (line) { await say(line); if (!alive) return; }
     log(`${j.boss} used ${attack.name}!`);
     const offerBlock = attacks === 0 || (sinceBlock >= 1 && (Math.random() < BLOCK_CHANCE || sinceBlock >= BLOCK_AT_LEAST_EVERY - 1));
     attacks += 1;
@@ -194,6 +218,8 @@ export default function boss(root, { id }) {
       hit(enemy, FIGHT_TEXT.counter);
       addMeter(METER_PERFECT);
       log(FIGHT_TEXT.block.perfect(j.boss));
+      paint();
+      await say(pick(HR_LINES.perfectBlock));
     } else {
       you = Math.max(0, you - dmg);
       hit(me, dmg);
@@ -208,11 +234,13 @@ export default function boss(root, { id }) {
     setButtons(false);
 
     if (move.ult) { meter = 0; ultUsed = true; await ultFlash(move.name); if (!alive) return; }
-    applyMove(move);
+    const { r, ghosted } = applyMove(move);
     paint();
-    await sleep(1000);
+    if (bossHp <= 0) { await sleep(1000); return alive && finish(true); }
+    // HR reacts to your move (this is also the pause before HR's turn)
+    const reaction = reactionTo(move, r, ghosted);
+    if (reaction) await say(reaction); else await sleep(1000);
     if (!alive) return;
-    if (bossHp <= 0) return finish(true);
     if (you <= 0) return finish(false);
 
     // Low on HP? The boss gets angry once, and takes one chai break.
@@ -222,7 +250,7 @@ export default function boss(root, { id }) {
       setRage(true);   // final-round music: faster, with a lead on top
       log(FIGHT_TEXT.rage(j.boss));
       paint();
-      await sleep(1100);
+      await say(pick(HR_LINES.rage));
       if (!alive) return;
       if (!chaiUsed) {
         chaiUsed = true;

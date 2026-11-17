@@ -157,6 +157,7 @@ export const JOBS = [
     stipend: "exposure + 1 company hoodie (size S only)",
     reqs: ["zero yapping (we will check)", "must survive 9am standups", "5 years of experience (it's an internship)", "must say \"let's circle back\" unironically"],
     boss: "HR unc", attacks: [{ name: "WE'LL CIRCLE BACK", text: "you feel ignored.", min: 10, max: 16 }],
+    taunts: ["we'll circle back… in 2029.", "back in my day we applied by fax.", "beta, what's your cgpa?"],
   },
   {
     id: "thursday", title: "senior vibe engineer", company: "Thursday Labs", logo: "TL", color: "#1E3A8A",
@@ -165,6 +166,7 @@ export const JOBS = [
     stipend: "₹49,000 (7x7, obviously)",
     reqs: ["must have 7x7=49 energy", "navy blue typa vibe (navy blue bedsheets = instant red flag)", "thursday 4pm aura. 9x9=81 is a plus", "must not crash out during standups"],
     boss: "the vibe auditor", attacks: [{ name: "VIBE CHECK", text: "your aura is being audited.", min: 12, max: 18 }],
+    taunts: ["your vibe is giving 'pending verification'.", "aura audit in progress. it's not looking good."],
   },
   {
     id: "synergy", title: "junior dev (entry level)", company: "Synergy Inc", logo: "SI", color: "#0EA5E9",
@@ -173,6 +175,7 @@ export const JOBS = [
     stipend: "market standard (the market is closed)",
     reqs: ["7 years of experience in a framework released last year", "must be a \"rockstar ninja\"", "we're a family (unpaid overtime)", "glazing the CEO on linkedin weekly"],
     boss: "recruiter karen", attacks: [{ name: "WHY IS THERE A GAP IN YOUR RESUME", text: "it was summer vacation.", min: 14, max: 20 }],
+    taunts: ["can i speak to your previous employer?", "explain the gap. the two-week gap. in 2019."],
   },
   {
     id: "grindset", title: "chief vibe officer", company: "GrindsetHQ", logo: "GH", color: "#111111",
@@ -181,6 +184,7 @@ export const JOBS = [
     stipend: "equity in a podcast with 12 listeners",
     reqs: ["post \"day 1 of learning dsa\" daily for 365 days", "attend the 5am club (mandatory)", "for the huzz (results not guaranteed)", "must call the founder \"visionary\""],
     boss: "the founder (22, has a podcast)", attacks: [{ name: "HUSTLE LECTURE", text: "45 minutes on waking up at 4am.", min: 12, max: 19 }],
+    taunts: ["we're like a family. a family that doesn't pay.", "i wake up at 4am. what do you do?", "subscribe to my podcast before answering."],
   },
   {
     id: "rizzosoft", title: "sigma software engineer", company: "Rizzosoft", logo: "RZ", color: "#16A34A",
@@ -189,6 +193,7 @@ export const JOBS = [
     stipend: "1 pizza per sprint",
     reqs: ["no meetings, no yapping, only grinding", "must mog the competition in code review", "twin-coded team, matching hoodies", "aura > experience"],
     boss: "tech lead who says \"quick call?\"", attacks: [{ name: "QUICK CALL?", text: "it lasted 2 hours.", min: 13, max: 19 }],
+    taunts: ["quick call? 2 hours. cameras on.", "can you hop on a quick call real quick?"],
   },
   {
     id: "tralalero", title: "italian brainrot intern", company: "Tralalero Tralala Pvt Ltd", logo: "TT", color: "#38BDF8",
@@ -197,6 +202,7 @@ export const JOBS = [
     stipend: "one (1) cappuccino. ballerina not included",
     reqs: ["explain italian brainrot lore to the CEO (he's 52)", "fluent in tung tung tung sahur", "generate 40 AI sharks before lunch", "steal a brainrot rank: diamond or above"],
     boss: "ballerina cappuccina (head of HR)", attacks: [{ name: "BOMBARDIRO CROCODILO", text: "an airstrike on your cover letter.", min: 13, max: 19 }],
+    taunts: ["tralalero tralala, you're not hired.", "cappuccina doesn't do second rounds."],
   },
   {
     id: "clanker", title: "AI prompt engineer (human)", company: "Clanker Corp", logo: "CC", color: "#64748B",
@@ -205,6 +211,7 @@ export const JOBS = [
     stipend: "paid in API credits that expire tomorrow",
     reqs: ["write prompts so good the AI can do your job", "only call it a clanker when it's not listening", "type faster than gpt-6", "comfortable being replaced (we'll do it nicely)"],
     boss: "the AI interviewer", attacks: [{ name: "AS A LANGUAGE MODEL", text: "it rejected you in 0.3 seconds.", min: 12, max: 18 }],
+    taunts: ["beep. culture fit score: 0.2.", "rephrasing your answer to sound smarter… failed."],
   },
   {
     id: "fanum", title: "junior fanum tax officer", company: "Fanum Foods", logo: "FF", color: "#F59E0B",
@@ -213,6 +220,7 @@ export const JOBS = [
     stipend: "40% of your tiffin, taxed weekly",
     reqs: ["collect the fanum tax on every tiffin in the office", "share your maggi or face consequences", "rizz the canteen bhaiya for extra chutney", "must not crash out when your fries get taxed"],
     boss: "the CFO (chief fanum officer)", attacks: [{ name: "FANUM TAX", text: "he took a bite. a big one.", min: 12, max: 18 }],
+    taunts: ["that's a fanum tax on your stipend.", "i took a bite of your offer letter."],
   },
   {
     id: "skibidi", title: "skibidi SDE-1", company: "Skibidi Solutions", logo: "SS", color: "#A855F7",
@@ -221,6 +229,7 @@ export const JOBS = [
     stipend: "lifetime supply of fidget spinners",
     reqs: ["explain skibidi to the board of directors", "pass the ohio final boss round", "refactor legacy code written in goofy ahh", "get gagged by a clean pull request at least once"],
     boss: "the ohio final boss", attacks: [{ name: "SKIBIDI DOP DOP", text: "it echoes in your head. forever.", min: 13, max: 20 }],
+    taunts: ["this interview is in ohio. you're cooked.", "dop dop yes yes. no."],
   },
   {
     id: "ragebait", title: "engagement farmer", company: "Ragebait Media", logo: "RB", color: "#EF4444",
@@ -229,6 +238,7 @@ export const JOBS = [
     stipend: "₹0.02 per angry comment",
     reqs: ["post one hot take a day (\"dsa is useless\")", "reply \"source?\" to everything", "farm aura AND engagement", "ask \"chat, is this real?\" every hour"],
     boss: "the community manager", attacks: [{ name: "CHAT IS THIS REAL", text: "chat said no.", min: 10, max: 16 }],
+    taunts: ["chat, is this real?", "chat says you're mid. chat is never wrong."],
   },
   {
     id: "mewing", title: "looksmaxxing analyst", company: "Mewing Ventures", logo: "MV", color: "#0EA5A4",
@@ -237,6 +247,7 @@ export const JOBS = [
     stipend: "₹0 + a gua sha",
     reqs: ["mew through every standup (no talking, obviously)", "know your canthal tilt by heart", "a chopped chin is a performance issue", "looksmaxx the company logo every quarter"],
     boss: "the looksmaxxing coach", attacks: [{ name: "SIDE PROFILE CHECK", text: "you were not ready.", min: 11, max: 17 }],
+    taunts: ["mewing check. you failed.", "your side profile is giving 'entry level'."],
   },
   {
     id: "washed", title: "growth hacker (washed)", company: "Washed Capital", logo: "WC", color: "#78716C",
@@ -245,6 +256,7 @@ export const JOBS = [
     stipend: "equity in a company valued at ₹6.7",
     reqs: ["peaked in 2019 and still talks about it", "says \"back in my day\" about react class components", "washed, but confident about it", "aura farm in every board meeting"],
     boss: "the washed VP", attacks: [{ name: "BACK IN MY DAY", text: "a 40-minute story about jQuery.", min: 12, max: 18 }],
+    taunts: ["back in my day we had jQuery and we were happy.", "i invented synergy. in 2009."],
   },
 ];
 
@@ -359,6 +371,33 @@ export const BOSS_TAUNTS = [
   "your aura is giving \"pending\".",
   "we're like a family. i'm the strict uncle.",
 ];
+
+// What HR says during the fight, in a big speech bubble.
+// reactions: right after your move ("good" if it landed, "bad" if it flopped or backfired).
+// The other lists are for moments: your ultimate, hitting HR while it's ghosting you, HR low on hp,
+// you low on hp, rage mode, and your perfect block. Each HR also has its own `taunts` in JOBS.
+export const HR_LINES = {
+  reactions: {
+    excel: { good: ["excel? in this economy?", "pivot tables. ok. noted.", "a vlookup user. respect, unfortunately."] },
+    cert: { good: ["wait… it says winner??", "ok that one's real. annoying."], bad: ["participation certificates are not a personality.", "the font is comic sans, bestie."] },
+    glaze: { good: ["flattery noted. still unpaid.", "go on… (this changes nothing)"] },
+    github: { good: ["green squares everywhere. who hurt you?", "commits at 3am. we love a burnout."], bad: ["a todo app. in 2026.", "last commit: 8 months ago."] },
+    learner: { good: ["quick learner? learn to take a hint.", "everyone says that. everyone."] },
+    lag: { good: ["you're on mute, bestie.", "your wifi dies exactly when i ask about the gap. interesting."] },
+    reverse: { good: ["um. we'll get back to you on that.", "nobody's ever asked me that. i need a minute."] },
+    farm: { good: ["why are you staring like that.", "is this a sigma edit? are we being filmed?"] },
+    six7: { good: ["6… 7… i get it now. i'm crying.", "ok that one got me."], bad: ["six what? is that your cgpa?", "i don't speak gen alpha."] },
+    startup: { good: ["uber for chai… take my money.", "pre-revenue? say less."], bad: ["tinder for notes. blocked.", "that's not a startup, that's a group project."] },
+    gpt: { good: ["that answer was suspiciously perfect.", "you blinked zero times. ok."], bad: ["we can see your other tab.", "you said 'certainly!' out loud."] },
+    salary: { bad: ["salary is a mindset.", "we pay in exposure and pizza fridays.", "it's a learning opportunity. say it back."] },
+  },
+  ult: ["…what was that aura??", "the whole department felt that.", "ok main character, calm down."],
+  ghosted: ["seen 2:14pm.", "new phone who dis.", "you're talking to an out-of-office reply."],
+  lowBoss: ["ok wait. let's talk about a PPO.", "fine. what if we said ₹5k stipend?", "this is going on my linkedin. as a W for me."],
+  lowYou: ["need a minute? we have 11,203 other applicants.", "you look tired. is that your culture fit face?", "almost done. with you."],
+  rage: ["unpaid overtime mode: ON.", "i haven't had a weekend since 2019. match my energy.", "ok now i'm actually mad."],
+  perfectBlock: ["who taught you to block??", "ok that was clean. i hate it.", "noted. passive aggression loading…"],
+};
 
 export const BOSS_ATTACKS = [
   { name: "AWKWARD SILENCE", text: "it's super effective.", min: 8, max: 14 },
