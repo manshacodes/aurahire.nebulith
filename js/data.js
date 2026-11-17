@@ -269,7 +269,7 @@ export const GHOST_TOASTS = [
 
 // ---------- boss fight ----------
 export const YOUR_HP = 120;
-export const BOSS_HP = 120;
+export const BOSS_HP = 135;
 
 // Every move returns what happened. Optional fields:
 //   dmg (to the boss), self (to you), heal (to you), effect: "dodge" | "stun" | "charge"
@@ -289,7 +289,7 @@ export const MOVES = [
       ? { dmg: 24, text: "green squares everywhere. HR squints. 24 dmg." }
       : { dmg: 6, text: "3 forks and a todo app. 6 dmg. HR is unimpressed." }),
   },
-  { id: "learner", name: "\"i'm a quick learner\"", hint: "+22 hp", run: () => ({ heal: 22, text: "you said it with your whole chest. you believed it. +22 hp." }) },
+  { id: "learner", name: "\"i'm a quick learner\"", hint: "+16 hp", run: () => ({ heal: 16, text: "you said it with your whole chest. you believed it. +16 hp." }) },
   { id: "lag", name: "pretend your wifi died", hint: "dodge next attack", run: () => ({ effect: "dodge", text: "\"sorry, you're breaking up…\" HR's next attack will hit a frozen frame." }) },
   { id: "reverse", name: "\"any questions for me?\"", hint: "8 dmg · HR skips a turn", run: () => ({ dmg: 8, effect: "stun", text: "you flipped the interview. HR is buffering. 8 dmg." }) },
   { id: "farm", name: "aura farm", hint: "next hit does 2×", run: () => ({ effect: "charge", text: "you stared into the middle distance in silence. aura charging…" }) },
@@ -314,6 +314,57 @@ export const MOVES = [
   { id: "salary", name: "ask about salary", hint: "trust me bro", run: () => ({ self: 35, text: "HR used \"it's a learning opportunity\". it bounced back. 35 dmg to you." }) },
 ];
 
+// Moves your resume unlocks (AuraGPT picks up to 4 with perksFor in aura-engine.js).
+// One shows up in your hand about 30% of turns, tagged "from your resume".
+// `from` is shown on the score page: "unlocked by …". effect "scared" = HR can't use a special next turn.
+export const PERK_MOVES = {
+  winner: { name: "show the winner cert (real)", hint: "26 dmg", from: "a real win",
+    run: () => ({ dmg: 26, text: "it actually says winner. not participation. HR checked twice. 26 dmg." }) },
+  intern: { name: "name-drop your last company", hint: "24 dmg", from: "an internship",
+    run: () => ({ dmg: 24, text: "you said the company name slowly. HR googled it. 24 dmg." }) },
+  prs: { name: "merged PR receipts", hint: "22 dmg", from: "open source",
+    run: () => ({ dmg: 22, text: "merged. not opened, merged. HR respects the green. 22 dmg." }) },
+  algo: { name: "solve it in O(n)", hint: "24 dmg · watch the edge cases", from: "competitive programming",
+    run: () => (Math.random() < 0.7
+      ? { dmg: 24, text: "O(n), no hints. HR's whiteboard is crying. 24 dmg." }
+      : { dmg: 8, text: "you forgot the empty-array edge case. 8 dmg." }) },
+  tests: { name: "run the test suite", hint: "blocks next attack · +8 hp", from: "automated tests",
+    run: () => ({ effect: "dodge", heal: 8, text: "all tests passed. HR's next attack is just another test case. +8 hp." }) },
+  livelink: { name: "send the live link", hint: "20 dmg", from: "a live project",
+    run: () => ({ dmg: 20, text: "it actually works. on mobile too. HR is confused. 20 dmg." }) },
+  robot: { name: "bring the robot arm", hint: "16 dmg · HR too scared for tricks", from: "robotics",
+    run: () => ({ dmg: 16, effect: "scared", text: "the arm copied HR's hand gestures. HR is scared. 16 dmg. no specials next turn." }) },
+  redesign: { name: "redesign HR's portal live", hint: "18 dmg · +6 hp", from: "design skills",
+    run: () => ({ dmg: 18, heal: 6, text: "you fixed their careers page in figma mid-interview. 18 dmg. +6 hp." }) },
+  deck: { name: "show your pitch deck", hint: "28 dmg or backfire", from: "a startup",
+    run: () => (Math.random() < 0.5
+      ? { dmg: 28, text: "slide 3 had a hockey-stick graph. HR wants equity. 28 dmg." }
+      : { self: 12, text: "slide 1 said \"uber for X\". HR closed the tab. 12 dmg to you." }) },
+  cgpa: { name: "flash the 9+ cgpa", hint: "18 dmg", from: "a 9+ cgpa",
+    run: () => ({ dmg: 18, text: "nine point something. HR's own cgpa could never. 18 dmg." }) },
+  clubs: { name: "\"core member of every society\"", hint: "coin flip", from: "5+ societies",
+    run: () => (Math.random() < 0.5
+      ? { dmg: 18, text: "you name-dropped 4 fests in one breath. 18 dmg." }
+      : { self: 10, text: "HR asked which meetings you actually attend. silence. 10 dmg to you." }) },
+  uncle: { name: "call uncle", hint: "30 dmg · costs dignity", from: "nepotism, detected",
+    run: () => ({ dmg: 30, self: 6, text: "uncle picked up on the first ring. 30 dmg. −6 dignity. HR saw everything." }) },
+  teamplayer: { name: "\"passionate team player\"", hint: "1 dmg", from: "glazing yourself",
+    run: () => ({ dmg: 1, text: "you said it with passion. HR felt nothing. 1 dmg." }) },
+};
+
+// Score page: the moves your resume unlocked
+export const PERK_TEXT = {
+  title: "your resume unlocked these fight moves",
+  from: (what) => `unlocked by ${what}`,
+  none: "no fight moves unlocked. HR is not scared of you.",
+};
+
+// Your HR fight record on the profile
+export const RECORD_TEXT = {
+  record: (w, l) => `HR record: ${w}W – ${l}L`,
+  none: "HR record: 0 fights. scared?",
+};
+
 // Fight copy that isn't a move or an attack
 export const FIGHT_TEXT = {
   opener: (boss) => `${boss} wants to know your expected stipend. choose wisely.`,
@@ -322,7 +373,7 @@ export const FIGHT_TEXT = {
   stunned: (boss) => `${boss} is still buffering. they skipped their turn.`,
   rage: (boss) => `${boss} entered unpaid-overtime mode. attacks hit harder now.`,
   slamFinale: "OFFER UNLOCKED",   // the big sticker at the end of the win meme slam
-  fx: { dodge: "wifi \"down\"", charge: "2× charged", stun: "buffering", rage: "rage mode", ghost: "ghosting you", takehome: "take-home due" },
+  fx: { dodge: "wifi \"down\"", charge: "2× charged", stun: "buffering", rage: "rage mode", ghost: "ghosting you", takehome: "take-home due", scared: "scared" },
   // HR's special moves (instead of a normal attack, sometimes)
   special: {
     takehome: { name: "TAKE-HOME ASSIGNMENT", text: "unpaid. due in 3 turns. you lose 6 hp a turn doing it." },
@@ -330,7 +381,7 @@ export const FIGHT_TEXT = {
   },
   takehomeTick: (dmg, left) => `take-home assignment: −${dmg} hp. ${left ? `${left} more turn${left > 1 ? "s" : ""} of unpaid work.` : "submitted. no feedback, obviously."}`,
   ghostWhiff: "HR is ghosting you. your attack hit an empty zoom call.",
-  chai: (boss) => `${boss} took a chai break. +20 hp. you were not offered chai.`,
+  chai: (boss) => `${boss} took a chai break. +25 hp. you were not offered chai.`,
   ultNoFarm: "(you can't aura farm your aura farm.)",
   // fighting-game moments
   round: "ROUND 1",
@@ -350,12 +401,13 @@ export const FIGHT_TEXT = {
     good: "blocked half of it. not bad, twin.",
     miss: "no block. you felt that one.",
   },
-  counter: 8,   // damage a perfect block reflects back
+  counter: 5,   // damage a perfect block reflects back
   // aura ultimate: fills as you deal and take damage
   meterLabel: "aura",
   ultReady: "ULTIMATE READY",
   ult: { name: "AURA FARM ULTIMATE", hint: "30–40 dmg · once per fight", text: "you stared into the camera like a sigma edit. HR's whole department felt it." },
   ultSpent: "aura spent. no second ultimate, twin.",
+  perkTag: "from your resume",   // the label on a resume move card
 };
 
 // What HR says right before attacking (speech bubble over the boss)
@@ -389,6 +441,20 @@ export const HR_LINES = {
     six7: { good: ["6… 7… i get it now. i'm crying.", "ok that one got me."], bad: ["six what? is that your cgpa?", "i don't speak gen alpha."] },
     startup: { good: ["uber for chai… take my money.", "pre-revenue? say less."], bad: ["tinder for notes. blocked.", "that's not a startup, that's a group project."] },
     gpt: { good: ["that answer was suspiciously perfect.", "you blinked zero times. ok."], bad: ["we can see your other tab.", "you said 'certainly!' out loud."] },
+    // resume moves
+    winner: { good: ["ok. the cert is real. annoying.", "winner? not 'participant'? hm."] },
+    intern: { good: ["they let YOU intern there?", "i've heard of them. unfortunately."] },
+    prs: { good: ["merged. not even a draft. hm.", "a maintainer approved you? who?"] },
+    algo: { good: ["did you just say O(n) to me?", "that was faster than our hiring process."], bad: ["edge cases. every time.", "and that's why we have hidden test cases."] },
+    tests: { good: ["who writes tests in college??", "a test suite. in this economy."] },
+    livelink: { good: ["it… loads? on mobile too?", "a deployed project. are you lost?"] },
+    robot: { good: ["please put the arm down.", "is it recording me?"] },
+    redesign: { good: ["…the new portal is better. i hate this.", "our designer is crying. thanks."] },
+    deck: { good: ["can i get equity?", "send me the deck. for… reasons."], bad: ["closed the tab. sorry not sorry.", "uber for what?"] },
+    cgpa: { good: ["nine point what?? sit down.", "show-off. respectfully."] },
+    clubs: { good: ["you're in HOW many?", "do you sleep?"], bad: ["so you attend zero of them.", "core member of the group chat."] },
+    uncle: { good: ["we'll be calling your uncle too. about you.", "is your uncle hiring? asking for me."] },
+    teamplayer: { bad: ["passionate. noted. still unpaid.", "the team did not ask."] },
     salary: { bad: ["salary is a mindset.", "we pay in exposure and pizza fridays.", "it's a learning opportunity. say it back."] },
   },
   ult: ["…what was that aura??", "the whole department felt that.", "ok main character, calm down."],

@@ -555,3 +555,12 @@ textarea[data-lenis-prevent] { overflow-y: auto; resize: none; }
 .h2h-card { border: 3px solid var(--ink); }
 .h2h-back { width: 100%; margin-top: 12px; }
 .share-btn { width: 100%; margin: 18px 0 10px; background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+
+/* ---------- resume moves (fight) ---------- */
+.move-perk { position: relative; border: 2px solid var(--ink) !important; background: var(--accent-2) !important; color: var(--accent-2-ink) !important; }
+.move-perk small { color: var(--accent-2-ink) !important; opacity: 0.8; }
+.perk-tag { display: block; margin-bottom: 4px; font-style: normal; font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.75; }
+.perk-list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.perk { display: grid; gap: 2px; padding: 10px 12px; border-radius: var(--radius-sm); background: var(--accent-2); color: var(--accent-2-ink); }
+.perk b { font-weight: 900; }
+.perk small { font-size: 12px; font-weight: 600; opacity: 0.8; }

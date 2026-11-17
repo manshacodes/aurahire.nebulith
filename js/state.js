@@ -16,6 +16,8 @@ const defaults = {
   lines: [],             // the 14 lines the scan showed
   allLines: [],          // every judged line of your resume (the breakdown meters read these)
   challenge: null,       // a friend's "beat my aura" link you opened: { name, aura, tier, color }
+  perks: [],             // fight moves your resume unlocked (ids from PERK_MOVES)
+  record: { w: 0, l: 0 }, // your HR boss fight wins and losses
   tierName: "",
   stickers: [],          // the 5 personality stickers you picked
   currentJob: null,      // id of the job you're fighting for

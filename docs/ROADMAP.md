@@ -105,7 +105,9 @@ Built as planned: `js/share-card.js` + `js/screens/vs.js`. The owner chose portr
 - Square or portrait image?
 - Should the fight result also be shareable later ("hired by Tralalero Tralala in 9 turns" / "ghosted by recruiter karen")?
 
-### B. Your resume powers your fight moves
+### B. Your resume powers your fight moves — ✅ DONE
+
+Built: `perksFor()` in `aura-engine.js`, `PERK_MOVES` / `PERK_TEXT` in `data.js`, the hand logic in `boss.js`, and the list on the score page. Moves are weaker than first sketched below and appear about 30% of turns. The owner asked for the fight to be harder overall at the same time: HR 135 HP, specials 35%, quick learner heals 16, perfect-block counter 5, chai +25. Simulated win rates for a normal player: 38% with no moves, 40% with the owner's resume, 45% with an intern/winner resume. Also added an HR record on the profile. The copy says "your resume unlocked these fight moves" and never promises the fight is easier (the owner's call). The original sketch is kept below for reference.
 
 **What it is:** what AuraGPT found in your resume unlocks special moves in the HR fight. They're added to the move pool (not guaranteed each turn), so your real resume changes how the fight plays. This ties the two halves of the site together.
 

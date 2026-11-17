@@ -257,6 +257,40 @@ export function tidyLines(rawLines) {
   return out.filter((l) => l.split(" ").length > 3 || SIGNALS.some((s) => s.re.test(l)));
 }
 
+// ---------- fight moves your resume unlocks ----------
+// Looks at the judged lines (and their CAP/NEPO/… flags) and returns up to 4 move ids from PERK_MOVES
+// in data.js. A flagged line doesn't unlock the good stuff: "won SIH (internal round)" is not a win.
+const PERK_RULES = [
+  ["winner", /\b(won|winners?|1st|first place|champions?)\b/i],
+  ["intern", /\bintern(ship)?s?\b/i],
+  ["prs", /open.?source|\bgsoc\b|merged (prs|pull)|pull requests?|\bprs\b/i],
+  ["algo", /leetcode|codeforces|codechef|\bicpc\b|\bdsa\b/i],
+  ["tests", /(\d[\d,]*)\s*(automated\s+)?(unit\s+)?tests?\b/i, (m) => Number(m[1].replace(/,/g, "")) >= 50],
+  ["livelink", /\b(live|deployed|vercel|netlify|github pages|play store|app store)\b/i],
+  ["robot", /arduino|raspberry pi|robot\w*|rover|drone|\biot\b|esp32/i],
+  ["redesign", /figma|ui\/?ux|behance|dribbble|after effects|illustrator/i],
+  ["deck", /founder|\bceo\b|(my|own|started a) startup/i, null, true],   // founding one, not interning at one; allowed even on flagged lines
+  ["cgpa", /\bc?gpa\b\s*[:\-]?\s*(\d+(\.\d+)?)|(\d\.\d+)\s*c?gpa/i, (m) => Number(m[1] || m[3]) >= 9],
+];
+const MAX_PERKS = 4;
+
+export function perksFor(lines = []) {
+  const clean = lines.filter((l) => !l.kind);
+  const good = PERK_RULES.filter(([, re, test, anyLine]) => (anyLine ? lines : clean).some((l) => {
+    const m = l.text.match(re);
+    return m && (!test || test(m));
+  })).map(([id]) => id);
+  // the joke moves: 5+ societies, nepotism, glazing (one of these always gets a slot if you earned it)
+  const societies = lines.filter((l) => ORG_LINE.test(l.text)).length > SOCIETY_KEEP
+    || lines.some((l) => { const m = l.text.match(/(\d+)\s*(?:more\s+)?(?:college\s+)?(clubs?|societ)/i); return m && Number(m[1]) > 3; });
+  const jokes = [
+    lines.some((l) => l.kind === "nepo") && "uncle",
+    societies && "clubs",
+    lines.some((l) => l.kind === "glaze") && "teamplayer",
+  ].filter(Boolean);
+  return [...good.slice(0, jokes.length ? MAX_PERKS - 1 : MAX_PERKS), ...jokes].slice(0, MAX_PERKS);
+}
+
 // ---------- branch + graduation year (the profile headline, e.g. "CSE-AI '30") ----------
 // Only lines about your degree are read, so "member, computer science club" doesn't count as a branch.
 const EDU_LINE = /b\.?\s?tech|btech|b\.e\.|bachelor|master|degree|university|college|institute|\biit\b|\bnit\b|iiit|igdtuw|\bdtu\b|nsut|\b(1st|2nd|3rd|4th|first|second|third|fourth|final)[\s-]*year\b|class of|batch of|graduat|\b(bca|bba|mba|mca|b\.?com|b\.?sc|b\.?des|b\.?arch|m\.?tech)\b/i;
