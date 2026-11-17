@@ -4,7 +4,7 @@
 // Each vibe card sets its own data-theme, so it renders with that theme's CSS variables (a real preview).
 import { go } from "../router.js";
 import * as S from "../state.js";
-import { $, $$, esc, sticker, toast, rand, signed } from "../fx.js";
+import { $, $$, esc, sticker, toast, rand } from "../fx.js";
 import { THEMES, LANDING_VIBES as V, LANDING_FEATURES as F, CAP_FAX } from "../data.js";
 import { memeImg } from "../memes.js";
 import { setTheme } from "../theme.js";
@@ -54,20 +54,6 @@ export function extrasHTML() {
 // The little demo inside each feature card (decorative, so aria-hidden above)
 function demo(id) {
   switch (id) {
-    case "share": {   // a tiny version of the share card, with a shine that sweeps across it
-      const s = F.share;
-      return `<div class="mini-share"><small>${esc(s.name)}</small><b>${signed(s.aura)}</b>${sticker(s.tier, "lime", { rot: -3, size: "sm" })}
-        <div class="mini-share-bars">${s.meters.map((w) => `<i style="width:${w}%"></i>`).join("")}</div></div>`;
-    }
-    case "vs": {      // head-to-head bars that race when the tile shows up
-      const top = Math.max(...F.vs.rows.map(([, v]) => v));
-      return `<div class="mini-vs">${F.vs.rows.map(([who, v]) => `
-        <div class="mog-bar"><span>${esc(who)}</span><div class="bar"><span style="width:${(v / top) * 100}%"></span></div><b>${signed(v)}</b></div>`).join("")}
-        <p class="mini-verdict">${esc(F.vs.verdict)}</p></div>`;
-    }
-    case "moves":     // resume move cards, dealt in like a hand (wrappers animate, the cards keep their tilt)
-      return `<div class="mini-moves">${F.moves.map((m, i) => `
-        <span class="mini-move-wrap"><span class="mini-move" style="--rot:${[-2, 1.5, -1][i]}deg"><small>${esc(F.moveTag)}</small>${esc(m)}</span></span>`).join("")}</div>`;
     case "breakdown":
       return F.meters.map(([label, v]) => `
         <div class="mini-meter"><span>${label}</span><div class="bar"><span style="width:${v * 10}%"></span></div><b>${v}/10</b></div>`).join("");
@@ -128,14 +114,6 @@ export function animateExtras(gsap) {
   gsap.from(".bento-breakdown .mini-meter .bar > span", {
     width: 0, duration: 1, ease: "power3.out", stagger: 0.15,
     scrollTrigger: { trigger: ".bento-breakdown", start: "top 80%", toggleActions: "play none none reverse" },
-  });
-  gsap.from(".bento-vs .bar > span", {
-    width: 0, duration: 1.1, ease: "power3.out", stagger: 0.2,
-    scrollTrigger: { trigger: ".bento-vs", start: "top 80%", toggleActions: "play none none reverse" },
-  });
-  gsap.from(".mini-move-wrap", {
-    y: 40, x: -30, rotation: -12, opacity: 0, duration: 0.5, ease: "back.out(1.8)", stagger: 0.12,
-    scrollTrigger: { trigger: ".bento-moves", start: "top 80%", toggleActions: "play none none reverse" },
   });
   gsap.from(".mini-slam .slam-item, .mini-unlock", {
     scale: 2.4, opacity: 0, duration: 0.25, ease: "power4.in", stagger: 0.18,

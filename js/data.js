@@ -836,6 +836,11 @@ export const LANDING_SCORE = {
   sub: "W, BASED, MID, L. AuraGPT reads every line. no mercy, all regex.",
   target: 4606,
   tier: "certified linkedin sigma",
+  // feature lines under the chapter text: [badge, title, line, where tapping goes]
+  extras: [
+    ["↗", "share your aura", "turn your score into a card. post it. let them cope.", "/upload"],
+    ["vs", "beat my aura", "send a challenge link. they scan. someone gets mogged.", "/upload"],
+  ],
   lines: [
     ["Won Smart India Hackathon (internal round)", -185, "the brackets are doing a lot of work", "cap"],
     ["Exam notice scraper · 169 automated tests · live", 315, "stacked W: 169 tests", ""],
@@ -853,6 +858,8 @@ export const LANDING_BOSS = {
   line: "we'll circle back… in 2029.",
   special: "TAKE-HOME ASSIGNMENT!",
   perk: ["send the live link", "20 dmg"],
+  perkTag: "from your resume",
+  extras: [["✦", "your resume is your moveset", "what AuraGPT finds becomes fight moves. even the cringe ones.", "/jobs"]],
   dmg: ["−20", "−24 CRIT", "−36 ULT", "−16"],
 };
 
@@ -861,9 +868,6 @@ export const LANDING_FEATURES = {
   label: "06 · everything else",
   title: "everything else<br>in the grind.",
   cards: [
-    { id: "share", title: "share your aura", line: "turn your score into a card. post it. let them cope.", go: "/upload" },
-    { id: "vs", title: "beat my aura", line: "send a challenge link. they scan. someone gets mogged.", go: "/upload" },
-    { id: "moves", title: "your resume is your moveset", line: "what AuraGPT finds becomes fight moves. even the cringe ones.", go: "/jobs" },
     { id: "breakdown", title: "the AuraGPT breakdown", line: "yap level, nepo index, delulu meter, grind, touch grass and a cap detector. all 0-10. all personal.", go: "/upload" },
     { id: "batch", title: "roast the batch", line: "stalk 5 classmates. call cap on their resume, post a diss, and watch them clap back.", go: "/people" },
     { id: "chat", title: "HR replies in memes", line: "send a meme, get a meme back. HR remembers everything. HR forgives nothing.", go: "/chat" },
@@ -875,10 +879,6 @@ export const LANDING_FEATURES = {
   meters: [["yap level", 9], ["nepo index", 10], ["grind", 2]],
   names: [["Aarav", "Grindwala"], ["Riya", "Rizzvi"], ["Kabir", "Mogwani"]],
   diss: "the only thing kabir has shipped is a linkedin post",
-  share: { name: "aarav grindwala", aura: 4606, tier: "certified linkedin sigma", meters: [30, 90, 50] },
-  vs: { rows: [["you", 4606], ["riya", 3980]], verdict: "you mogged riya by 626 aura." },
-  moves: ["run the test suite", "call uncle", "solve it in O(n)"],
-  moveTag: "from your resume",
 };
 
 // ---------- aura farming ----------

@@ -4,7 +4,7 @@
 
 import { go } from "../router.js";
 import { $, $$, esc, sticker, signed, rand } from "../fx.js";
-import { SLANG, JOBS, STICKERS, LANDING_SCORE as LS, LANDING_BOSS as LB, LANDING_FEATURES as F } from "../data.js";
+import { SLANG, JOBS, STICKERS, LANDING_SCORE as LS, LANDING_BOSS as LB } from "../data.js";
 import { stampFor, toneOf } from "../aura-engine.js";
 import { gsap, ScrollTrigger, hasGsap, scrollTo } from "../motion.js";
 import { reducedMotion } from "../fx.js";
@@ -19,6 +19,13 @@ const HERO_STICKERS = [
   ["7x7=49", "sky", -6, "", 1.5, "36%", "88%"],
   ["CRASH OUT", "orange", 10, "sm", 0.6, "92%", "64%"],
 ];
+
+// A feature line under a chapter's text: a round badge, a bold title, one line of copy (links to the feature)
+const featureLines = (items) => `
+  <ul class="feature-lines">${items.map(([badge, title, line, href]) => `
+    <li class="feature-line-wrap"><a class="feature-line" href="#${href}"><span class="fl-badge" aria-hidden="true">${esc(badge)}</span>
+      <span class="fl-text"><b>${esc(title)}</b><small>${esc(line)}</small></span><span class="fl-arrow" aria-hidden="true">→</span></a></li>`).join("")}
+  </ul>`;
 
 const STORM = ["W", "L", "MID", "COOKED", "RED_FLAG", "GREEN_FLAG", "NPC", "AURA", "DELULU", "SIGMA", "RATIO", "SIX7", "TWIN", "UNC", "MOGGED", "CRASH", "SEVEN", "CHOPPED", "HUZZ", "WOMP"];
 
@@ -49,6 +56,7 @@ export default function home(root) {
           <p class="label">01 · the resume</p>
           <h2 class="display">your resume,<br>rated in aura.</h2>
           <p class="sub">${esc(LS.sub)}</p>
+          ${featureLines(LS.extras)}
         </div>
         <div class="card score-demo" data-tilt>
           <p class="label">your aura score</p>
@@ -88,6 +96,7 @@ export default function home(root) {
           <p class="label">03 · the application</p>
           <h2 class="display">applying is a<br>boss fight.</h2>
           <p class="sub">${esc(LB.sub)}</p>
+          ${featureLines(LB.extras)}
         </div>
         <div class="card boss-demo" data-tilt>
           <div class="flex-row"><b>HR unc · lv.99</b><span class="label" id="hpLabel">${LB.hp} hp</span></div>
@@ -96,7 +105,7 @@ export default function home(root) {
             <div class="demo-talk" id="demoTalk" aria-hidden="true">${esc(LB.line)}</div>
             <span class="fx fx-takehome demo-special" id="demoSpecial">${esc(LB.special)}</span>
             <div class="avatar boss-av" id="demoBoss"><span class="visor"></span><span class="mouth"></span></div>
-            <div class="demo-perk-wrap"><div class="move move-perk demo-perk"><i class="perk-tag">${esc(F.moveTag)}</i><b>${esc(LB.perk[0])}</b><small>${esc(LB.perk[1])}</small></div></div>
+            <div class="demo-perk-wrap"><div class="move move-perk demo-perk"><i class="perk-tag">${esc(LB.perkTag)}</i><b>${esc(LB.perk[0])}</b><small>${esc(LB.perk[1])}</small></div></div>
             ${LB.dmg.map((d, i) => `<span class="dmg dmg-${i}">${d}</span>`).join("")}
             <span class="boss-w">${sticker("OFFER UNLOCKED", "lime", { rot: -8, size: "lg" })}</span>
           </div>
@@ -174,7 +183,9 @@ export default function home(root) {
       .from(".demo-line", { opacity: 0, x: 40, stagger: 0.13, duration: 0.18 }, 0)
       .fromTo(".demo-line .tag", { scale: 0 }, { scale: 1, stagger: 0.13, duration: 0.12, ease: "back.out(3)" }, 0.06)
       .from(".demo-stamp", { scale: 3, opacity: 0, rotation: -25, stagger: 0.13, duration: 0.08, ease: "power4.in" }, 0.1)
-      .from(".demo-tier", { scale: 0, rotation: -30, opacity: 0, duration: 0.12, ease: "back.out(2.5)" }, 0.88);
+      .from(".demo-tier", { scale: 0, rotation: -30, opacity: 0, duration: 0.12, ease: "back.out(2.5)" }, 0.88)
+      // then what you do with it: share it, dare someone
+      .from(".ch-score .feature-line-wrap", { y: 16, opacity: 0, stagger: 0.04, duration: 0.08, ease: "power2.out" }, 0.92);
 
     // Chapter 2: job cards flip away one by one (top card first)
     const cards = $$(".flip-card", root).reverse();

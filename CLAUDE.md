@@ -118,12 +118,12 @@ Side screens: `#/people` ("the batch": you + 5 mock classmates ranked by aura, w
 **Landing page chapters** (`js/screens/home.js`, all GSAP ScrollTrigger):
 1. Hero: scramble-text logo, parallax stickers (`data-speed`), the title lifts away on scroll.
 2. A velocity marquee that skews and speeds up with scroll velocity.
-3. "Your resume, rated in aura" (pinned): the counter scrubs 0 → 4,606 while 6 judged lines slide in, their points pop and their stamps (CAP, W, MID, LARP, NEPO, GLAZE) slam down, then the tier sticker lands. The lines and real scores are `LANDING_SCORE` in data.js. On phones each line is just text + stamp, and short phones show 4 lines so the pinned card fits.
+3. "Your resume, rated in aura" (pinned): the counter scrubs 0 → 4,606 while 6 judged lines slide in, their points pop and their stamps (CAP, W, MID, LARP, NEPO, GLAZE) slam down, then the tier sticker lands, then two feature lines slide in under the text ("↗ share your aura", "vs beat my aura"). The lines, real scores and feature lines are `LANDING_SCORE` in data.js. On phones each line is just text + stamp, and short phones show 4 lines so the pinned card fits.
 4. "Every listing is a red flag" (pinned): job cards flip away one by one (rotateX).
-5. "Applying is a boss fight" (pinned): HR's line types out (mouth moving), a TAKE-HOME ASSIGNMENT chip flashes, a "from your resume" move card flips in, the HP bar drains from 135, damage numbers pop, "OFFER UNLOCKED" (`LANDING_BOSS` in data.js).
+5. "Applying is a boss fight" (pinned): HR's line types out (mouth moving), a TAKE-HOME ASSIGNMENT chip flashes, a "from your resume" move card flips in, the HP bar drains from 135, damage numbers pop, "OFFER UNLOCKED"; a "✦ your resume is your moveset" feature line sits under the text (`LANDING_BOSS` in data.js).
 6. "HR only replies in stickers": a sticker storm flies in and assembles into a wall.
 7. "Pick your vibe" (`home-extras.js`): the 5 themes as live mini previews (each card has its own `data-theme`); tapping one really switches the site theme (`setTheme` in `js/theme.js`). Cards deal in on scroll.
-8. "Everything else in the grind": a bento grid of 9 features (share your aura, beat my aura, your resume is your moveset, breakdown, roast the batch, meme HR chat, AuraGPT surname, profile circle, meme slam), each with a tiny demo (the share card has a shine sweep, the head-to-head bars race, the move cards deal in) and a link to the feature. 3×3 on desktop; **on phones it's a swipeable row** with scroll-snap and dots, so the page stays short.
+8. "Everything else in the grind": a bento grid of 6 features (breakdown, roast the batch, meme HR chat, AuraGPT surname, profile circle, meme slam), each with a tiny demo and a link to the feature. 3×2 on desktop; **on phones it's a swipeable row** with scroll-snap and dots, so the page stays short.
 9. Finale: "your aura is waiting." zooms in, plus the CTA.
 
 ## Conventions (please follow)
