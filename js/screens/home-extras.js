@@ -47,7 +47,6 @@ export function extrasHTML() {
             </a>
           </div>`).join("")}
       </div>
-      <div class="bento-dots" aria-hidden="true">${F.cards.map((_, i) => `<i${i ? "" : ' class="on"'}></i>`).join("")}</div>
     </div>`;
 }
 
@@ -77,16 +76,8 @@ function demo(id) {
   }
 }
 
-// Vibe cards switch the theme for real; on phones the feature tiles swipe, and the dots follow along
+// Vibe cards switch the theme for real
 export function bindExtras(root) {
-  const bento = $(".bento", root), dots = $$(".bento-dots i", root);
-  bento.addEventListener("scroll", () => {
-    const first = bento.firstElementChild;
-    if (!first) return;
-    const step = first.getBoundingClientRect().width + 12;   // card width + gap
-    const i = Math.round(bento.scrollLeft / step);
-    dots.forEach((d, k) => d.classList.toggle("on", k === i));
-  }, { passive: true });
   $("#vibeCards", root).addEventListener("click", (e) => {
     const card = e.target.closest(".vibe-card");
     if (!card) return;

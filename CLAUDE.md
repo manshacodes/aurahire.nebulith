@@ -123,7 +123,7 @@ Side screens: `#/people` ("the batch": you + 5 mock classmates ranked by aura, w
 5. "Applying is a boss fight" (pinned): HR's line types out (mouth moving), a TAKE-HOME ASSIGNMENT chip flashes, a "from your resume" move card flips in, the HP bar drains from 135, damage numbers pop, "OFFER UNLOCKED"; a "✦ your resume is your moveset" feature line sits under the text (`LANDING_BOSS` in data.js).
 6. "HR only replies in stickers": a sticker storm flies in and assembles into a wall.
 7. "Pick your vibe" (`home-extras.js`): the 5 themes as live mini previews (each card has its own `data-theme`); tapping one really switches the site theme (`setTheme` in `js/theme.js`). Cards deal in on scroll.
-8. "Everything else in the grind": a bento grid of 6 features (breakdown, roast the batch, meme HR chat, AuraGPT surname, profile circle, meme slam), each with a tiny demo and a link to the feature. 3×2 on desktop; **on phones it's a swipeable row** with scroll-snap and dots, so the page stays short.
+8. "Everything else in the grind": a bento grid of 6 features (breakdown, roast the batch, meme HR chat, AuraGPT surname, profile circle, meme slam), each with a tiny demo and a link to the feature. Tiles pop in as they scroll into view (no pinning, cheap on phones). Share your aura, beat my aura and your resume moveset are *feature lines* in chapters 3 and 5, not extra tiles (the owner's call: keep the grid at 6, no swipe row).
 9. Finale: "your aura is waiting." zooms in, plus the CTA.
 
 ## Conventions (please follow)
