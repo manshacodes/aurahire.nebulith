@@ -3,8 +3,9 @@
 // a scrubbed boss fight and a sticker storm.
 
 import { go } from "../router.js";
-import { $, $$, sticker, signed, rand } from "../fx.js";
-import { SLANG, JOBS, STICKERS } from "../data.js";
+import { $, $$, esc, sticker, signed, rand } from "../fx.js";
+import { SLANG, JOBS, STICKERS, LANDING_SCORE as LS, LANDING_BOSS as LB, LANDING_FEATURES as F } from "../data.js";
+import { stampFor, toneOf } from "../aura-engine.js";
 import { gsap, ScrollTrigger, hasGsap, scrollTo } from "../motion.js";
 import { reducedMotion } from "../fx.js";
 import { playIntro, shouldPlayIntro } from "../intro.js";
@@ -17,15 +18,6 @@ const HERO_STICKERS = [
   ["MOGGED", "pink", 8, "", 2.2, "90%", "6%"],
   ["7x7=49", "sky", -6, "", 1.5, "36%", "88%"],
   ["CRASH OUT", "orange", 10, "sm", 0.6, "92%", "64%"],
-];
-
-const DEMO_LINES = [
-  ["Won Smart India Hackathon", 500, "actual W. respect."],
-  ["Core member of 6 clubs", -400, "physically impossible"],
-  ["Solved 400 LeetCode problems", 250, "unc behaviour, respect"],
-  ["Proficient in MS Word", -100, "groundbreaking."],
-  ["Internship at uncle's startup", -150, "nepotism detected"],
-  ["Passionate team player", -50, "glazing detected"],
 ];
 
 const STORM = ["W", "L", "MID", "COOKED", "RED_FLAG", "GREEN_FLAG", "NPC", "AURA", "DELULU", "SIGMA", "RATIO", "SIX7", "TWIN", "UNC", "MOGGED", "CRASH", "SEVEN", "CHOPPED", "HUZZ", "WOMP"];
@@ -56,14 +48,20 @@ export default function home(root) {
         <div class="chapter-copy">
           <p class="label">01 · the resume</p>
           <h2 class="display">your resume,<br>rated in aura.</h2>
-          <p class="sub">AuraGPT reads every line and judges it. no mercy, all regex.</p>
+          <p class="sub">${esc(LS.sub)}</p>
         </div>
         <div class="card score-demo" data-tilt>
           <p class="label">your aura score</p>
-          <div class="big-num num" id="demoNum">+4,200</div>
+          <div class="score-top"><div class="big-num num" id="demoNum">${signed(LS.target)}</div>
+            <span class="demo-tier">${sticker(LS.tier, "lime", { rot: -4 })}</span></div>
           <ul class="demo-lines">
-            ${DEMO_LINES.map(([t, p, r]) => `
-              <li class="demo-line"><span>${t}</span><span class="tag ${p >= 0 ? "plus" : "minus"}">${signed(p)} <em>${r}</em></span></li>`).join("")}
+            ${LS.lines.map(([t, p, r, kind]) => {
+              const line = { points: p, roast: r, kind: kind || undefined };
+              const [stamp, c] = stampFor(line);
+              return `
+              <li class="demo-line"><span class="demo-text">${esc(t)}</span><span class="tag ${toneOf(line)}">${signed(p)} <em>${esc(r)}</em></span>
+                <span class="demo-stamp">${sticker(stamp, c, { rot: p >= 0 ? -8 : 8, size: "sm" })}</span></li>`;
+            }).join("")}
           </ul>
         </div>
       </div>
@@ -89,14 +87,17 @@ export default function home(root) {
         <div class="chapter-copy">
           <p class="label">03 · the application</p>
           <h2 class="display">applying is a<br>boss fight.</h2>
-          <p class="sub">mention excel. glaze the manager. never ask about salary.</p>
+          <p class="sub">${esc(LB.sub)}</p>
         </div>
         <div class="card boss-demo" data-tilt>
-          <div class="flex-row"><b>HR unc · lv.99</b><span class="label" id="hpLabel">100 hp</span></div>
+          <div class="flex-row"><b>HR unc · lv.99</b><span class="label" id="hpLabel">${LB.hp} hp</span></div>
           <div class="hp big"><span id="demoHp"></span></div>
           <div class="boss-stage">
+            <div class="demo-talk" id="demoTalk" aria-hidden="true">${esc(LB.line)}</div>
+            <span class="fx fx-takehome demo-special" id="demoSpecial">${esc(LB.special)}</span>
             <div class="avatar boss-av" id="demoBoss"><span class="visor"></span><span class="mouth"></span></div>
-            ${["−18", "−34 CRIT", "−30", "−12"].map((d, i) => `<span class="dmg dmg-${i}">${d}</span>`).join("")}
+            <div class="demo-perk-wrap"><div class="move move-perk demo-perk"><i class="perk-tag">${esc(F.moveTag)}</i><b>${esc(LB.perk[0])}</b><small>${esc(LB.perk[1])}</small></div></div>
+            ${LB.dmg.map((d, i) => `<span class="dmg dmg-${i}">${d}</span>`).join("")}
             <span class="boss-w">${sticker("OFFER UNLOCKED", "lime", { rot: -8, size: "lg" })}</span>
           </div>
         </div>
@@ -163,14 +164,17 @@ export default function home(root) {
       },
     });
 
-    // Chapter 1: pinned, the aura counts up and lines get judged as you scroll
+    // Chapter 1: pinned. The aura counts up, each line slides in, its points pop and its stamp slams down,
+    // then the tier sticker lands. (Stamps animate a wrapper: the sticker keeps its own CSS tilt.)
     const num = $("#demoNum", root);
     const counter = { v: 0 };
     num.textContent = "+0";
-    gsap.timeline({ scrollTrigger: { trigger: ".ch-score", start: "top top", end: "+=1400", scrub: 1, pin: true, anticipatePin: 1 } })
-      .to(counter, { v: 4200, ease: "none", duration: 1, onUpdate: () => { num.textContent = signed(counter.v); } }, 0)
-      .from(".demo-line", { opacity: 0, x: 40, stagger: 0.14, duration: 0.2 }, 0)
-      .fromTo(".demo-line .tag", { scale: 0 }, { scale: 1, stagger: 0.14, duration: 0.15, ease: "back.out(3)" }, 0.08);
+    gsap.timeline({ scrollTrigger: { trigger: ".ch-score", start: "top top", end: "+=1500", scrub: 1, pin: true, anticipatePin: 1 } })
+      .to(counter, { v: LS.target, ease: "none", duration: 1, onUpdate: () => { num.textContent = signed(counter.v); } }, 0)
+      .from(".demo-line", { opacity: 0, x: 40, stagger: 0.13, duration: 0.18 }, 0)
+      .fromTo(".demo-line .tag", { scale: 0 }, { scale: 1, stagger: 0.13, duration: 0.12, ease: "back.out(3)" }, 0.06)
+      .from(".demo-stamp", { scale: 3, opacity: 0, rotation: -25, stagger: 0.13, duration: 0.08, ease: "power4.in" }, 0.1)
+      .from(".demo-tier", { scale: 0, rotation: -30, opacity: 0, duration: 0.12, ease: "back.out(2.5)" }, 0.88);
 
     // Chapter 2: job cards flip away one by one (top card first)
     const cards = $$(".flip-card", root).reverse();
@@ -179,13 +183,26 @@ export default function home(root) {
       flip.to(card, { rotateX: -88, y: -60, opacity: 0, transformOrigin: "50% 0%", ease: "power2.in", duration: 1 });
     });
 
-    // Chapter 3: scrub through a boss fight
-    const hp = { v: 100 };
-    gsap.timeline({ scrollTrigger: { trigger: ".ch-boss", start: "top top", end: "+=1300", scrub: 1, pin: true, anticipatePin: 1 } })
+    // Chapter 3: scrub through a fight. HR talks (typed out, mouth moving), assigns a take-home,
+    // your resume move flips in, damage pops, HR goes down, offer unlocked.
+    const hp = { v: LB.hp }, typed = { n: 0 };
+    const talk = $("#demoTalk", root), boss = $("#demoBoss", root);
+    talk.textContent = "";
+    gsap.timeline({ scrollTrigger: { trigger: ".ch-boss", start: "top top", end: "+=1600", scrub: 1, pin: true, anticipatePin: 1 } })
       .to(hp, { v: 0, ease: "none", duration: 1, onUpdate: () => {
-        $("#demoHp", root).style.width = `${hp.v}%`;
+        $("#demoHp", root).style.width = `${(hp.v / LB.hp) * 100}%`;
         $("#hpLabel", root).textContent = `${Math.round(hp.v)} hp`;
       } }, 0)
+      .fromTo(talk, { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.05, ease: "back.out(2)" }, 0)
+      .to(typed, { n: LB.line.length, duration: 0.18, ease: "none", onUpdate: () => {
+        talk.textContent = LB.line.slice(0, Math.round(typed.n));
+        boss.classList.toggle("talking", typed.n > 0 && typed.n < LB.line.length);
+      } }, 0.02)
+      .to(talk, { opacity: 0, y: -10, duration: 0.05 }, 0.3)
+      .fromTo("#demoSpecial", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.06, ease: "back.out(3)" }, 0.32)
+      .to("#demoSpecial", { opacity: 0, duration: 0.05 }, 0.5)
+      .fromTo(".demo-perk-wrap", { rotationY: 90, opacity: 0 }, { rotationY: 0, opacity: 1, duration: 0.08, ease: "power2.out" }, 0.5)
+      .to(".demo-perk-wrap", { y: -30, opacity: 0, duration: 0.06 }, 0.68)
       .to("#demoBoss", { rotation: 20, scale: 0.7, ease: "none", duration: 1 }, 0)
       .from(".dmg", { opacity: 0, y: 20, scale: 0.5, stagger: 0.22, duration: 0.12, ease: "back.out(3)" }, 0.05)
       .to(".dmg", { opacity: 0, y: -40, stagger: 0.22, duration: 0.12 }, 0.2)

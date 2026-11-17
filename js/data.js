@@ -830,11 +830,40 @@ export const LANDING_VIBES = {
   picked: "vibe switched. your aura has been re-skinned.",
 };
 
+// Chapter 01 demo: real scores from aura-engine.js ([line, points, roast, kind]).
+// The society line is scored in context (7 societies), the rest straight from scoreLine().
+export const LANDING_SCORE = {
+  sub: "W, BASED, MID, L. AuraGPT reads every line. no mercy, all regex.",
+  target: 4606,
+  tier: "certified linkedin sigma",
+  lines: [
+    ["Won Smart India Hackathon (internal round)", -185, "the brackets are doing a lot of work", "cap"],
+    ["Exam notice scraper · 169 automated tests · live", 315, "stacked W: 169 tests", ""],
+    ["Skills: React, Node.js, Python", 36, "skills section. noted.", ""],
+    ["Media team member (society 7 of 7)", -100, "do you even go to the meetings?", "larp"],
+    ["Internship at uncle's startup", -150, "nepotism detected", "nepo"],
+    ["Passionate team player", -120, "glazing yourself detected", "glaze"],
+  ],
+};
+
+// Chapter 03 demo: a fight you scrub through
+export const LANDING_BOSS = {
+  sub: "HR talks back. assigns take-homes. ghosts you. your resume brings its own moves. not everyone gets hired.",
+  hp: 135,
+  line: "we'll circle back… in 2029.",
+  special: "TAKE-HOME ASSIGNMENT!",
+  perk: ["send the live link", "20 dmg"],
+  dmg: ["−20", "−24 CRIT", "−36 ULT", "−16"],
+};
+
 // Bento grid of the other features. `go` = where tapping the card takes you.
 export const LANDING_FEATURES = {
   label: "06 · everything else",
   title: "everything else<br>in the grind.",
   cards: [
+    { id: "share", title: "share your aura", line: "turn your score into a card. post it. let them cope.", go: "/upload" },
+    { id: "vs", title: "beat my aura", line: "send a challenge link. they scan. someone gets mogged.", go: "/upload" },
+    { id: "moves", title: "your resume is your moveset", line: "what AuraGPT finds becomes fight moves. even the cringe ones.", go: "/jobs" },
     { id: "breakdown", title: "the AuraGPT breakdown", line: "yap level, nepo index, delulu meter, grind, touch grass and a cap detector. all 0-10. all personal.", go: "/upload" },
     { id: "batch", title: "roast the batch", line: "stalk 5 classmates. call cap on their resume, post a diss, and watch them clap back.", go: "/people" },
     { id: "chat", title: "HR replies in memes", line: "send a meme, get a meme back. HR remembers everything. HR forgives nothing.", go: "/chat" },
@@ -846,6 +875,10 @@ export const LANDING_FEATURES = {
   meters: [["yap level", 9], ["nepo index", 10], ["grind", 2]],
   names: [["Aarav", "Grindwala"], ["Riya", "Rizzvi"], ["Kabir", "Mogwani"]],
   diss: "the only thing kabir has shipped is a linkedin post",
+  share: { name: "aarav grindwala", aura: 4606, tier: "certified linkedin sigma", meters: [30, 90, 50] },
+  vs: { rows: [["you", 4606], ["riya", 3980]], verdict: "you mogged riya by 626 aura." },
+  moves: ["run the test suite", "call uncle", "solve it in O(n)"],
+  moveTag: "from your resume",
 };
 
 // ---------- aura farming ----------
