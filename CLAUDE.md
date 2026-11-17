@@ -84,6 +84,7 @@ js/
   fight-fx.js         boss fight extras: VS intro, HR taunt bubble, block timing minigame, ultimate flash, K.O. splash
   resume-file.js      reads .txt and PDF resumes (pdf.js from cdnjs, loaded only when a PDF is picked) + auto-growing text boxes
   breakdown.js        the AuraGPT breakdown meters, shared by score, roast-a-friend and friend profiles
+  share-card.js       "share my aura": draws a 1080×1350 card on a canvas in the current vibe (gradients included), shares it (share sheet, or download + copied link), and encodes/decodes "beat my aura" challenge links (#/vs/<code>: name, aura, tier, colour + a checksum; never resume text)
   aura.js             earn(id): aura for every action (AURA_EARN in data.js), "+N aura" pops, leaderboard overtakes
   memes.js            meme sticker <img> helper + mix/mixGroups for mixing memes with text stickers
   fx.js               $, $$, esc, toast, confetti, countUp, typewriter, shake, floatText, sticker()
@@ -102,7 +103,8 @@ tools/make_sticker.py turns any image into a die-cut sticker PNG (needs: pip ins
 `#/` **home**: scroll-story landing page.
 → `#/upload`: type your first name (AuraGPT assigns a funny surname like "Grindwala", reroll-able), then paste your resume, upload a .txt (only .txt is accepted), or pick one of 6 demo personas (`DEMO_RESUMES` in data.js: hackathon tourist, nepo intern, dsa monk, linkedin lunatic, founder (19), club president), each tuned to land in a different aura tier.
 → `#/scan`: AuraGPT v6.7 judges line by line: a sticky HUD with a thinking orb (turns green or pink per verdict) and a live counter + sparkline, a terminal log of its "thoughts", a highlighter sweep on each line, verdict stamps slamming on (W, BASED, MID, L, CAP, NEPO, GLAZE, LARP, TOURIST), points flying into the counter, a shake on big Ls, confetti on big Ws, a "SCAN COMPLETE" stamp, and a skip button.
-→ `#/score`: count-up, confetti, rank tier, roast, rizz / Ws / crash outs, best + worst line, and the **AuraGPT breakdown**: yap, nepo, delulu, grind, touch grass and cap, each 0-10 from signals in the resume (`SIGNALS` in aura-engine.js, copy in `FACTORS`), "copy my flex".
+→ `#/score`: count-up, confetti, rank tier, roast, rizz / Ws / crash outs, best + worst line, and the **AuraGPT breakdown**: yap, nepo, delulu, grind, touch grass and cap, each 0-10 from signals in the resume (`SIGNALS` in aura-engine.js, copy in `FACTORS`), "copy my flex", and **share my aura** (the share card; `SHARE_TEXT` in data.js). If you came from a friend's challenge link, a head-to-head card sits on top ("you mogged them by N" / "challenge them back").
+→ `#/vs/:code` (`js/screens/vs.js`): a friend's "beat my aura" challenge: their score and tier, then "scan my resume" (or "use my last scan"); stores `state.challenge` for the score page. An edited link shows "that's cap"; a broken one goes home.
 → `#/stickers`: pick exactly 5 personality stickers (a 6th shakes: "this isn't 6-7, twin").
 → `#/jobs`: swipeable card stack (drag right to apply, left to ghost).
 → `#/job/:id`: details; the **Apply button runs from your cursor** (6 escapes with taunts on mouse, 3 on touch), then gives up and turns into a **"hold to apply" ring** (1.6s press-and-hold, inspired by zero.university's tap-hold; letting go early resets it with a roast).

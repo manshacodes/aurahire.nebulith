@@ -280,6 +280,19 @@ export const toneOf = (line) => {
   const v = verdictOf(line.points);
   return v === "W" || v === "BASED" ? "good" : v === "MID" ? "mid" : "bad";
 };
+// The stamp for a judged line: [label, sticker colour]. Used by the scan and the share card.
+const KIND_STAMPS = { nepo: ["NEPO", "red"], glaze: ["GLAZE", "pink"], cap: ["CAP", "red"], larp: ["LARP", "orange"], tourist: ["TOURIST", "sky"] };
+export function stampFor({ points, roast, kind }) {
+  if (KIND_STAMPS[kind]) return KIND_STAMPS[kind];
+  // older saved scans have no `kind`, so fall back to reading the roast
+  if (/nepotism/.test(roast)) return ["NEPO", "red"];
+  if (/glazing/.test(roast)) return ["GLAZE", "pink"];
+  if (/impossible/.test(roast)) return ["CAP", "red"];
+  if (/larping/.test(roast)) return ["LARP", "orange"];
+  if (/tourist/.test(roast)) return ["TOURIST", "sky"];
+  return { W: ["W", "lime"], BASED: ["BASED", "lime"], L: ["L", "red"], MID: ["MID", "grey"] }[verdictOf(points)];
+}
+
 // Ws and crash outs only count real Ws and real Ls
 export const isW = (line) => !line.kind && line.points >= 300;
 export const isCrashOut = (line) => toneOf(line) === "bad";
