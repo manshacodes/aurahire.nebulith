@@ -1,11 +1,14 @@
 // The HR boss fight, fighting-game style:
 // VS intro → ROUND 1 → FIGHT! → you pick a move from a reshuffled hand → HR taunts and attacks,
 // and you can BLOCK it with a timing tap → repeat until someone is K.O.
-// An aura meter fills as you deal and take damage; when full it unlocks the AURA FARM ULTIMATE.
+// An aura meter fills as you deal and take damage; when full it unlocks the AURA FARM ULTIMATE (once per fight).
+// Sometimes HR uses a special instead of attacking: a take-home assignment (damage over 3 turns)
+// or ghosting (your next attack misses). At rage mode HR takes one chai break (+20 hp).
+// Tuned with a simulation so a normal player wins about 6 fights in 10.
 import { go } from "../router.js";
 import * as S from "../state.js";
 import { $, esc, pick, rand, sleep, floatText, confetti, reducedMotion } from "../fx.js";
-import { JOBS, MOVES, BOSS_ATTACKS, BOSS_HP, YOUR_HP, FIGHT_TEXT, BOSS_TAUNTS } from "../data.js";
+import { JOBS, MOVES, BOSS_ATTACKS, BOSS_HP, YOUR_HP, FIGHT_TEXT, BOSS_TAUNTS, HR_LINES } from "../data.js";
 import { hasGsap } from "../motion.js";
 import { memeSlam, preloadMemes } from "../slam.js";
 import { sfx } from "../sound.js";
@@ -16,6 +19,14 @@ import { avatarHTML } from "../identity.js";
 const HAND = 3;            // random moves dealt per turn (plus "ask about salary")
 const RAGE_AT = 40;        // boss HP that triggers rage mode
 const RAGE_MULT = 1.3;     // rage attacks hit this much harder
+const ATK_MULT = 1.45;     // all HR attacks hit this much harder than the numbers in data.js
+const SPECIAL_CHANCE = 0.3;            // how often HR uses a special move instead of attacking
+const TAKEHOME = { dmg: 6, turns: 3 }; // take-home assignment: 6 hp a turn for 3 turns
+const CHAI_HEAL = 20;                  // HR's one chai break when rage mode starts
+// Aura meter: how much each source fills it
+const METER_DEALT = 0.5, METER_TAKEN = 0.6, METER_PERFECT = 15;
+const LOW_BOSS = 30, LOW_YOU = 35;     // hp at which HR's "low hp" lines kick in (once each)
+const TAUNT_CHANCE = 0.4;              // how often HR also talks trash right before attacking
 const METER_MAX = 100;     // aura meter: full = ultimate unlocked
 const BLOCK_SWEEP = 900, RAGE_SWEEP = 750;     // how long the block marker takes to cross (ms), faster in rage mode
 const BLOCK_DAMAGE = { perfect: 0, good: 0.5, miss: 1, none: 1 };
@@ -24,7 +35,7 @@ const BLOCK_DAMAGE = { perfect: 0, good: 0.5, miss: 1, none: 1 };
 const BLOCK_CHANCE = 0.25, BLOCK_AT_LEAST_EVERY = 4;
 
 // The ultimate is a move like the others, so it uses the same code path
-const ULT = { id: "ult", name: FIGHT_TEXT.ult.name, hint: FIGHT_TEXT.ult.hint, ult: true, run: () => ({ dmg: rand(45, 60), text: FIGHT_TEXT.ult.text }) };
+const ULT = { id: "ult", name: FIGHT_TEXT.ult.name, hint: FIGHT_TEXT.ult.hint, ult: true, run: () => ({ dmg: rand(30, 40), text: FIGHT_TEXT.ult.text }) };
 
 // Deal a fresh hand: 3 random moves + the cursed salary button
 function deal() {
@@ -36,8 +47,31 @@ export default function boss(root, { id }) {
   const j = JOBS.find((x) => x.id === id) || JOBS[0];
   let bossHp = BOSS_HP, you = YOUR_HP, busy = true, alive = true, turn = 1, meter = 0;
   let attacks = 0, sinceBlock = 0;   // for deciding when the block minigame shows up
-  // Status effects: dodge (block next attack), charge (2× next hit), stun (boss skips a turn), rage
-  const fx = { dodge: false, charge: false, stun: false, rage: false };
+  let ultUsed = false, chaiUsed = false, takehome = 0;   // takehome = turns of take-home damage left
+  // Status effects: dodge (block next attack), charge (2× next hit), stun (boss skips a turn), rage,
+  // ghost (HR is ghosting you: your next attack misses)
+  const fx = { dodge: false, charge: false, stun: false, rage: false, ghost: false };
+  const ultReady = () => meter >= METER_MAX && !ultUsed;
+  const said = { lowBoss: false, lowYou: false };   // the one-off "low hp" lines
+  const say = (text) => taunt(enemy, text);
+
+  // What HR says after your move: about that move, whether it landed or flopped
+  function reactionTo(move, r, ghosted) {
+    if (ghosted) return pick(HR_LINES.ghosted);
+    if (move.ult) return pick(HR_LINES.ult);
+    const lines = HR_LINES.reactions[move.id];
+    if (!lines) return null;
+    const flopped = r.self || (r.dmg && r.dmg <= 8 && !r.effect);   // backfired, or a tiny hit
+    return pick((flopped && lines.bad) || lines.good || lines.bad);
+  }
+
+  // What HR says right before attacking: a "low hp" line once, else sometimes its own trash talk
+  function tauntLine() {
+    if (!said.lowBoss && bossHp <= LOW_BOSS) { said.lowBoss = true; return pick(HR_LINES.lowBoss); }
+    if (!said.lowYou && you <= LOW_YOU) { said.lowYou = true; return pick(HR_LINES.lowYou); }
+    if (Math.random() > TAUNT_CHANCE) return null;
+    return j.taunts && Math.random() < 0.6 ? pick(j.taunts) : pick(BOSS_TAUNTS);
+  }
   let hand = deal();
 
   root.innerHTML = `
@@ -71,8 +105,9 @@ export default function boss(root, { id }) {
 
   // Draw the current hand (re-dealt every turn). A full meter adds the ultimate on top.
   function renderHand() {
-    const cards = meter >= METER_MAX ? [ULT, ...hand] : hand;
-    $("#turnLabel", root).textContent = meter >= METER_MAX ? FIGHT_TEXT.ultReady : `turn ${turn} · your hand reshuffles every turn`;
+    const cards = ultReady() ? [ULT, ...hand] : hand;
+    $("#turnLabel", root).textContent = ultReady() ? FIGHT_TEXT.ultReady
+      : `turn ${turn} · ${ultUsed ? FIGHT_TEXT.ultSpent : "your hand reshuffles every turn"}`;
     movesEl.innerHTML = cards.map((m) => `<button class="move${m.ult ? " move-ult" : ""}" data-id="${m.id}"><b>${esc(m.name)}</b><small>${esc(m.hint)}</small></button>`).join("");
     movesEl.classList.remove("deal");
     void movesEl.offsetWidth;   // restart the deal animation
@@ -84,13 +119,14 @@ export default function boss(root, { id }) {
     $("#youHp", root).style.width = `${(you / YOUR_HP) * 100}%`;
     $("#youHpText", root).textContent = `lv.1 · ${you}/${YOUR_HP} hp`;
     $("#meter", root).style.width = `${(meter / METER_MAX) * 100}%`;
-    $("#meter", root).parentElement.classList.toggle("full", meter >= METER_MAX);
+    $("#meter", root).parentElement.classList.toggle("full", ultReady());
+    $("#meter", root).parentElement.classList.toggle("spent", ultUsed);
     const chip = (key) => `<span class="fx fx-${key}">${FIGHT_TEXT.fx[key]}</span>`;
-    $("#youFx", root).innerHTML = ["dodge", "charge"].filter((k) => fx[k]).map(chip).join("");
-    $("#bossFx", root).innerHTML = ["stun", "rage"].filter((k) => fx[k]).map(chip).join("");
+    $("#youFx", root).innerHTML = ["dodge", "charge"].filter((k) => fx[k]).map(chip).join("") + (takehome ? chip("takehome") : "");
+    $("#bossFx", root).innerHTML = ["stun", "rage", "ghost"].filter((k) => fx[k]).map(chip).join("");
   }
 
-  const addMeter = (n) => { meter = Math.min(METER_MAX, meter + n); };
+  const addMeter = (n) => { if (!ultUsed) meter = Math.min(METER_MAX, meter + n); };   // stops after the one ultimate
 
   function hit(fighter, amount) {
     amount >= 28 ? sfx.crit() : sfx.hit();   // big numbers get the crunchy crit sound
@@ -120,31 +156,52 @@ export default function boss(root, { id }) {
     }
   }
 
-  // Your move: apply damage, healing and effects
+  // Your move: apply damage, healing and effects. Returns what happened, for HR's reaction.
   function applyMove(move) {
     const r = move.run();
-    let text = r.text;
-    if (r.dmg) {
+    let text = r.text, ghosted = false;
+    if (r.dmg && fx.ghost) {
+      ghosted = true;
+      fx.ghost = false;                 // HR was ghosting you: the attack hits nothing
+      text = FIGHT_TEXT.ghostWhiff;
+    } else if (r.dmg) {
       let dmg = r.dmg;
-      if (fx.charge) { dmg *= 2; fx.charge = false; text += ` ${FIGHT_TEXT.charged(dmg)}`; }
+      if (fx.charge && move.ult) text += ` ${FIGHT_TEXT.ultNoFarm}`;   // the 2× is saved for your next normal hit
+      else if (fx.charge) { dmg *= 2; fx.charge = false; text += ` ${FIGHT_TEXT.charged(dmg)}`; }
       bossHp = Math.max(0, bossHp - dmg);
       hit(enemy, dmg);
-      if (!move.ult) addMeter(dmg);
+      if (!move.ult) addMeter(dmg * METER_DEALT);
     }
-    if (r.self) { you = Math.max(0, you - r.self); hit(me, r.self); addMeter(r.self * 0.8); }
+    if (r.self) { you = Math.max(0, you - r.self); hit(me, r.self); addMeter(r.self * METER_TAKEN); }
     if (r.heal) { you = Math.min(YOUR_HP, you + r.heal); floatText(me, `+${r.heal}`, true); }
     if (r.effect) fx[r.effect] = true;
     log(text);
+    return { r, ghosted };
   }
 
   // HR's turn: a taunt, then an attack you can block with a timing tap
   async function bossTurn() {
     if (fx.stun) { fx.stun = false; log(FIGHT_TEXT.stunned(j.boss)); return; }
+
+    // Sometimes HR plays dirty instead of attacking
+    if (Math.random() < SPECIAL_CHANCE) {
+      const kind = pick(["takehome", "ghost"]);
+      if (kind === "ghost" || takehome === 0) {
+        const s = FIGHT_TEXT.special[kind];
+        await taunt(enemy, `${s.name}!`);
+        if (!alive) return;
+        if (kind === "ghost") fx.ghost = true; else takehome = TAKEHOME.turns;
+        sfx.rumble();
+        log(`${j.boss} used ${s.name}! ${s.text}`);
+        return;
+      }
+    }
+
     const attack = pick([...j.attacks, ...BOSS_ATTACKS]);
     if (fx.dodge) { fx.dodge = false; log(`${j.boss} used ${attack.name}! ${FIGHT_TEXT.dodged}`); return; }
 
-    await taunt(enemy, pick(BOSS_TAUNTS));
-    if (!alive) return;
+    const line = tauntLine();
+    if (line) { await say(line); if (!alive) return; }
     log(`${j.boss} used ${attack.name}!`);
     const offerBlock = attacks === 0 || (sinceBlock >= 1 && (Math.random() < BLOCK_CHANCE || sinceBlock >= BLOCK_AT_LEAST_EVERY - 1));
     attacks += 1;
@@ -154,17 +211,19 @@ export default function boss(root, { id }) {
       : "none";   // a normal attack: no minigame, full damage
     if (!alive) return;
 
-    const dmg = Math.round(rand(attack.min, attack.max) * (fx.rage ? RAGE_MULT : 1) * BLOCK_DAMAGE[result]);
+    const dmg = Math.round(rand(attack.min, attack.max) * ATK_MULT * (fx.rage ? RAGE_MULT : 1) * BLOCK_DAMAGE[result]);
     if (result === "perfect") {
       sfx.ding();
       bossHp = Math.max(0, bossHp - FIGHT_TEXT.counter);   // a perfect block reflects some damage
       hit(enemy, FIGHT_TEXT.counter);
-      addMeter(20);
+      addMeter(METER_PERFECT);
       log(FIGHT_TEXT.block.perfect(j.boss));
+      paint();
+      await say(pick(HR_LINES.perfectBlock));
     } else {
       you = Math.max(0, you - dmg);
       hit(me, dmg);
-      addMeter(dmg * 0.8);
+      addMeter(dmg * METER_TAKEN);
       log(result === "none" ? `${j.boss} used ${attack.name}! ${attack.text}` : `${attack.text} ${result === "good" ? FIGHT_TEXT.block.good : FIGHT_TEXT.block.miss}`);
     }
   }
@@ -174,23 +233,34 @@ export default function boss(root, { id }) {
     busy = true;
     setButtons(false);
 
-    if (move.ult) { meter = 0; await ultFlash(move.name); if (!alive) return; }
-    applyMove(move);
+    if (move.ult) { meter = 0; ultUsed = true; await ultFlash(move.name); if (!alive) return; }
+    const { r, ghosted } = applyMove(move);
     paint();
-    await sleep(1000);
+    if (bossHp <= 0) { await sleep(1000); return alive && finish(true); }
+    // HR reacts to your move (this is also the pause before HR's turn)
+    const reaction = reactionTo(move, r, ghosted);
+    if (reaction) await say(reaction); else await sleep(1000);
     if (!alive) return;
-    if (bossHp <= 0) return finish(true);
     if (you <= 0) return finish(false);
 
-    // Low on HP? The boss gets angry once.
+    // Low on HP? The boss gets angry once, and takes one chai break.
     if (!fx.rage && bossHp <= RAGE_AT) {
       fx.rage = true;
       sfx.rumble();
       setRage(true);   // final-round music: faster, with a lead on top
       log(FIGHT_TEXT.rage(j.boss));
       paint();
-      await sleep(1100);
+      await say(pick(HR_LINES.rage));
       if (!alive) return;
+      if (!chaiUsed) {
+        chaiUsed = true;
+        bossHp = Math.min(BOSS_HP, bossHp + CHAI_HEAL);
+        floatText(enemy, `+${CHAI_HEAL}`, true);
+        log(FIGHT_TEXT.chai(j.boss));
+        paint();
+        await sleep(1100);
+        if (!alive) return;
+      }
     }
 
     await bossTurn();
@@ -200,6 +270,18 @@ export default function boss(root, { id }) {
     if (!alive) return;
     if (bossHp <= 0) return finish(true);   // K.O. by perfect-block counter
     if (you <= 0) return finish(false);
+
+    // The take-home assignment eats some hp every turn until it's "submitted"
+    if (takehome > 0) {
+      takehome -= 1;
+      you = Math.max(0, you - TAKEHOME.dmg);
+      hit(me, TAKEHOME.dmg);
+      log(FIGHT_TEXT.takehomeTick(TAKEHOME.dmg, takehome));
+      paint();
+      await sleep(900);
+      if (!alive) return;
+      if (you <= 0) return finish(false);
+    }
 
     turn += 1;
     hand = deal();

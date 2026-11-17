@@ -41,14 +41,35 @@ export function vsIntro({ youHTML, youName, bossName }) {
   });
 }
 
-// ---------- HR's speech bubble over the boss ----------
-export async function taunt(fighterEl, text) {
+// ---------- HR's speech bubble ----------
+// A big comic bubble next to HR. The text types out while HR's mouth moves,
+// stays long enough to read, and a tap skips it.
+export function taunt(fighterEl, text) {
   const bubble = document.createElement("div");
   bubble.className = "taunt";
-  bubble.textContent = text;
+  bubble.setAttribute("aria-live", "polite");
   fighterEl.appendChild(bubble);
-  await sleep(1300);
-  bubble.remove();
+  fighterEl.classList.add("talking");
+  const arena = fighterEl.closest(".arena") || fighterEl;
+
+  return new Promise((resolve) => {
+    let typer = 0, timer = 0;
+    function done() {
+      clearInterval(typer); clearTimeout(timer);
+      arena.removeEventListener("click", done);
+      fighterEl.classList.remove("talking");
+      bubble.remove();
+      resolve();
+    }
+    arena.addEventListener("click", done);
+    const hold = Math.min(2600, 1000 + text.length * 30);   // longer lines stay up longer
+    if (reducedMotion()) { bubble.textContent = text; timer = setTimeout(done, hold); return; }
+    let i = 0;
+    typer = setInterval(() => {
+      bubble.textContent = text.slice(0, ++i);
+      if (i >= text.length) { clearInterval(typer); fighterEl.classList.remove("talking"); timer = setTimeout(done, hold); }
+    }, 22);
+  });
 }
 
 // ---------- Block minigame (full screen) ----------
