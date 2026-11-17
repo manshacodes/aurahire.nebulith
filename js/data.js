@@ -830,6 +830,43 @@ export const LANDING_VIBES = {
   picked: "vibe switched. your aura has been re-skinned.",
 };
 
+// Chapter 01 demo: real scores from aura-engine.js ([line, points, roast, kind]).
+// The society line is scored in context (7 societies), the rest straight from scoreLine().
+export const LANDING_SCORE = {
+  sub: "W, BASED, MID, L. AuraGPT reads every line. no mercy, all regex.",
+  target: 4606,
+  tier: "certified linkedin sigma",
+  // the add-ons, as phone notifications that pop in after the score:
+  // [time, message (**bold**), where tapping goes, icon]. icon "card:+4.6k" = a tiny aura card, "person:R:lilac" = a profile circle
+  notifs: [
+    ["now", "your aura card is ready ↗ **+4,606**. post it. let them cope.", "/upload", "card:+4.6k"],
+    ["2m ago", "**riya** challenged you: **+3,980**. think you can mog that?", "/upload", "person:R:lilac"],
+  ],
+  notifApp: "AuraHire",
+  lines: [
+    ["Won Smart India Hackathon (internal round)", -185, "the brackets are doing a lot of work", "cap"],
+    ["Exam notice scraper · 169 automated tests · live", 315, "stacked W: 169 tests", ""],
+    ["Skills: React, Node.js, Python", 36, "skills section. noted.", ""],
+    ["Media team member (society 7 of 7)", -100, "do you even go to the meetings?", "larp"],
+    ["Internship at uncle's startup", -150, "nepotism detected", "nepo"],
+    ["Passionate team player", -120, "glazing yourself detected", "glaze"],
+  ],
+};
+
+// Chapter 03 demo: a fight you scrub through
+export const LANDING_BOSS = {
+  sub: "HR talks back. assigns take-homes. ghosts you. your resume brings its own moves. not everyone gets hired.",
+  hp: 135,
+  line: "we'll circle back… in 2029.",
+  special: "TAKE-HOME ASSIGNMENT!",
+  perk: ["send the live link", "20 dmg"],
+  perkTag: "from your resume",
+  // the add-on: a row with a live preview of your resume moves dealing in
+  moveset: { title: "your resume is your moveset", line: "what AuraGPT finds becomes fight moves. even the cringe ones.", go: "/jobs",
+    preview: ["run the test suite", "call uncle"] },
+  dmg: ["−20", "−24 CRIT", "−36 ULT", "−16"],
+};
+
 // Bento grid of the other features. `go` = where tapping the card takes you.
 export const LANDING_FEATURES = {
   label: "06 · everything else",
