@@ -56,45 +56,45 @@ const SIGNALS = [
   // --- leadership & clubs ---
   { re: /(\d+)\s*(?:more\s+)?(?:college\s+)?(clubs?|societ(y|ies))/i,
     rule: (m) => (Number(m[1]) > 3
-      ? { points: -300, roast: `${m[1]} ${m[2]} is physically impossible`, kind: "larp" }
+      ? { points: -100, roast: `${m[1]} ${m[2]} is physically impossible`, kind: "larp" }
       : { points: 40, roast: "club aura" }) },
   { re: /president|\bhead\b|\blead(er)?\b|captain|founded the|started the initiative/i, points: 140, roast: "title farming" },
   { re: /coordinator|organi[sz]er|\bvp\b|secretary|core member/i, points: 70, roast: "title farming" },
   { re: /\b(team )?member\b|\bteam\b,/i, points: 0, roast: "member #47 of the team" },
   { re: /\bhackathons?\b/i, points: 40, roast: "showed up. respect, kind of." },
   { re: /organi[sz](ed|er|ing).*hackathon|hackathon.*organi[sz](ed|er)/i, points: 320, roast: "ran a whole hackathon. that's a W." },
-  { re: /\bparticipated\b/i, points: -40, roast: "participation trophy unlocked" },
-  { re: /\b(\d{2,})\s*hackathons?/i, points: -150, roast: "hackathon tourist detected", kind: "tourist" },
+  { re: /\bparticipated\b/i, points: -10, roast: "participation trophy unlocked" },
+  { re: /\b(\d{2,})\s*hackathons?/i, points: -10, roast: "hackathon tourist detected", kind: "tourist" },
   { re: /startup|founder|\bceo\b/i, points: 100, roast: "founder of a startup with 0 users" },
   { re: /stealth|pre.?revenue|idea stage|future founder|aspiring/i, points: -200, roast: "idea stage is not a stage", kind: "cap" },
 
   // --- skills that count for a little ---
   { re: /\bai\b|artificial intelligence|machine learning|\bml\b|\bllm\b|deep learning|computer vision|\bnlp\b/i, points: 30, roast: "'no thanks i use ai' energy" },
-  { re: /chatgpt clone|openai api|llm wrapper|gpt wrapper/i, points: -150, roast: "an api wrapper. mogged by one curl command." },
+  { re: /chatgpt clone|openai api|llm wrapper|gpt wrapper/i, points: -80, roast: "an api wrapper. mogged by one curl command." },
   { re: /react|javascript|typescript|python|\bjava\b|c\+\+|node(\.js)?|\bgo(lang)?\b|rust|kotlin|swift/i, points: 20, roast: "skill diff" },
   { re: /figma|ui\/?ux|photograph\w*|illustrat\w*|brand identity|after effects|animation/i, points: 60, roast: "has taste. rare in cse." },
   { re: /volunteer|\bngo\b|\bnss\b|special school|charity|fundrais|teaching drive/i, points: 80, roast: "kind aura" },
   { re: /\b(dance|singing|singer|sports|cricket|football|basketball|gym|marathon|trek\w*|theatre|band)\b/i, points: 80, roast: "touches grass. rare." },
   { re: /certificat|\bcourses?\b|udemy|coursera|nptel/i, points: 0, roast: "they were 2 hrs long, twin", loud: true },
-  { re: /\b(\d{2,})\s*(free\s+)?(\w+\s+)?(certificat\w*|courses?)/i, points: -180, roast: "certificate collector. they were 2 hrs long, twin", loud: true },
+  { re: /\b(\d{2,})\s*(free\s+)?(\w+\s+)?(certificat\w*|courses?)/i, points: -20, roast: "certificate collector. they were 2 hrs long, twin", loud: true },
 
   // --- the Ls ---
   { re: /uncle|aunt|dad'?s|papa|mom'?s|cousin|family friend|relatives/i, points: -250, roast: "nepotism detected", kind: "nepo" },
-  { re: /ms word|microsoft word|ms office|powerpoint|\bexcel\b/i, points: -120, roast: "proficient in word. groundbreaking." },
-  { re: /hello world/i, points: -100, roast: "7 languages, 0 projects" },
-  { re: /full.?stack|mern stack/i, points: -150, roast: "larping as full-stack", kind: "larp" },
-  { re: /to.?do app|calculator|weather app|tic.?tac.?toe/i, points: -150, roast: "the to-do app strikes again" },
+  { re: /ms word|microsoft word|ms office|powerpoint|\bexcel\b/i, points: 10, roast: "proficient in word. groundbreaking." },
+  { re: /hello world/i, points: -30, roast: "7 languages, 0 projects", kind: "basic" },
+  { re: /full.?stack|mern stack/i, points: -80, roast: "larping as full-stack", kind: "larp" },
+  { re: /to.?do app|calculator|weather app|tic.?tac.?toe/i, points: -80, roast: "the to-do app strikes again" },
   { re: /portfolio website using html|library management|student management|house prices?|titanic|kaggle dataset/i,
-    points: -150, roast: "the college project starter pack" },
+    points: -80, roast: "the college project starter pack" },
   { re: /passionate|hard.?working|team player|motivated|go.?getter|detail.?oriented|enthusiast|self.?starter|quick learner/i,
-    points: -120, roast: "glazing yourself detected", kind: "glaze" },
-  { re: /communication skills|public speaking|leadership skills|people skills|time management/i, points: -100, roast: "soft skills section. hard pass." },
-  { re: /hobbies:.*\b(reading|music|movies|travel\w*|netflix)\b/i, points: -110, roast: "reading and music. the npc hobby combo." },
-  { re: /linkedin|followers|influencer|top voice/i, points: -120, roast: "linkedin lunatic" },
+    points: -70, roast: "glazing yourself detected", kind: "glaze" },
+  { re: /communication skills|public speaking|leadership skills|people skills|time management/i, points: -50, roast: "soft skills section. hard pass." },
+  { re: /hobbies:.*\b(reading|music|movies|travel\w*|netflix)\b/i, points: -50, roast: "reading and music. the npc hobby combo." },
+  { re: /linkedin|followers|influencer|top voice/i, points: 50, roast: "linkedin lunatic", soft: true },
   { re: /internal round|fixed a typo|self.?nominated|mostly relatives|all co.?founders|\(\d+ teams?\)|imports only|\(college project\)/i,
-    points: -300, roast: "the brackets are doing a lot of work", kind: "cap" },
+    points: -250, roast: "the brackets are doing a lot of work", kind: "cap" },
   { re: /\[[^\]]*\]/, points: -150, roast: "forgot to fill in the template, twin" },
-  { re: /attendance/i, points: -120, roast: "attendance mentioned. sus." },
+  { re: /attendance/i, points: -60, roast: "attendance mentioned. sus." },
 ];
 
 // Lines that match nothing land in MID: a repeatable joke, small points either way
@@ -112,7 +112,7 @@ const round5 = (n) => Math.round(n / 5) * 5;
 
 function scoreSkillsLine(text) {
   const items = text.split(":").slice(1).join(":").split(/[,;/]|\band\b/).filter((s) => s.trim()).length;
-  if (/ms office|ms word|powerpoint|\bexcel\b|public speaking/i.test(text)) return { points: -100, roast: "ms office in the skills section. HR felt that." };
+  if (/ms office|ms word|powerpoint|\bexcel\b|public speaking/i.test(text)) return { points: 10, roast: "ms office in the skills section. HR felt that." };
   return { points: Math.min(100, items * 12), roast: items >= 8 ? `${items} tools listed. tutorial count unknown.` : "skills section. noted." };
 }
 
@@ -132,7 +132,7 @@ export function scoreLine(text) {
   // Good stuff stacks with diminishing returns: the best signal counts fully, the rest at 40%.
   // Bad stuff always counts in full. A cap / nepo / glaze / larp line keeps only a quarter of its good points.
   const flagged = hits.some((h) => h.kind && h.points < 0);
-  const pos = hits.filter((h) => h.points > 0).map((h) => h.points).sort((a, b) => b - a);
+  const pos = hits.filter((h) => h.points > 0 && !(flagged && h.soft)).map((h) => h.points).sort((a, b) => b - a);
   const neg = hits.filter((h) => h.points < 0).reduce((sum, h) => sum + h.points, 0);
   let good = pos.length ? pos[0] + 0.4 * pos.slice(1).reduce((a, b) => a + b, 0) : 0;
   if (flagged) good /= 4;
@@ -367,12 +367,13 @@ export const tierFor = (total) => [...TIERS].reverse().find((t) => total >= t.mi
 export const verdictOf = (p) => (p >= 300 ? "W" : p >= 100 ? "BASED" : p <= -100 ? "L" : "MID");
 // Colour of a judged line: green for W / BASED, grey for MID, red for L or any special stamp (CAP, LARP…)
 export const toneOf = (line) => {
+  if (line.kind === "tourist") return line.points <= -100 ? "bad" : "mid";   // showed up a lot: sketchy, not an L
   if (line.kind) return "bad";
   const v = verdictOf(line.points);
   return v === "W" || v === "BASED" ? "good" : v === "MID" ? "mid" : "bad";
 };
 // The stamp for a judged line: [label, sticker colour]. Used by the scan and the share card.
-const KIND_STAMPS = { nepo: ["NEPO", "red"], glaze: ["GLAZE", "pink"], cap: ["CAP", "red"], larp: ["LARP", "orange"], tourist: ["TOURIST", "sky"] };
+const KIND_STAMPS = { basic: ["L", "red"], nepo: ["NEPO", "red"], glaze: ["GLAZE", "pink"], cap: ["CAP", "red"], larp: ["LARP", "orange"], tourist: ["TOURIST", "sky"] };
 export function stampFor({ points, roast, kind }) {
   if (KIND_STAMPS[kind]) return KIND_STAMPS[kind];
   // older saved scans have no `kind`, so fall back to reading the roast

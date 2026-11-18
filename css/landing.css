@@ -15,7 +15,8 @@ body[data-route="home"] .screen > section { animation: none; }
   letter-spacing: -0.07em;
   transform-origin: left center;
 }
-.hero-stickers { position: absolute; inset: 0; pointer-events: none; }
+.hero-stickers { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.hero > :not(.hero-stickers) { position: relative; z-index: 1; }   /* text and buttons always sit above the stickers */
 .hero-stk { position: absolute; }
 .hero-cta { display: flex; flex-wrap: wrap; gap: 10px; }
 .hero .tagline { font-size: clamp(26px, 4vw, 40px); }
