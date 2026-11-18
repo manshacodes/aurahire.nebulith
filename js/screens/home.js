@@ -4,7 +4,7 @@
 
 import { go } from "../router.js";
 import { $, $$, esc, sticker, signed, rand } from "../fx.js";
-import { SLANG, JOBS, STICKERS, LANDING_SCORE as LS, LANDING_BOSS as LB } from "../data.js";
+import { SLANG, JOBS, STICKERS, LANDING_SCORE as LS, LANDING_BOSS as LB, LANDING_JOBS } from "../data.js";
 import { stampFor, toneOf } from "../aura-engine.js";
 import { gsap, ScrollTrigger, hasGsap, scrollTo } from "../motion.js";
 import { reducedMotion } from "../fx.js";
@@ -12,12 +12,13 @@ import { playIntro, shouldPlayIntro } from "../intro.js";
 import { extrasHTML, bindExtras, animateExtras } from "./home-extras.js";
 
 const HERO_STICKERS = [
-  ["W", "lime", -14, "lg", 1.8, "8%", "6%"],
+  // [label, colour, tilt, size, parallax speed, top, left]: kept to the right side and corners, away from the text
+  ["W", "lime", -14, "lg", 1.8, "6%", "72%"],
   ["6-7", "lilac", 12, "", 1.3, "14%", "78%"],
   ["100% linkedin-free*", "yellow", -8, "sm", 0.7, "60%", "70%"],
-  ["MOGGED", "pink", 8, "", 2.2, "90%", "6%"],
+  ["MOGGED", "pink", 8, "", 2.2, "86%", "80%"],
   ["7x7=49", "sky", -6, "", 1.5, "36%", "88%"],
-  ["CRASH OUT", "orange", 10, "sm", 0.6, "92%", "64%"],
+  ["CRASH OUT", "orange", 10, "sm", 0.6, "94%", "58%"],
 ];
 
 // Chapter 01 add-ons: they pop in like phone notifications from "AuraHire" (**text** = bold).
@@ -102,7 +103,7 @@ export default function home(root) {
           <p class="sub">swipe right to apply. swipe left to ghost them first.</p>
         </div>
         <div class="flip-stack">
-          ${JOBS.slice(0, 4).reverse().map((j) => `
+          ${LANDING_JOBS.map((id) => JOBS.find((j) => j.id === id)).filter(Boolean).reverse().map((j) => `
             <article class="card flip-card">
               <div class="job-top"><span class="logo-badge" style="background:${j.color}">${j.logo}</span><div><b>${j.company}</b><small>${j.applicants} applicants</small></div></div>
               <h3>${j.title}</h3>

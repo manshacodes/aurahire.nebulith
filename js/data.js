@@ -853,6 +853,9 @@ export const LANDING_SCORE = {
   ],
 };
 
+// Chapter 02 demo: the 4 job cards that flip away (by id from JOBS, top card first)
+export const LANDING_JOBS = ["ohio", "tralalero", "fanum", "grindset"];
+
 // Chapter 03 demo: a fight you scrub through
 export const LANDING_BOSS = {
   sub: "HR talks back. assigns take-homes. ghosts you. your resume brings its own moves. not everyone gets hired.",
