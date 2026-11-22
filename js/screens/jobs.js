@@ -1,7 +1,7 @@
 import { go } from "../router.js";
 import * as S from "../state.js";
-import { $, esc, pick, shuffle, toast } from "../fx.js";
-import { JOBS, GHOST_TOASTS } from "../data.js";
+import { $, esc, pick, shuffle, toast, sticker } from "../fx.js";
+import { JOBS, GHOST_TOASTS, levelOf } from "../data.js";
 import { sfx } from "../sound.js";
 import { earn } from "../aura.js";
 
@@ -37,6 +37,7 @@ export default function jobs(root) {
         <span class="logo-badge" style="background:${j.color}">${j.logo}</span>
         <div><b>${esc(j.company)}</b><small>${j.posted} · ${j.applicants} applicants</small></div>
       </div>
+      <span class="job-level">${sticker(levelOf(j).label, levelOf(j).c, { rot: 6, size: "sm" })}</span>
       <h2>${esc(j.title)}</h2>
       <div class="chips">${j.tags.map((t) => `<span class="chip">${esc(t)}</span>`).join("")}</div>
       <p class="stipend">stipend: ${esc(j.stipend)}</p>
