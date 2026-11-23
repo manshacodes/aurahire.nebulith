@@ -1023,12 +1023,79 @@ export const AURA_EARN = {
   ghosted: [-800, "ghosted. womp womp"],
   judge:   [20, "judged a friend"],
   share:   [25, "posted your aura"],
+  linkedify: [7, "cringe, copied"],
 };
 
 // Profile headline: your branch + grad year from your resume ("CSE-AI '30"), or a joke if it's not there
 export const EDU_TEXT = {
   unknown: "branch: vibes '??",
   noYear: (branch) => `${branch} '??`,
+};
+
+// ---------- LinkedIn-ify my resume ----------
+// Turns your resume into a peak cringe LinkedIn post (js/linkedify.js writes it).
+// **text** becomes 𝐛𝐨𝐥𝐝 unicode, like real LinkedIn posts. Level 1 = humble, 2 = thought leader, 3 = top voice.
+export const LINKEDIFY = {
+  button: "LinkedIn-ify my resume 🚀",
+  buttonFriend: "LinkedIn-ify their resume 🚀",
+  title: "your resume, LinkedIn-ified",
+  levels: ["🙂 humble", "😤 thought leader", "🤡 top voice"],
+  copy: "copy post",
+  reroll: "reroll 🎲",
+  post: "post it",
+  copied: "copied. post it if you're brave.",
+  posted: "we stopped you. you're welcome.",
+  seeMore: "…see more",
+  meta: "2m · edited · 🌐",
+  you: "You and 3 relatives reacted",
+  headline: (tier) => `Aspiring CEO of my own life | ${tier} | Open to work (desperately)`,
+  openers: {
+    1: ["Happy to share a small update 🙏", "Grateful for the journey so far.", "Quick reflection on my journey:"],
+    2: ["Humbled and honoured to share something personal.", "This is your sign to keep going. Here's mine:", "Unpopular opinion: I'm built different. Let me explain."],
+    3: ["I wasn't going to post this, but my therapist said I should.", "I cried in the office today. Here's what it taught me about B2B sales.", "POV: you're the main character and HR is a side quest."],
+  },
+  hooks: ["3 years ago, I couldn't spell \"API\".", "3 years ago, I was rejected by 47 companies.\nToday, I am rejected by 48.", "My parents wanted a doctor.\nThey got a **visionary**."],
+  // what AuraGPT finds in your resume → the line it becomes (first matches win; `m` is the regex match)
+  topics: [
+    { re: /scrap(e|es|er|ing)\b/i, line: () => "Today, I built a **scraper** that reads government websites **for fun**.", tag: "#webscraping" },
+    { re: /(\d[\d,]*)\s*(automated\s+)?(unit\s+)?tests?\b/i, line: (m) => `${m[1]} automated tests.\nZero failures.\nZero friends.`, tag: "#testing" },
+    { re: /robot|arduino|raspberry pi|rover/i, line: () => "I build **robots**. Mostly so I have someone to talk to.", tag: "#robotics",
+      source: (text) => { const y = text.match(/(\d+)\+?\s*years?/i); return y ? `${y[1]} years of robotics` : "Robotics"; },
+      lesson: "Be the robot arm you want to see in the world." },
+    { societies: true, line: (n) => `I'm a core member of ${n} societies.\nI attend 2 of them.\nThe other ${n - 2} are a **mindset**.`, tag: "#leadership" },
+    { re: /(\d+)\s*hackathons?/i, line: (m) => `${m[1]} hackathons. 0 sleep. 1 personality.`, tag: "#hackathon" },
+    { re: /\bhackathons?\b/i, line: () => "I don't do hackathons. Hackathons do **me**.", tag: "#hackathon", source: () => "My last hackathon" },
+    { re: /uncle|dad'?s|cousin|family friend/i, line: () => "Landed my internship through pure **networking**. (my uncle)", tag: "#networking" },
+    { re: /\bintern(ship)?s?\b/i, line: () => "Interned somewhere you've heard of. (unpaid, but the **exposure**)", tag: "#internship" },
+    { re: /([\d,]+)\+?\s*(leetcode\s+)?problems/i, line: (m) => `${m[1]} LeetCode problems.\n0 problems solved in my personal life.`, tag: "#dsa" },
+    { re: /(\d\.\d+)\s*c?gpa|c?gpa\s*[:\-]?\s*(\d\.\d+)/i, line: (m) => { const g = Number(m[1] || m[2]); return `CGPA ${g}. My parents asked where the other ${(10 - g).toFixed(1)} went.`; }, tag: "#academics" },
+    { re: /founder|startup|\bceo\b/i, line: () => "Founder & CEO of a startup.\n(pre-revenue, pre-product, pre-everything)", tag: "#startup" },
+    { re: /(\d{2,})\s*(free\s+)?(\w+\s+)?(certificat\w*|courses?)/i, line: (m) => `${m[1]} certificates. **Lifelong learner.** Short-term memory.`, tag: "#lifelonglearning" },
+    { re: /\b(live|deployed|vercel|production)\b/i, line: () => "Shipped to **production**. On a Friday. At 5:59pm.", tag: "#shipit" },
+    { re: /figma|ui\/?ux|\bdesign/i, line: () => "I don't design interfaces. I design **experiences**. (it's a figma file)", tag: "#design" },
+    { re: /([\d,]+)\+?\s*(linkedin\s+)?followers/i, line: (m) => `${m[1]} followers. Each one a **lesson**.`, tag: "#personalbranding" },
+    { re: /attendance/i, line: () => "Attendance: low. I believe in **async presence**.", tag: "#worklifebalance" },
+    { re: /passionate|hard.?working|team player|motivated/i, line: () => "They call me passionate.\nI call me **the vision**.", tag: "#mindset" },
+    { re: /to.?do app|calculator|weather app/i, line: () => "Built a to-do app. First item: \"change the world\". Done ✅", tag: "#buildinpublic" },
+    { re: /hello world in (\d+)/i, line: (m) => `Said hello world in ${m[1]} languages.\nThe world has not replied.`, tag: "#polyglot" },
+    { re: /full.?stack/i, line: () => "Full-stack developer. Every stack. Full. 🥞", tag: "#fullstack" },
+  ],
+  // used when the resume doesn't give enough to work with
+  generic: ["I don't chase opportunities. Opportunities chase **me**. (they're slow)", "I'm not unemployed. I'm **pre-hired**.", "Every rejection is just a **yes** in a different font."],
+  lessonsIntro: (source, level) => `${source} taught me 3 things about ${level === 3 ? "B2B sales" : "leadership"}:`,
+  lessons: ["Never ask about salary. 🙏", "If HR ghosts you, ghost them first.", "Your network is your net worth. (mine is ₹43)", "Sleep is a subscription. I cancelled it.",
+    "Every L is a W that hasn't loaded yet.", "Be so good they can't ignore you. They will anyway.", "Ship first, sleep never.", "Agree with the senior. Always. Even when he's wrong."],
+  thanks: "Huge thanks to @my uncle @Elon (didn't reply) @God and @the chai guy outside college.",
+  hiring: "I'm hiring!! (I'm not.)",
+  cta: { 1: "", 2: "Agree? 👇", 3: "Agree? 👇\nRepost ♻️ if you also breathe." },
+  hashtags: ["#grateful", "#humbled", "#opentowork", "#aurafarming", "#6767", "#hustle", "#blessed", "#leadership"],
+  reactions: ["6,767", "4,206", "69,420", "4,999"],
+  commentCounts: ["49", "67", "420"],
+  reposts: ["420", "69", "7"],
+  // [who, comment]; HR unc always shows up, then 2 random ones
+  hrComment: ["HR unc", "we'll circle back 🙏"],
+  comments: [["a bot", "Congrats on the new role!! 🎉 (there is no role)"], ["someone", "Can you refer me?"], ["a guy who didn't read it", "Insightful."],
+    ["your senior", "This. 💯"], ["random recruiter", "Interested"], ["your mom", "so proud beta ❤️ (please call)"], ["LinkedIn Top Voice", "Agree. Also, buy my course."]],
 };
 
 // ---------- share my aura + "beat my aura" challenge links ----------

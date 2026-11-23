@@ -3,7 +3,9 @@
 import { go } from "../router.js";
 import * as S from "../state.js";
 import { $, esc, signed, sticker, toast, shake, countUp } from "../fx.js";
-import { JUDGE_TEXT as T, AVATAR_COLORS } from "../data.js";
+import { JUDGE_TEXT as T, AVATAR_COLORS, LINKEDIFY } from "../data.js";
+import { openLinkedify } from "../linkedify.js";
+import { initials } from "../identity.js";
 import { scoreResume, analyzeResume, toneOf, isCrashOut } from "../aura-engine.js";
 import { readResumeFile, autoGrow } from "../resume-file.js";
 import { breakdownHTML, fillBreakdown, rizzText } from "../breakdown.js";
@@ -12,7 +14,7 @@ import { earn } from "../aura.js";
 const fill = (text, vars) => text.replace(/\{(\w+)\}/g, (_, k) => vars[k]);
 
 export default function judge(root) {
-  let result = null, fillTimer = 0;
+  let result = null, fillTimer = 0, closeLinkedify = null;
 
   root.innerHTML = `
     <section>
@@ -95,6 +97,7 @@ export default function judge(root) {
           <li><span>${esc(l.text)}</span><b class="${toneOf(l)}">${signed(l.points)}</b><small>${esc(l.roast)}</small></li>`).join("")}</ul>
       </div>
       <div class="row">
+        <button class="btn btn-ghost" id="linkedify">${esc(LINKEDIFY.buttonFriend)}</button>
         <button class="btn btn-ghost" id="again">${esc(T.again)}</button>
         <button class="btn btn-cta" id="add">${esc(T.add)}</button>
       </div>`;
@@ -104,6 +107,9 @@ export default function judge(root) {
     fillTimer = fillBreakdown(root, 300);
     $("#result", root).scrollIntoView({ behavior: "smooth", block: "start" });
 
+    $("#linkedify", root).addEventListener("click", () => {
+      closeLinkedify = openLinkedify(allLines, { name, avatarHTML: `<span class="av li-av" data-c="pink">${esc(initials(name))}</span>`, headline: LINKEDIFY.headline(tier.name) });
+    });
     $("#again", root).addEventListener("click", () => {
       $("#friendName", root).value = ""; text.value = ""; fitText();
       $("#result", root).innerHTML = "";
@@ -122,5 +128,5 @@ export default function judge(root) {
     go("/people");
   }
 
-  return () => clearTimeout(fillTimer);
+  return () => { clearTimeout(fillTimer); closeLinkedify?.(); };
 }

@@ -570,3 +570,28 @@ textarea[data-lenis-prevent] { overflow-y: auto; resize: none; }
 .job-level-row { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin: 4px 0 14px; font-weight: 700; color: var(--sub); }
 .vs-level { display: block; margin-top: 10px; }
 .vs-level-line { display: block; margin-top: 6px; font-size: 13px; font-weight: 800; opacity: 0.85; }
+
+/* ---------- LinkedIn-ify my resume: the pop-up post card ---------- */
+.li-open { margin-bottom: 10px; }
+.li-sheet { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 16px; background: rgba(10, 10, 12, 0.55); backdrop-filter: blur(6px); animation: msgIn 0.25s both; overflow-y: auto; }
+.li-panel { width: min(520px, 100%); max-height: calc(100dvh - 32px); overflow-y: auto; display: grid; gap: 12px; padding: 16px; border-radius: var(--radius); background: var(--bg); box-shadow: 0 30px 80px rgba(0,0,0,.35); }
+.li-top { display: flex; align-items: center; justify-content: space-between; }
+.li-dial { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 4px; border-radius: 999px; background: var(--surface-2); }
+.li-level { padding: 8px 6px; border: 0; border-radius: 999px; background: transparent; color: var(--ink); font-weight: 800; font-size: 12.5px; cursor: pointer; }
+.li-level[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.li-post { padding: 14px 16px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface-solid); color: var(--ink); font-family: -apple-system, "Segoe UI", Inter, sans-serif; }
+.li-head { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 10px; }
+.li-av { flex: none; width: 46px; height: 46px; font-size: 16px; }
+.li-who { display: grid; line-height: 1.25; font-size: 14px; }
+.li-name span { color: var(--sub); font-weight: 600; }
+.li-who small { color: var(--sub); font-size: 12px; }
+.li-body { font-size: 14.5px; line-height: 1.45; white-space: normal; word-break: break-word; }
+.li-body.is-collapsed { max-height: 8.6em; overflow: hidden; }
+.li-more { display: block; margin: 2px 0 0 auto; padding: 0; border: 0; background: none; color: var(--sub); font-weight: 700; cursor: pointer; }
+.li-reacts { display: flex; justify-content: space-between; gap: 8px; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--sub); }
+.li-you { display: block; margin-top: 4px; font-size: 12px; color: var(--sub); }
+.li-comments { display: grid; gap: 8px; margin: 12px 0 0; padding: 0; list-style: none; }
+.li-comments li { display: grid; gap: 2px; padding: 8px 12px; border-radius: 12px; background: var(--surface-2); font-size: 13px; }
+.li-comments b { font-size: 12.5px; }
+.li-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.li-actions .btn { padding-left: 8px; padding-right: 8px; }

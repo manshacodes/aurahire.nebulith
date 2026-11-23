@@ -139,7 +139,9 @@ Built: `perksFor()` in `aura-engine.js`, `PERK_MOVES` / `PERK_TEXT` in `data.js`
 
 **How to build it:** each signal in `aura-engine.js` (or its roast) maps to a tip id. Tips and examples live in `data.js` (`FIX_TIPS`). Lines with no matching signal get a generic tip ("lead with a verb, end with a number"). Show it as a small expandable panel under the line. No new scoring logic.
 
-### D. LinkedIn-ify my resume
+### D. LinkedIn-ify my resume — ✅ DONE
+
+Built in `js/linkedify.js` with all copy in `LINKEDIFY` (data.js). The owner asked for it to be much funnier than the first sketch, so it got 3 cringe levels, every LinkedIn trope, fake reactions and a fake comments section. It's on the score page and roast-a-friend. The original sketch is kept below.
 
 **What it is:** a button that turns your resume lines into peak cringe LinkedIn speak, with a copy button.
 - "Built an exam notice scraper" → "Humbled to share that I single-handedly disrupted the exam notification space 🚀 #grateful"

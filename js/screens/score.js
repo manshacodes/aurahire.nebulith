@@ -1,7 +1,9 @@
 import { go } from "../router.js";
 import * as S from "../state.js";
 import { $, esc, signed, countUp, confetti, toast, sticker } from "../fx.js";
-import { SHARE_TEXT, PERK_MOVES, PERK_TEXT } from "../data.js";
+import { SHARE_TEXT, PERK_MOVES, PERK_TEXT, LINKEDIFY } from "../data.js";
+import { openLinkedify } from "../linkedify.js";
+import { avatarHTML } from "../identity.js";
 import { shareAura } from "../share-card.js";
 import { earn } from "../aura.js";
 import { tierFor, analyzeResume, isW, isCrashOut, perksFor } from "../aura-engine.js";
@@ -77,6 +79,7 @@ export default function score(root) {
 
       </div></div>
       <button class="btn share-btn" id="share">${esc(SHARE_TEXT.button)} ↗</button>
+      <button class="btn btn-ghost btn-block li-open" id="linkedify">${esc(LINKEDIFY.button)}</button>
       <div class="row">
         <button class="btn btn-ghost" id="flex">copy my flex</button>
         <button class="btn btn-cta" id="next">pick my vibe →</button>
@@ -109,9 +112,17 @@ export default function score(root) {
     if (alive) { btn.disabled = false; btn.textContent = label; }
   };
   $("#share", root).addEventListener("click", (e) => share(e.currentTarget));
+
+  // LinkedIn-ify my resume: a cringe post written from the whole resume
+  let closeLinkedify = null;
+  $("#linkedify", root).addEventListener("click", () => {
+    closeLinkedify = openLinkedify(allLines?.length ? allLines : lines,
+      { name, avatarHTML: avatarHTML(S.get(), "li-av"), headline: LINKEDIFY.headline(tier.name) });
+  });
   $("#shareBack", root)?.addEventListener("click", (e) => share(e.currentTarget));
 
   return () => {
+    closeLinkedify?.();
     alive = false; clearTimeout(fillTimer);
     if (challenge) S.set({ challenge: null });   // the head-to-head shows once, for this result
   };

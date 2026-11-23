@@ -160,6 +160,7 @@ const BIG_SOCIETY = /tedx|microsoft|google|gdsc|gdg|\bacm\b|ieee|mlsa|e-?cell|en
 const DID_THERE = /^(built|building|designed|designing|developed|developing|made|making|created|creating|wrote|ran|organi[sz]ed|launched|shipped|led|managed|handled)\b/i;
 // posts, decks and posters count as a small contribution, not as building something
 const SMALL_STUFF = /instagram|posts?\b|carousel|poster|deck|banner|reel|story|stories|social media|caption/i;
+export const societyCount = (lines) => lines.filter((l) => ORG_LINE.test(l.text)).length;   // also used by linkedify.js
 const SOCIETY_KEEP = 4;   // your best 4 societies count in full; 5+ and the rest get taxed
 
 // did: "big" (built something real there), "small" (a few posts or a deck), or "" (nothing listed)
