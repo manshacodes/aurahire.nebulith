@@ -727,7 +727,7 @@ export const MOCK_PROFILES = [
   {
     id: "kabir", name: "kabir.exe", color: "#C8FF2E", ink: "#10200A", aura: 2140,
     headline: "hackathon tourist | 14 participation certs | ex-intern at a startup that pivoted 6 times",
-    stickers: [["HACKATHON TOURIST", "lime"], ["CERTIFIED YAPPER", "pink"], ["3AM DEBUGGER", "black"], ["NO THANKS I USE AI", "yellow"], ["DELULU BUT DEDICATED", "lilac"]],
+    stickers: [["HACKATHON TOURIST", "lime"], ["img:crying"], ["CERTIFIED YAPPER", "pink"], ["NO THANKS I USE AI", "yellow"], ["img:yippee"]],
     stats: [["certificates", "14"], ["hackathons won", "0"], ["energy drinks", "∞"]],
     endorsed: "endorsed for \"fixing the projector\" by 12 people",
     post: "humbled and honoured to share that i participated in my 14th hackathon 🙏\n\nwe did not win. we did not finish. the wifi did not work.\n\nbut the real prize was the free t-shirt we made along the way.\n\n#grateful #hackathon #nosleep",
@@ -742,7 +742,7 @@ export const MOCK_PROFILES = [
   {
     id: "tanvi", name: "tanvi | core ×6", color: "#CDBEFF", ink: "#1E1340", aura: 3780,
     headline: "president of 3 clubs | vp of 2 | core member of the 6th | networking is my love language",
-    stickers: [["MAIN CHARACTER", "lilac"], ["LINKEDIN LUNATIC", "pink"], ["GROUP PROJECT CARRIER", "yellow"], ["7x7=49 ENERGY", "lime"], ["CRASHES OUT POLITELY", "orange"]],
+    stickers: [["MAIN CHARACTER", "lilac"], ["img:slay"], ["LINKEDIN LUNATIC", "pink"], ["GROUP PROJECT CARRIER", "yellow"], ["img:crashout"]],
     stats: [["clubs", "6"], ["meetings / week", "23"], ["sleep", "4h"]],
     endorsed: "endorsed for \"making a google form for everything\" by 67 people",
     post: "what being core member of 6 societies taught me about leadership 🧵\n\n1. calendars are a social construct\n2. every meeting could have been a whatsapp poll\n3. i have not attended a class since august\n\nagree?",
@@ -757,7 +757,7 @@ export const MOCK_PROFILES = [
   {
     id: "rohan", name: "rohan (day 412)", color: "#FF8A3D", ink: "#2A1200", aura: 940,
     headline: "day 412 of learning dsa | 5am club | building in public (nobody asked)",
-    stickers: [["AURA FARMER", "black"], ["UNC AT 19", "grey"], ["CHAI > COFFEE", "orange"], ["TOUCHES GRASS (RARELY)", "grey"], ["RIZZ IN EXCEL", "sky"]],
+    stickers: [["AURA FARMER", "black"], ["img:chillin"], ["UNC AT 19", "grey"], ["RIZZ IN EXCEL", "sky"], ["img:zen"]],
     stats: [["streak", "412d"], ["problems solved", "9"], ["cold plunges", "87"]],
     endorsed: "endorsed for \"waking up early\" by 5 people (all at 5am)",
     post: "day 412 of learning dsa.\n\ntoday i solved two sum.\nagain.\n\nconsistency > talent. see you tomorrow at 5am.\n\n#100daysofcode (it has been 412)",
@@ -772,7 +772,7 @@ export const MOCK_PROFILES = [
   {
     id: "meher", name: "meher.ai", color: "#8FD3FF", ink: "#062A44", aura: 3150,
     headline: "prompt engineer | ai thought leader since tuesday | building agi in my hostel room",
-    stickers: [["NO THANKS I USE AI", "yellow"], ["MAIN CHARACTER", "lilac"], ["CERTIFIED YAPPER", "pink"], ["DELULU BUT DEDICATED", "lilac"], ["3AM DEBUGGER", "black"]],
+    stickers: [["NO THANKS I USE AI", "yellow"], ["img:lockin"], ["CERTIFIED YAPPER", "pink"], ["img:erm"], ["3AM DEBUGGER", "black"]],
     stats: [["prompts written", "9,001"], ["models trained", "0"], ["ai newsletters", "4"]],
     endorsed: "endorsed for \"knowing what an llm is\" by 31 people",
     post: "ai won't replace you.\n\na person using ai will.\n\nthat person is me. i am replacing you.\n\nfollow for more ai insights (copied from twitter)",
@@ -787,7 +787,7 @@ export const MOCK_PROFILES = [
   {
     id: "arjun", name: "arjun (gym era)", color: "#FFE45C", ink: "#2A2100", aura: 2560,
     headline: "cse student by day, gym sigma by night | mogging since 2024 | 7x7=49 certified",
-    stickers: [["7x7=49 ENERGY", "lime"], ["AURA FARMER", "black"], ["MAIN CHARACTER", "lilac"], ["NAVY BLUE TYPA VIBE", "sky"], ["TOUCHES GRASS (RARELY)", "grey"]],
+    stickers: [["7x7=49 ENERGY", "lime"], ["img:stare"], ["AURA FARMER", "black"], ["NAVY BLUE TYPA VIBE", "sky"], ["img:gn"]],
     stats: [["bench", "60kg"], ["mirror selfies", "412"], ["commits", "3"]],
     endorsed: "endorsed for \"carrying the group project (the laptop bag)\" by 9 people",
     post: "lessons from the gym that apply to coding:\n\n1. never skip leg day\n2. never skip leg day\n3. i haven't opened vs code in a month\n\nconsistency.",

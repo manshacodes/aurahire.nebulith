@@ -4,7 +4,8 @@
 import { go } from "../router.js";
 import * as S from "../state.js";
 import { $, esc, pick, rand, signed, sticker, toast, sleep } from "../fx.js";
-import { MOCK_PROFILES, STICKERS, MOG_VERDICTS, CONNECT_TOASTS, CAP_FAX, DISSES, DISS_REPLIES } from "../data.js";
+import { MOCK_PROFILES, STICKERS, MOG_VERDICTS, CONNECT_TOASTS, CAP_FAX, DISSES, DISS_REPLIES, MEMES } from "../data.js";
+import { memeImg, isMemePick, memeIdOf } from "../memes.js";
 import { tierFor } from "../aura-engine.js";
 import { initials, avatarHTML } from "../identity.js";
 import { earn } from "../aura.js";
@@ -80,7 +81,10 @@ export default function person(root, { id }) {
       </div><div class="split-side">
       <div class="card">
         <p class="label" style="margin-bottom:12px">their 5 stickers</p>
-        <div class="chips" style="gap:14px 10px">${p.stickers.map(([l, c], k) => sticker(l, c, { rot: k % 2 ? 3 : -3, size: "sm" })).join("")}</div>
+        <div class="chips" style="gap:14px 10px;align-items:center">${p.stickers.map(([l, c], k) => (isMemePick(l)
+          // picture stickers ("img:<meme id>") look the same as on your own profile
+          ? `<span class="meme-chip">${memeImg(memeIdOf(l), "meme-pick", k % 2 ? 4 : -4)}<small>${esc(MEMES[memeIdOf(l)]?.label || "")}</small></span>`
+          : sticker(l, c, { rot: k % 2 ? 3 : -3, size: "sm" }))).join("")}</div>
         <div class="stats" style="margin-top:16px">
           ${p.stats.map(([label, value]) => `<div class="stat"><small>${esc(label)}</small><b>${esc(value)}</b></div>`).join("")}
         </div>
