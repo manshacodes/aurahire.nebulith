@@ -313,11 +313,67 @@ export const JOBS = [
     boss: "cappuccino assassino (HR, ninja division)", attacks: [{ name: "SILENT ESPRESSO", text: "you didn't even see the rejection coming.", min: 13, max: 19 }],
     taunts: ["you'll never see the offer. or me.", "decaf energy detected."],
   },
+  // ---- the rest of the brainrot multiverse ----
+  {
+    id: "sixseven", level: "mid", title: "six seven data analyst", company: "Six Seven Statistics", logo: "67", color: "#7C3AED",
+    posted: "6-7 days ago", applicants: "67", vibe: 67,
+    tags: ["every answer is 6 or 7", "hand gestures required", "excel but only 2 columns"],
+    stipend: "₹6,700 (or ₹7,600, depends)",
+    reqs: ["round every number to 6 or 7", "do the hand thing in client calls", "explain 6-7 to HR without laughing", "present 67 slides, all titled \"6-7\""],
+    boss: "the 6-7 kid (head of numbers)", attacks: [{ name: "SIX SEVEN", text: "6… 7… your brain is buffering.", min: 11, max: 17 }],
+    taunts: ["6-7. that's your chance of getting hired.", "on a scale of 6 to 7, you're a 5."],
+  },
+  {
+    id: "delulu", level: "chill", title: "chief delulu officer", company: "Delulu Ventures", logo: "DV", color: "#F472B6",
+    posted: "manifested yesterday", applicants: "∞ (in their heads)", vibe: 82,
+    tags: ["vision boards only", "results: pending", "the universe will provide"],
+    stipend: "good vibes and a crystal (manifest the rest)",
+    reqs: ["believe you already got the offer", "write a 10-year plan on a sticky note", "say \"delulu is the solulu\" in every meeting", "never check the numbers"],
+    boss: "the manifestation coach (HR)", attacks: [{ name: "DELULU IS THE SOLULU", text: "you believed it. it hurt anyway.", min: 9, max: 15 }],
+    taunts: ["i manifested your rejection.", "the universe said no, bestie."],
+  },
+  {
+    id: "crashout", level: "sweaty", title: "crash out coordinator", company: "Crash Out Co.", logo: "CO", color: "#EA580C",
+    posted: "mid crash out", applicants: "12 (all crashing out)", vibe: 29,
+    tags: ["high stress, by design", "yelling is a KPI", "scream room provided"],
+    stipend: "therapy (one session, group, 47 people)",
+    reqs: ["crash out on schedule, never early", "calm down 3 other crash outs per day", "write incident reports in all caps", "have zero chill, professionally"],
+    boss: "the crash out supervisor", attacks: [{ name: "PUBLIC CRASH OUT", text: "he crashed out on you. in front of everyone.", min: 13, max: 19 }],
+    taunts: ["i'm about to crash out on your resume.", "this interview is my 4th crash out today."],
+  },
+  {
+    id: "npc", level: "chill", title: "NPC streamer (full time)", company: "NPC Live", logo: "NP", color: "#22D3EE",
+    posted: "respawned 5m ago", applicants: "1,000 identical guys", vibe: 71,
+    tags: ["same 3 lines, forever", "standing still is the job", "tips in gifts only"],
+    stipend: "gifts from strangers (non-cash, mostly roses)",
+    reqs: ["say the same 3 lines for 8 hours", "react to gifts on cue", "never break character, even at lunch", "have the dialogue range of a vending machine"],
+    boss: "the NPC (respawns every 5 min)", attacks: [{ name: "DIALOGUE LOOP", text: "he said the same line 47 times. you felt all of them.", min: 9, max: 15 }],
+    taunts: ["hello traveller. no.", "i have 3 lines and you're not in any of them."],
+  },
+  {
+    id: "bedsheet", level: "mid", title: "bedsheet consultant (navy blue)", company: "7x7=49 Interiors", logo: "49", color: "#1E3A8A",
+    posted: "7x7 hours ago", applicants: "49", vibe: 49,
+    tags: ["navy blue only", "red flag detection", "7x7=49 dress code"],
+    stipend: "a navy blue bedsheet (used)",
+    reqs: ["spot a navy blue bedsheet from 49 metres", "explain why it's a red flag, with slides", "know your times tables, at least 7x7", "be 7x7=49 at all times"],
+    boss: "the bedsheet inspector", attacks: [{ name: "NAVY BLUE CHECK", text: "she saw your bedsheets in the zoom background.", min: 11, max: 17 }],
+    taunts: ["your bedsheets are navy blue. it's over.", "7x7=49 and you're still not hired."],
+  },
+  {
+    id: "lockin", level: "sweaty", title: "lock in specialist", company: "Lock In Labs", logo: "LI", color: "#0F172A",
+    posted: "do not disturb", applicants: "0 (they're all locked in)", vibe: 34,
+    tags: ["no phones, ever", "headphones on, soul off", "6am lock in sessions"],
+    stipend: "a timer app and a stare",
+    reqs: ["lock in for 12 hours straight", "ignore every notification, including payroll", "make eye contact with nobody", "drink water on a schedule"],
+    boss: "the locked-in monk (HR)", attacks: [{ name: "DO NOT DISTURB", text: "you were muted. permanently.", min: 13, max: 19 }],
+    taunts: ["i'm locked in. you're locked out.", "you blinked. that's a no."],
+  },
 ];
 
 // How tough each job's HR is. Every job has a `level`; the boss fight uses its hp and how hard HR hits
 // (a multiplier on the attack numbers above). Tuned with a simulation: a normal player wins about
 // 61% / 44% / 33% / 24%, and about 44% across the original 12 jobs.
+// (24 jobs now: the originals, 6 italian brainrot ones, and 6 from the rest of the brainrot multiverse.)
 export const HR_LEVELS = {
   chill: { label: "🌶️ chill HR", c: "lime", hp: 115, atk: 1.35, intro: "chill HR. don't fumble this." },
   mid: { label: "🌶️🌶️ mid HR", c: "yellow", hp: 130, atk: 1.42, intro: "mid HR. it's giving 3 rounds." },
