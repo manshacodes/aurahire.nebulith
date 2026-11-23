@@ -324,15 +324,6 @@ export const JOBS = [
     taunts: ["6-7. that's your chance of getting hired.", "on a scale of 6 to 7, you're a 5."],
   },
   {
-    id: "delulu", level: "chill", title: "chief delulu officer", company: "Delulu Ventures", logo: "DV", color: "#F472B6",
-    posted: "manifested yesterday", applicants: "∞ (in their heads)", vibe: 82,
-    tags: ["vision boards only", "results: pending", "the universe will provide"],
-    stipend: "good vibes and a crystal (manifest the rest)",
-    reqs: ["believe you already got the offer", "write a 10-year plan on a sticky note", "say \"delulu is the solulu\" in every meeting", "never check the numbers"],
-    boss: "the manifestation coach (HR)", attacks: [{ name: "DELULU IS THE SOLULU", text: "you believed it. it hurt anyway.", min: 9, max: 15 }],
-    taunts: ["i manifested your rejection.", "the universe said no, bestie."],
-  },
-  {
     id: "crashout", level: "sweaty", title: "crash out coordinator", company: "Crash Out Co.", logo: "CO", color: "#EA580C",
     posted: "mid crash out", applicants: "12 (all crashing out)", vibe: 29,
     tags: ["high stress, by design", "yelling is a KPI", "scream room provided"],
@@ -351,15 +342,6 @@ export const JOBS = [
     taunts: ["hello traveller. no.", "i have 3 lines and you're not in any of them."],
   },
   {
-    id: "bedsheet", level: "mid", title: "bedsheet consultant (navy blue)", company: "7x7=49 Interiors", logo: "49", color: "#1E3A8A",
-    posted: "7x7 hours ago", applicants: "49", vibe: 49,
-    tags: ["navy blue only", "red flag detection", "7x7=49 dress code"],
-    stipend: "a navy blue bedsheet (used)",
-    reqs: ["spot a navy blue bedsheet from 49 metres", "explain why it's a red flag, with slides", "know your times tables, at least 7x7", "be 7x7=49 at all times"],
-    boss: "the bedsheet inspector", attacks: [{ name: "NAVY BLUE CHECK", text: "she saw your bedsheets in the zoom background.", min: 11, max: 17 }],
-    taunts: ["your bedsheets are navy blue. it's over.", "7x7=49 and you're still not hired."],
-  },
-  {
     id: "lockin", level: "sweaty", title: "lock in specialist", company: "Lock In Labs", logo: "LI", color: "#0F172A",
     posted: "do not disturb", applicants: "0 (they're all locked in)", vibe: 34,
     tags: ["no phones, ever", "headphones on, soul off", "6am lock in sessions"],
@@ -368,12 +350,21 @@ export const JOBS = [
     boss: "the locked-in monk (HR)", attacks: [{ name: "DO NOT DISTURB", text: "you were muted. permanently.", min: 13, max: 19 }],
     taunts: ["i'm locked in. you're locked out.", "you blinked. that's a no."],
   },
+  {
+    id: "reels", level: "chill", title: "professional AI reel watcher", company: "Fruit Love Island Productions", logo: "FL", color: "#FB7185",
+    posted: "4am, still scrolling", applicants: "2.3M (all on their phones)", vibe: 90,
+    tags: ["8 hrs screen time minimum", "fruit drama expert", "thumb cardio"],
+    stipend: "unlimited reels, zero salary",
+    reqs: ["watch 1,000 AI reels a day without blinking", "know who the banana is coupled up with on fruit love island", "rate AI slop from 1 to \"whyyy\"", "never touch grass (it's not in the algorithm)"],
+    boss: "the algorithm (head of HR)", attacks: [{ name: "INFINITE SCROLL", text: "you watched 400 reels. it's 4am. you lost 14 hp and your will.", min: 9, max: 15 }],
+    taunts: ["you've been scrolling for 6 hours. that was the interview.", "the algorithm already knows you're not hired."],
+  },
 ];
 
 // How tough each job's HR is. Every job has a `level`; the boss fight uses its hp and how hard HR hits
 // (a multiplier on the attack numbers above). Tuned with a simulation: a normal player wins about
 // 61% / 44% / 33% / 24%, and about 44% across the original 12 jobs.
-// (24 jobs now: the originals, 6 italian brainrot ones, and 6 from the rest of the brainrot multiverse.)
+// (23 jobs now: the originals, 6 italian brainrot ones, and 5 from the rest of the brainrot multiverse.)
 export const HR_LEVELS = {
   chill: { label: "🌶️ chill HR", c: "lime", hp: 115, atk: 1.35, intro: "chill HR. don't fumble this." },
   mid: { label: "🌶️🌶️ mid HR", c: "yellow", hp: 130, atk: 1.42, intro: "mid HR. it's giving 3 rounds." },
