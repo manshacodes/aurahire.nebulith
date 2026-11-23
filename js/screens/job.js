@@ -1,7 +1,7 @@
 import { go } from "../router.js";
-import { $, esc, rand } from "../fx.js";
+import { $, esc, rand, sticker } from "../fx.js";
 import { mountHold } from "../hold.js";
-import { JOBS } from "../data.js";
+import { JOBS, levelOf } from "../data.js";
 
 // The Apply button runs from your cursor (or your taps), then gives up
 // and turns into a "hold to apply" ring, because commitment is hard.
@@ -18,6 +18,7 @@ export default function job(root, { id }) {
       <a href="#/jobs" class="back">← back to the grind</a>
       <div class="banner" style="background:${j.color}">${esc(j.company)}<small>${j.posted} · ${j.applicants} applicants · remote (office 6 days a week)</small></div>
       <h1 class="h1" data-scramble>${esc(j.title)}</h1>
+      <p class="job-level-row">${sticker(levelOf(j).label, levelOf(j).c, { rot: -3, size: "sm" })} <span>${esc(levelOf(j).intro)}</span></p>
       <div class="split"><div class="split-main">
       <div class="card">
         <p class="label" style="margin-bottom:12px">requirements</p>

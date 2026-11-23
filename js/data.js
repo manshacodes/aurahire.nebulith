@@ -151,7 +151,7 @@ export const PERSONALITY = [
 
 export const JOBS = [
   {
-    id: "ohio", title: "cracked intern", company: "Ohio Ventures", logo: "OV", color: "#FF5FC1",
+    id: "ohio", level: "mid", title: "cracked intern", company: "Ohio Ventures", logo: "OV", color: "#FF5FC1",
     posted: "2m ago", applicants: "4,000", vibe: 87,
     tags: ["zero yapping", "9am standups", "unpaid", "\"fast-paced\""],
     stipend: "exposure + 1 company hoodie (size S only)",
@@ -160,7 +160,7 @@ export const JOBS = [
     taunts: ["we'll circle back… in 2029.", "back in my day we applied by fax.", "beta, what's your cgpa?"],
   },
   {
-    id: "thursday", title: "senior vibe engineer", company: "Thursday Labs", logo: "TL", color: "#1E3A8A",
+    id: "thursday", level: "mid", title: "senior vibe engineer", company: "Thursday Labs", logo: "TL", color: "#1E3A8A",
     posted: "1h ago", applicants: "49", vibe: 77,
     tags: ["7x7=49 energy", "navy blue typa vibe", "hybrid"],
     stipend: "₹49,000 (7x7, obviously)",
@@ -169,7 +169,7 @@ export const JOBS = [
     taunts: ["your vibe is giving 'pending verification'.", "aura audit in progress. it's not looking good."],
   },
   {
-    id: "synergy", title: "junior dev (entry level)", company: "Synergy Inc", logo: "SI", color: "#0EA5E9",
+    id: "synergy", level: "mid", title: "junior dev (entry level)", company: "Synergy Inc", logo: "SI", color: "#0EA5E9",
     posted: "3d ago", applicants: "11,204", vibe: 41,
     tags: ["entry level", "7 yrs exp", "\"family\""],
     stipend: "market standard (the market is closed)",
@@ -178,7 +178,7 @@ export const JOBS = [
     taunts: ["can i speak to your previous employer?", "explain the gap. the two-week gap. in 2019."],
   },
   {
-    id: "grindset", title: "chief vibe officer", company: "GrindsetHQ", logo: "GH", color: "#111111",
+    id: "grindset", level: "sweaty", title: "chief vibe officer", company: "GrindsetHQ", logo: "GH", color: "#111111",
     posted: "5h ago", applicants: "777", vibe: 69,
     tags: ["5am club", "cold plunge", "podcast"],
     stipend: "equity in a podcast with 12 listeners",
@@ -187,7 +187,7 @@ export const JOBS = [
     taunts: ["we're like a family. a family that doesn't pay.", "i wake up at 4am. what do you do?", "subscribe to my podcast before answering."],
   },
   {
-    id: "rizzosoft", title: "sigma software engineer", company: "Rizzosoft", logo: "RZ", color: "#16A34A",
+    id: "rizzosoft", level: "sweaty", title: "sigma software engineer", company: "Rizzosoft", logo: "RZ", color: "#16A34A",
     posted: "12m ago", applicants: "6,767", vibe: 93,
     tags: ["no meetings", "no yapping", "only grinding"],
     stipend: "1 pizza per sprint",
@@ -196,7 +196,7 @@ export const JOBS = [
     taunts: ["quick call? 2 hours. cameras on.", "can you hop on a quick call real quick?"],
   },
   {
-    id: "tralalero", title: "italian brainrot intern", company: "Tralalero Tralala Pvt Ltd", logo: "TT", color: "#38BDF8",
+    id: "tralalero", level: "mid", title: "italian brainrot intern", company: "Tralalero Tralala Pvt Ltd", logo: "TT", color: "#38BDF8",
     posted: "6m ago", applicants: "3 (all sharks)", vibe: 88,
     tags: ["3 legs preferred", "nike drip mandatory", "remote (ocean)"],
     stipend: "one (1) cappuccino. ballerina not included",
@@ -205,7 +205,7 @@ export const JOBS = [
     taunts: ["tralalero tralala, you're not hired.", "cappuccina doesn't do second rounds."],
   },
   {
-    id: "clanker", title: "AI prompt engineer (human)", company: "Clanker Corp", logo: "CC", color: "#64748B",
+    id: "clanker", level: "sweaty", title: "AI prompt engineer (human)", company: "Clanker Corp", logo: "CC", color: "#64748B",
     posted: "0.3s ago", applicants: "1 human, 9,000 bots", vibe: 52,
     tags: ["train your replacement", "replaced in 3 months", "\"human in the loop\""],
     stipend: "paid in API credits that expire tomorrow",
@@ -214,7 +214,7 @@ export const JOBS = [
     taunts: ["beep. culture fit score: 0.2.", "rephrasing your answer to sound smarter… failed."],
   },
   {
-    id: "fanum", title: "junior fanum tax officer", company: "Fanum Foods", logo: "FF", color: "#F59E0B",
+    id: "fanum", level: "mid", title: "junior fanum tax officer", company: "Fanum Foods", logo: "FF", color: "#F59E0B",
     posted: "lunch time", applicants: "2,404", vibe: 71,
     tags: ["your lunch is our lunch", "free snacks (yours)", "canteen-first"],
     stipend: "40% of your tiffin, taxed weekly",
@@ -223,7 +223,7 @@ export const JOBS = [
     taunts: ["that's a fanum tax on your stipend.", "i took a bite of your offer letter."],
   },
   {
-    id: "skibidi", title: "skibidi SDE-1", company: "Skibidi Solutions", logo: "SS", color: "#A855F7",
+    id: "skibidi", level: "boss", title: "skibidi SDE-1", company: "Skibidi Solutions", logo: "SS", color: "#A855F7",
     posted: "dop dop ago", applicants: "6,969", vibe: 66,
     tags: ["ohio office", "skibidi standups", "goofy ahh codebase"],
     stipend: "lifetime supply of fidget spinners",
@@ -232,7 +232,7 @@ export const JOBS = [
     taunts: ["this interview is in ohio. you're cooked.", "dop dop yes yes. no."],
   },
   {
-    id: "ragebait", title: "engagement farmer", company: "Ragebait Media", logo: "RB", color: "#EF4444",
+    id: "ragebait", level: "chill", title: "engagement farmer", company: "Ragebait Media", logo: "RB", color: "#EF4444",
     posted: "trending", applicants: "\"source?\"", vibe: 58,
     tags: ["post 6-7 times a day", "ratio or be ratioed", "comment section warrior"],
     stipend: "₹0.02 per angry comment",
@@ -241,7 +241,7 @@ export const JOBS = [
     taunts: ["chat, is this real?", "chat says you're mid. chat is never wrong."],
   },
   {
-    id: "mewing", title: "looksmaxxing analyst", company: "Mewing Ventures", logo: "MV", color: "#0EA5A4",
+    id: "mewing", level: "chill", title: "looksmaxxing analyst", company: "Mewing Ventures", logo: "MV", color: "#0EA5A4",
     posted: "mid-mew", applicants: "777", vibe: 74,
     tags: ["mewing streak required", "camera on 24/7", "jawline-first culture"],
     stipend: "₹0 + a gua sha",
@@ -250,7 +250,7 @@ export const JOBS = [
     taunts: ["mewing check. you failed.", "your side profile is giving 'entry level'."],
   },
   {
-    id: "washed", title: "growth hacker (washed)", company: "Washed Capital", logo: "WC", color: "#78716C",
+    id: "washed", level: "chill", title: "growth hacker (washed)", company: "Washed Capital", logo: "WC", color: "#78716C",
     posted: "2019", applicants: "4 uncs", vibe: 39,
     tags: ["unc status required", "\"we're like a startup\"", "peaked already"],
     stipend: "equity in a company valued at ₹6.7",
@@ -258,7 +258,120 @@ export const JOBS = [
     boss: "the washed VP", attacks: [{ name: "BACK IN MY DAY", text: "a 40-minute story about jQuery.", min: 12, max: 18 }],
     taunts: ["back in my day we had jQuery and we were happy.", "i invented synergy. in 2009."],
   },
+  // ---- italian brainrot cinematic universe ----
+  {
+    id: "tungtung", level: "sweaty", title: "night shift sahur intern", company: "Tung Tung Tung Sahur Systems", logo: "T3", color: "#8B5A2B",
+    posted: "3:00am", applicants: "3 (it's always 3)", vibe: 33,
+    tags: ["3am standups", "bring your own bat", "knocks: mandatory"],
+    stipend: "one (1) sahur meal. you cook it",
+    reqs: ["wake up the whole floor at 3am, three times", "carry a wooden bat to every meeting", "say \"tung\" with conviction", "never miss sahur (or a deadline)"],
+    boss: "tung tung tung sahur (night shift HR)", attacks: [{ name: "TUNG TUNG TUNG", text: "he knocked. three times. at 3am.", min: 13, max: 19 }],
+    taunts: ["tung. tung. tung. you're late.", "i was knocking since 3am, twin."],
+  },
+  {
+    id: "crocodilo", level: "sweaty", title: "aerial operations intern", company: "Bombardiro Crocodilo Airways", logo: "BC", color: "#4D7C0F",
+    posted: "dropped from the sky", applicants: "1 crocodile", vibe: 41,
+    tags: ["fully airborne", "must love explosions", "no window seats"],
+    stipend: "frequent flyer miles (non-transferable, non-real)",
+    reqs: ["fly over the office yelling your name", "drop deliverables from 30,000 ft", "be a crocodile, or crocodile-adjacent", "explain the lore to legal"],
+    boss: "bombardiro crocodilo (VP of airstrikes)", attacks: [{ name: "CARPET BOMB YOUR CV", text: "your resume was in the blast radius.", min: 14, max: 20 }],
+    taunts: ["incoming. it's your rejection.", "i don't do interviews. i do flyovers."],
+  },
+  {
+    id: "patapim", level: "chill", title: "forest vibes associate", company: "Brr Brr Patapim Woodworks", logo: "BP", color: "#15803D",
+    posted: "since the dawn of time", applicants: "2 trees and a guy", vibe: 77,
+    tags: ["touch grass (literally)", "hat provided", "big feet friendly"],
+    stipend: "unlimited leaves (the plant kind)",
+    reqs: ["stand still in a forest for 8 hours", "have a nose longer than your resume", "say \"brr brr\" in meetings", "zero yapping, all rooting"],
+    boss: "brr brr patapim (head of roots)", attacks: [{ name: "BRR BRR", text: "he just stood there. with the feet. menacingly.", min: 9, max: 15 }],
+    taunts: ["brr brr. that's a no.", "i've been standing here since 1600. you can wait."],
+  },
+  {
+    id: "chimpanzini", level: "mid", title: "banana growth hacker", company: "Chimpanzini Bananini Labs", logo: "CB", color: "#FACC15",
+    posted: "ripe, today only", applicants: "47 monkeys", vibe: 64,
+    tags: ["banana-first culture", "climb the ladder (literally)", "peel-based OKRs"],
+    stipend: "1 banana per sprint (unpeeled)",
+    reqs: ["turn 1 banana into a 10x growth story", "be a chimp inside a banana, or vice versa", "slip on zero peels during demos", "pitch bananini to investors"],
+    boss: "chimpanzini bananini (chief banana officer)", attacks: [{ name: "PEEL OF DOOM", text: "you slipped. in the interview. on camera.", min: 11, max: 17 }],
+    taunts: ["bananini says no.", "you're not ripe for this role."],
+  },
+  {
+    id: "lirili", level: "mid", title: "time management analyst", company: "Lirili Larila Clocks", logo: "LL", color: "#A3E635",
+    posted: "tick tock", applicants: "1 elephant cactus", vibe: 58,
+    tags: ["clock-in is a lifestyle", "sandals only", "desert office"],
+    stipend: "a cactus. water it yourself",
+    reqs: ["control time, or at least your calendar", "walk the desert in sandals", "be part elephant, part cactus", "never ask what time it is"],
+    boss: "lirili larila (head of time)", attacks: [{ name: "SANDAL STOMP", text: "time stopped. your interview didn't.", min: 11, max: 17 }],
+    taunts: ["lirili larila, time's up.", "i paused time just to reject you slower."],
+  },
+  {
+    id: "assassino", level: "sweaty", title: "espresso operations analyst", company: "Cappuccino Assassino Co.", logo: "CA", color: "#78350F",
+    posted: "silently", applicants: "0 (they vanished)", vibe: 36,
+    tags: ["ninja dress code", "decaf is a fireable offence", "night shifts"],
+    stipend: "one shot of espresso (you won't see it coming)",
+    reqs: ["move silently through the office", "brew a cappuccino in 0.3 seconds", "never miss a target (or a sprint)", "say nothing in standups. just appear."],
+    boss: "cappuccino assassino (HR, ninja division)", attacks: [{ name: "SILENT ESPRESSO", text: "you didn't even see the rejection coming.", min: 13, max: 19 }],
+    taunts: ["you'll never see the offer. or me.", "decaf energy detected."],
+  },
+  // ---- the rest of the brainrot multiverse ----
+  {
+    id: "sixseven", level: "mid", title: "six seven data analyst", company: "Six Seven Statistics", logo: "67", color: "#7C3AED",
+    posted: "6-7 days ago", applicants: "67", vibe: 67,
+    tags: ["every answer is 6 or 7", "hand gestures required", "excel but only 2 columns"],
+    stipend: "₹6,700 (or ₹7,600, depends)",
+    reqs: ["round every number to 6 or 7", "do the hand thing in client calls", "explain 6-7 to HR without laughing", "present 67 slides, all titled \"6-7\""],
+    boss: "the 6-7 kid (head of numbers)", attacks: [{ name: "SIX SEVEN", text: "6… 7… your brain is buffering.", min: 11, max: 17 }],
+    taunts: ["6-7. that's your chance of getting hired.", "on a scale of 6 to 7, you're a 5."],
+  },
+  {
+    id: "crashout", level: "sweaty", title: "crash out coordinator", company: "Crash Out Co.", logo: "CO", color: "#EA580C",
+    posted: "mid crash out", applicants: "12 (all crashing out)", vibe: 29,
+    tags: ["high stress, by design", "yelling is a KPI", "scream room provided"],
+    stipend: "therapy (one session, group, 47 people)",
+    reqs: ["crash out on schedule, never early", "calm down 3 other crash outs per day", "write incident reports in all caps", "have zero chill, professionally"],
+    boss: "the crash out supervisor", attacks: [{ name: "PUBLIC CRASH OUT", text: "he crashed out on you. in front of everyone.", min: 13, max: 19 }],
+    taunts: ["i'm about to crash out on your resume.", "this interview is my 4th crash out today."],
+  },
+  {
+    id: "npc", level: "chill", title: "NPC streamer (full time)", company: "NPC Live", logo: "NP", color: "#22D3EE",
+    posted: "respawned 5m ago", applicants: "1,000 identical guys", vibe: 71,
+    tags: ["same 3 lines, forever", "standing still is the job", "tips in gifts only"],
+    stipend: "gifts from strangers (non-cash, mostly roses)",
+    reqs: ["say the same 3 lines for 8 hours", "react to gifts on cue", "never break character, even at lunch", "have the dialogue range of a vending machine"],
+    boss: "the NPC (respawns every 5 min)", attacks: [{ name: "DIALOGUE LOOP", text: "he said the same line 47 times. you felt all of them.", min: 9, max: 15 }],
+    taunts: ["hello traveller. no.", "i have 3 lines and you're not in any of them."],
+  },
+  {
+    id: "lockin", level: "sweaty", title: "lock in specialist", company: "Lock In Labs", logo: "LI", color: "#0F172A",
+    posted: "do not disturb", applicants: "0 (they're all locked in)", vibe: 34,
+    tags: ["no phones, ever", "headphones on, soul off", "6am lock in sessions"],
+    stipend: "a timer app and a stare",
+    reqs: ["lock in for 12 hours straight", "ignore every notification, including payroll", "make eye contact with nobody", "drink water on a schedule"],
+    boss: "the locked-in monk (HR)", attacks: [{ name: "DO NOT DISTURB", text: "you were muted. permanently.", min: 13, max: 19 }],
+    taunts: ["i'm locked in. you're locked out.", "you blinked. that's a no."],
+  },
+  {
+    id: "reels", level: "chill", title: "professional AI reel watcher", company: "Fruit Love Island Productions", logo: "FL", color: "#FB7185",
+    posted: "4am, still scrolling", applicants: "2.3M (all on their phones)", vibe: 90,
+    tags: ["8 hrs screen time minimum", "fruit drama expert", "thumb cardio"],
+    stipend: "unlimited reels, zero salary",
+    reqs: ["watch 1,000 AI reels a day without blinking", "know who the banana is coupled up with on fruit love island", "rate AI slop from 1 to \"whyyy\"", "never touch grass (it's not in the algorithm)"],
+    boss: "the algorithm (head of HR)", attacks: [{ name: "INFINITE SCROLL", text: "you watched 400 reels. it's 4am. you lost 14 hp and your will.", min: 9, max: 15 }],
+    taunts: ["you've been scrolling for 6 hours. that was the interview.", "the algorithm already knows you're not hired."],
+  },
 ];
+
+// How tough each job's HR is. Every job has a `level`; the boss fight uses its hp and how hard HR hits
+// (a multiplier on the attack numbers above). Tuned with a simulation: a normal player wins about
+// 61% / 44% / 33% / 24%, and about 44% across the original 12 jobs.
+// (23 jobs now: the originals, 6 italian brainrot ones, and 5 from the rest of the brainrot multiverse.)
+export const HR_LEVELS = {
+  chill: { label: "🌶️ chill HR", c: "lime", hp: 115, atk: 1.35, intro: "chill HR. don't fumble this." },
+  mid: { label: "🌶️🌶️ mid HR", c: "yellow", hp: 130, atk: 1.42, intro: "mid HR. it's giving 3 rounds." },
+  sweaty: { label: "🌶️🌶️🌶️ sweaty HR", c: "orange", hp: 140, atk: 1.48, intro: "sweaty HR. lock in." },
+  boss: { label: "☠️ final boss", c: "black", hp: 150, atk: 1.5, intro: "final boss. good luck, twin." },
+};
+export const levelOf = (job) => HR_LEVELS[job.level] || HR_LEVELS.mid;
 
 export const GHOST_TOASTS = [
   "ghosted them first. +10 aura.",
@@ -269,7 +382,7 @@ export const GHOST_TOASTS = [
 
 // ---------- boss fight ----------
 export const YOUR_HP = 120;
-export const BOSS_HP = 135;
+// HR's hp depends on the job: see HR_LEVELS above
 
 // Every move returns what happened. Optional fields:
 //   dmg (to the boss), self (to you), heal (to you), effect: "dodge" | "stun" | "charge"

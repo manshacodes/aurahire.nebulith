@@ -2,20 +2,20 @@
 // the block timing minigame, the ultimate flash and the K.O. splash.
 // Each returns a Promise, so boss.js can simply `await` them in order.
 import { gsap } from "./motion.js";
-import { esc, sleep, rand, reducedMotion } from "./fx.js";
+import { esc, sleep, rand, reducedMotion, sticker } from "./fx.js";
 import { FIGHT_TEXT as T } from "./data.js";
 import { sfx } from "./sound.js";
 
 const animate = () => gsap && !reducedMotion();
 
 // ---------- VS intro: you vs HR, then ROUND 1 → FIGHT! (tap to skip) ----------
-export function vsIntro({ youHTML, youName, bossName }) {
+export function vsIntro({ youHTML, youName, bossName, level }) {
   if (!animate()) return Promise.resolve();
   document.body.insertAdjacentHTML("beforeend", `
     <div class="vs-intro" role="dialog" aria-label="${esc(youName)} versus ${esc(bossName)}">
       <div class="vs-side vs-left">${youHTML}<b>${esc(youName)}</b></div>
       <div class="vs-mid">${T.vs}</div>
-      <div class="vs-side vs-right"><span class="avatar boss-av vs-boss" aria-hidden="true"><span class="visor"></span><span class="mouth"></span></span><b>${esc(bossName)}</b></div>
+      <div class="vs-side vs-right"><span class="avatar boss-av vs-boss" aria-hidden="true"><span class="visor"></span><span class="mouth"></span></span><b>${esc(bossName)}</b>${level ? `<span class="vs-level">${sticker(level.label, level.c, { rot: -6, size: "sm" })}</span><small class="vs-level-line">${esc(level.intro)}</small>` : ""}</div>
       <p class="vs-call" aria-live="assertive"></p>
       <small class="vs-skip">${T.skipIntro}</small>
     </div>`);

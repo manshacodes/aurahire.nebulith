@@ -10,7 +10,7 @@
 import { go } from "../router.js";
 import * as S from "../state.js";
 import { $, esc, pick, rand, sleep, floatText, confetti, reducedMotion } from "../fx.js";
-import { JOBS, MOVES, BOSS_ATTACKS, BOSS_HP, YOUR_HP, FIGHT_TEXT, BOSS_TAUNTS, HR_LINES, PERK_MOVES } from "../data.js";
+import { JOBS, MOVES, BOSS_ATTACKS, YOUR_HP, FIGHT_TEXT, BOSS_TAUNTS, HR_LINES, PERK_MOVES, levelOf } from "../data.js";
 import { perksFor } from "../aura-engine.js";
 import { hasGsap } from "../motion.js";
 import { memeSlam, preloadMemes } from "../slam.js";
@@ -22,7 +22,6 @@ import { avatarHTML } from "../identity.js";
 const HAND = 3;            // random moves dealt per turn (plus "ask about salary")
 const RAGE_AT = 40;        // boss HP that triggers rage mode
 const RAGE_MULT = 1.3;     // rage attacks hit this much harder
-const ATK_MULT = 1.45;     // all HR attacks hit this much harder than the numbers in data.js
 const SPECIAL_CHANCE = 0.35;           // how often HR uses a special move instead of attacking
 const TAKEHOME = { dmg: 6, turns: 3 }; // take-home assignment: 6 hp a turn for 3 turns
 const CHAI_HEAL = 25;                  // HR's one chai break when rage mode starts
@@ -59,6 +58,8 @@ function myPerks() {
 
 export default function boss(root, { id }) {
   const j = JOBS.find((x) => x.id === id) || JOBS[0];
+  // How tough this HR is depends on the job (HR_LEVELS in data.js): its hp and how hard it hits
+  const level = levelOf(j), BOSS_HP = level.hp, ATK_MULT = level.atk;
   let bossHp = BOSS_HP, you = YOUR_HP, busy = true, alive = true, turn = 1, meter = 0;
   let attacks = 0, sinceBlock = 0;   // for deciding when the block minigame shows up
   let ultUsed = false, chaiUsed = false, takehome = 0;   // takehome = turns of take-home damage left
@@ -97,7 +98,7 @@ export default function boss(root, { id }) {
       <div class="split"><div class="split-main">
       <div class="card arena" id="arena">
         <div class="fighter" id="enemy">
-          <div class="hpcard"><b>${esc(j.boss)}</b><small>lv.99</small><div class="hp"><span id="bossHp"></span></div><div class="fx-row" id="bossFx"></div></div>
+          <div class="hpcard"><b>${esc(j.boss)}</b><small>${esc(level.label)}</small><div class="hp"><span id="bossHp"></span></div><div class="fx-row" id="bossFx"></div></div>
           <div class="avatar boss-av" aria-hidden="true"><span class="visor"></span><span class="mouth"></span></div>
         </div>
         <div class="fighter" id="me">
@@ -326,7 +327,7 @@ export default function boss(root, { id }) {
   // VS intro, then the music and the first turn
   (async () => {
     const s = S.get();
-    await vsIntro({ youHTML: avatarHTML(s, "vs-av"), youName: s.name, bossName: j.boss });
+    await vsIntro({ youHTML: avatarHTML(s, "vs-av"), youName: s.name, bossName: j.boss, level });
     if (!alive) return;
     startMusic();
     busy = false;

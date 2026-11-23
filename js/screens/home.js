@@ -12,13 +12,13 @@ import { playIntro, shouldPlayIntro } from "../intro.js";
 import { extrasHTML, bindExtras, animateExtras } from "./home-extras.js";
 
 const HERO_STICKERS = [
-  // [label, colour, tilt, size, parallax speed, top, left]: kept to the right side and corners, away from the text
-  ["W", "lime", -14, "lg", 1.8, "6%", "72%"],
+  // [label, colour, tilt, size, parallax speed, top, left]: scattered all over; the text sits on a layer above them
+  ["W", "lime", -14, "lg", 1.8, "8%", "6%"],
   ["6-7", "lilac", 12, "", 1.3, "14%", "78%"],
   ["100% linkedin-free*", "yellow", -8, "sm", 0.7, "60%", "70%"],
-  ["MOGGED", "pink", 8, "", 2.2, "86%", "80%"],
+  ["MOGGED", "pink", 8, "", 2.2, "90%", "6%"],
   ["7x7=49", "sky", -6, "", 1.5, "36%", "88%"],
-  ["CRASH OUT", "orange", 10, "sm", 0.6, "94%", "58%"],
+  ["CRASH OUT", "orange", 10, "sm", 0.6, "92%", "64%"],
 ];
 
 // Chapter 01 add-ons: they pop in like phone notifications from "AuraHire" (**text** = bold).
