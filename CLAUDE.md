@@ -85,6 +85,7 @@ js/
   resume-file.js      reads .txt and PDF resumes (pdf.js from cdnjs, loaded only when a PDF is picked) + auto-growing text boxes
   breakdown.js        the AuraGPT breakdown meters, shared by score, roast-a-friend and friend profiles
   share-card.js       "share my aura": draws a 1080×1350 card on a canvas in the current vibe (gradients included), shares it (share sheet, or download + copied link), and encodes/decodes "beat my aura" challenge links (#/vs/<code>: name, aura, tier, colour + a checksum; never resume text)
+  linkedify.js        "LinkedIn-ify my resume": writePost() turns what AuraGPT found (scraper, tests, robotics, societies, cgpa, nepo…) into a peak cringe LinkedIn post at 3 cringe levels (humble / thought leader / top voice: fake-humble opener, sad-story hook, "3 things this taught me about B2B sales", @-tagging God, "I'm hiring!! (I'm not.)", unicode-bold words, hashtags); openLinkedify() shows it as a pop-up post card with a cringe dial, reroll, copy, a fake "post it", fake reactions and fake comments (HR unc: "we'll circle back"). All copy is LINKEDIFY in data.js
   aura.js             earn(id): aura for every action (AURA_EARN in data.js), "+N aura" pops, leaderboard overtakes
   memes.js            meme sticker <img> helper + mix/mixGroups for mixing memes with text stickers
   fx.js               $, $$, esc, toast, confetti, countUp, typewriter, shake, floatText, sticker()
@@ -92,8 +93,12 @@ js/
   data.js             ALL copy: jobs, stickers, slang, boss moves, HR chat replies, post templates
   screens/            one file per screen (see the flow below)
 vendor/               gsap, ScrollTrigger, ScrambleTextPlugin, lenis (+ lenis.css)
-assets/               no-thanks-i-use-ai.png (meme used as a chat sticker), stickers/ (image stickers)
+assets/               no-thanks-i-use-ai.webp (meme used as a chat sticker, 11 KB), og.png (link preview image), stickers/ (image stickers)
 tools/make_sticker.py turns any image into a die-cut sticker PNG (needs: pip install "rembg[cpu]" pillow)
+tests/                aura-engine.test.mjs + features.test.mjs (node:test, no installs: `node --test tests/*.test.mjs`; they lock in the tuned scores, so update the numbers when you change scoring on purpose) and smoke.mjs (Playwright clicks through the main flow; needs a server, BASE=http://localhost:8765/). fixtures/ holds made-up resumes only: never commit the owner's real resume (public repo)
+.github/workflows/ci.yml  syntax check + unit tests + smoke test on every push to main and every PR. No package.json on purpose (Vercel would try to build it)
+vercel.json           week-long cache headers for assets/ and vendor/
+robots.txt, sitemap.xml  SEO; OG/Twitter tags + JSON-LD live in index.html (og image: assets/og.png, 1200×630)
 ```
 
 ## User flow (screens)
@@ -101,9 +106,9 @@ tools/make_sticker.py turns any image into a die-cut sticker PNG (needs: pip ins
 **Intro (every page load, `js/intro.js` + `css/intro.css`):** a believable fake LinkedIn feed (the name in text, no real logo image) gets a red marker X, "nah.", stickers slapped on the posts, the post text scrambled into brainrot, a shake and grey-out, then an acid-lime circle wipe reveals AuraHire. Skippable, and replayable from the landing footer.
 
 `#/` **home**: scroll-story landing page.
-→ `#/upload`: type your first name (AuraGPT assigns a funny surname like "Grindwala", reroll-able), then paste your resume, upload a .txt (only .txt is accepted), or pick one of 6 demo personas (`DEMO_RESUMES` in data.js: hackathon tourist, nepo intern, dsa monk, linkedin lunatic, founder (19), club president), each tuned to land in a different aura tier.
+→ `#/upload`: type your first name (AuraGPT assigns a funny surname like "Grindwala", reroll-able), then paste your resume, upload a PDF or .txt, or pick one of 6 demo personas (`DEMO_RESUMES` in data.js: hackathon tourist, nepo intern, dsa monk, linkedin lunatic, founder (19), club president), each tuned to land in a different aura tier.
 → `#/scan`: AuraGPT v6.7 judges line by line: a sticky HUD with a thinking orb (turns green or pink per verdict) and a live counter + sparkline, a terminal log of its "thoughts", a highlighter sweep on each line, verdict stamps slamming on (W, BASED, MID, L, CAP, NEPO, GLAZE, LARP, TOURIST), points flying into the counter, a shake on big Ls, confetti on big Ws, a "SCAN COMPLETE" stamp, and a skip button.
-→ `#/score`: count-up, confetti, rank tier, roast, rizz / Ws / crash outs, best + worst line, and the **AuraGPT breakdown**: yap, nepo, delulu, grind, touch grass and cap, each 0-10 from signals in the resume (`SIGNALS` in aura-engine.js, copy in `FACTORS`), "copy my flex", and **share my aura** (the share card; `SHARE_TEXT` in data.js). If you came from a friend's challenge link, a head-to-head card sits on top ("you mogged them by N" / "challenge them back").
+→ `#/score`: count-up, confetti, rank tier, roast, rizz / Ws / crash outs, best + worst line, and the **AuraGPT breakdown**: yap, nepo, delulu, grind, touch grass and cap, each 0-10 from signals in the resume (`SIGNALS` in aura-engine.js, copy in `FACTORS`), "copy my flex", **share my aura** (the share card; `SHARE_TEXT` in data.js), and **LinkedIn-ify my resume 🚀** (`js/linkedify.js`; also on roast-a-friend as "LinkedIn-ify their resume"). If you came from a friend's challenge link, a head-to-head card sits on top ("you mogged them by N" / "challenge them back").
 → `#/vs/:code` (`js/screens/vs.js`): a friend's "beat my aura" challenge: their score and tier, then "scan my resume" (or "use my last scan"); stores `state.challenge` for the score page. An edited link shows "that's cap"; a broken one goes home.
 → `#/stickers`: pick exactly 5 personality stickers (a 6th shakes: "this isn't 6-7, twin").
 → `#/jobs`: swipeable card stack (drag right to apply, left to ghost).
@@ -164,17 +169,22 @@ Done and tested end to end in headless Chrome (no console errors):
 - [x] "LinkedIn gets crossed out" intro animation
 - [x] runaway Apply button, then "hold to apply"
 - [x] Ghosted "hold to check status", then the "HR said:" hand flip-off
+- [x] launch polish: a 404 screen for unknown links (`notFound()` in router.js, `js/screens/notfound.js`), `#/privacy` (`js/screens/privacy.js`; copy in `NOT_FOUND` / `PRIVACY` in data.js), a crash toast (`CRASH_TEXT`, window error handler at the end of main.js), SRI on pdf.js, link previews, caching, tests + CI
 
 ## Next up (priority order)
+
+**Moving to a new chat? Read `docs/ROADMAP.md`, section "0. Start here".** It has the live status, what to do next, and how the owner likes to work. The list below is the original hackathon to-do list.
 
 1. [x] **Deploy (live at https://aurahire-nebulith.vercel.app/):** push to a public GitHub repo, enable GitHub Pages (or Netlify/Vercel), and add the live URL to the README.
 2. [ ] **Liquid glass vibe** (6th theme, maybe the new default): animated gradient background, frosted cards (`backdrop-filter: blur(24px) saturate(180%)`), bright 1px top edge, inner highlight, glossy pill buttons. Optional SVG displacement refraction in Chromium.
 3. [x] **Real brainrot stickers (done):** 20 meme stickers in `assets/stickers/*.jpg` (320px, resized from the originals in `/stickers`, which is gitignored), described in `MEMES` in data.js with alt text and a personality label. Used in the HR chat (meme tray; HR replies in context via `HR_MEME_REPLIES`, can send memes back, notices repeats, reads your answer to its opener, logs off once with the goodnight meme) and in the pick-5 screen (saved as `img:<id>`, shown on the profile). The "ni hao" cat was left out on purpose (stereotype). Old plan: the builder will supply Pinterest meme/reaction images. Convert each with `python3 tools/make_sticker.py in.jpg assets/stickers/name.png` (cutout: removes the background and adds a white die-cut outline; `--style card` keeps the whole image, for memes with text). Then add them to an image-sticker list in `data.js` and use them in the chat tray, rating tray, profile reactions and landing sticker storm alongside the text stickers.
 4. [x] **Hand gesture animation (done, as the "HR said:" moment on Ghosted).** It uses an original cartoon SVG hand. To swap in your own render or GIF, set `HAND_IMAGE = "assets/hand.png"` in `data.js` (a transparent PNG/WebP/GIF looks best; `tools/make_sticker.py` can cut one out). Old plan, for reference: a scroll-scrubbed image sequence (canvas + GSAP, Apple style) of a 3D hand. On the Ghosted screen it flips you off; on a low score it does an "L". Frames go in `assets/hand/frame-0001.webp …`, made by the builder (Spline or an AI video tool), with placeholders until then.
 5. [ ] Polish pass on mobile: tap targets, the swipe feel, the boss-fight pacing.
-6. [~] Small delights: **sound effects done** (`js/sound.js`, synthesized with the Web Audio API, no files: stamp thunk, W ding, L womp womp, swipe whoosh, boss hit/crit, rage rumble, a slap per meme in the slam + fanfare, the "HR said:" shatter; 🔊/🔇 toggle in the topbar saved as `state.muted`; silent until the first tap). Haptics via `buzz()` in fx.js. Still to do: a share card image for the aura score.
-7. [ ] README screenshots/GIF, and a 150-word project description for submission.
-8. [ ] Record the 2-minute video: tell it as one user's story (upload → score → swipe → boss fight → ghosted → sticker revenge).
+6. [~] Small delights: **sound effects done** (`js/sound.js`, synthesized with the Web Audio API, no files: stamp thunk, W ding, L womp womp, swipe whoosh, boss hit/crit, rage rumble, a slap per meme in the slam + fanfare, the "HR said:" shatter; 🔊/🔇 toggle in the topbar saved as `state.muted`; silent until the first tap). Haptics via `buzz()` in fx.js. The share card is done too (`js/share-card.js`).
+7. [~] README is up to date (PR #8). Still to do: screenshots/GIF. (The hackathon description and video were submitted.)
+8. [x] 2-minute video (submitted).
+9. [ ] Vercel Analytics: the owner enables it in the dashboard, then add the script tag and update the privacy copy (see ROADMAP "0. Start here").
+10. [ ] Roadmap features C (Fix my L) and E (resume vs resume); F (global leaderboard) and G (other degrees) later.
 
 ## Don'ts
 

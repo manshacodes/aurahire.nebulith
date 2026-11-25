@@ -727,7 +727,7 @@ export const MOCK_PROFILES = [
   {
     id: "kabir", name: "kabir.exe", color: "#C8FF2E", ink: "#10200A", aura: 2140,
     headline: "hackathon tourist | 14 participation certs | ex-intern at a startup that pivoted 6 times",
-    stickers: [["HACKATHON TOURIST", "lime"], ["CERTIFIED YAPPER", "pink"], ["3AM DEBUGGER", "black"], ["NO THANKS I USE AI", "yellow"], ["DELULU BUT DEDICATED", "lilac"]],
+    stickers: [["HACKATHON TOURIST", "lime"], ["img:crying"], ["CERTIFIED YAPPER", "pink"], ["NO THANKS I USE AI", "yellow"], ["img:yippee"]],
     stats: [["certificates", "14"], ["hackathons won", "0"], ["energy drinks", "∞"]],
     endorsed: "endorsed for \"fixing the projector\" by 12 people",
     post: "humbled and honoured to share that i participated in my 14th hackathon 🙏\n\nwe did not win. we did not finish. the wifi did not work.\n\nbut the real prize was the free t-shirt we made along the way.\n\n#grateful #hackathon #nosleep",
@@ -742,7 +742,7 @@ export const MOCK_PROFILES = [
   {
     id: "tanvi", name: "tanvi | core ×6", color: "#CDBEFF", ink: "#1E1340", aura: 3780,
     headline: "president of 3 clubs | vp of 2 | core member of the 6th | networking is my love language",
-    stickers: [["MAIN CHARACTER", "lilac"], ["LINKEDIN LUNATIC", "pink"], ["GROUP PROJECT CARRIER", "yellow"], ["7x7=49 ENERGY", "lime"], ["CRASHES OUT POLITELY", "orange"]],
+    stickers: [["MAIN CHARACTER", "lilac"], ["img:slay"], ["LINKEDIN LUNATIC", "pink"], ["GROUP PROJECT CARRIER", "yellow"], ["img:crashout"]],
     stats: [["clubs", "6"], ["meetings / week", "23"], ["sleep", "4h"]],
     endorsed: "endorsed for \"making a google form for everything\" by 67 people",
     post: "what being core member of 6 societies taught me about leadership 🧵\n\n1. calendars are a social construct\n2. every meeting could have been a whatsapp poll\n3. i have not attended a class since august\n\nagree?",
@@ -757,7 +757,7 @@ export const MOCK_PROFILES = [
   {
     id: "rohan", name: "rohan (day 412)", color: "#FF8A3D", ink: "#2A1200", aura: 940,
     headline: "day 412 of learning dsa | 5am club | building in public (nobody asked)",
-    stickers: [["AURA FARMER", "black"], ["UNC AT 19", "grey"], ["CHAI > COFFEE", "orange"], ["TOUCHES GRASS (RARELY)", "grey"], ["RIZZ IN EXCEL", "sky"]],
+    stickers: [["AURA FARMER", "black"], ["img:chillin"], ["UNC AT 19", "grey"], ["RIZZ IN EXCEL", "sky"], ["img:zen"]],
     stats: [["streak", "412d"], ["problems solved", "9"], ["cold plunges", "87"]],
     endorsed: "endorsed for \"waking up early\" by 5 people (all at 5am)",
     post: "day 412 of learning dsa.\n\ntoday i solved two sum.\nagain.\n\nconsistency > talent. see you tomorrow at 5am.\n\n#100daysofcode (it has been 412)",
@@ -772,7 +772,7 @@ export const MOCK_PROFILES = [
   {
     id: "meher", name: "meher.ai", color: "#8FD3FF", ink: "#062A44", aura: 3150,
     headline: "prompt engineer | ai thought leader since tuesday | building agi in my hostel room",
-    stickers: [["NO THANKS I USE AI", "yellow"], ["MAIN CHARACTER", "lilac"], ["CERTIFIED YAPPER", "pink"], ["DELULU BUT DEDICATED", "lilac"], ["3AM DEBUGGER", "black"]],
+    stickers: [["NO THANKS I USE AI", "yellow"], ["img:lockin"], ["CERTIFIED YAPPER", "pink"], ["img:erm"], ["3AM DEBUGGER", "black"]],
     stats: [["prompts written", "9,001"], ["models trained", "0"], ["ai newsletters", "4"]],
     endorsed: "endorsed for \"knowing what an llm is\" by 31 people",
     post: "ai won't replace you.\n\na person using ai will.\n\nthat person is me. i am replacing you.\n\nfollow for more ai insights (copied from twitter)",
@@ -787,7 +787,7 @@ export const MOCK_PROFILES = [
   {
     id: "arjun", name: "arjun (gym era)", color: "#FFE45C", ink: "#2A2100", aura: 2560,
     headline: "cse student by day, gym sigma by night | mogging since 2024 | 7x7=49 certified",
-    stickers: [["7x7=49 ENERGY", "lime"], ["AURA FARMER", "black"], ["MAIN CHARACTER", "lilac"], ["NAVY BLUE TYPA VIBE", "sky"], ["TOUCHES GRASS (RARELY)", "grey"]],
+    stickers: [["7x7=49 ENERGY", "lime"], ["img:stare"], ["AURA FARMER", "black"], ["NAVY BLUE TYPA VIBE", "sky"], ["img:gn"]],
     stats: [["bench", "60kg"], ["mirror selfies", "412"], ["commits", "3"]],
     endorsed: "endorsed for \"carrying the group project (the laptop bag)\" by 9 people",
     post: "lessons from the gym that apply to coding:\n\n1. never skip leg day\n2. never skip leg day\n3. i haven't opened vs code in a month\n\nconsistency.",
@@ -1023,12 +1023,107 @@ export const AURA_EARN = {
   ghosted: [-800, "ghosted. womp womp"],
   judge:   [20, "judged a friend"],
   share:   [25, "posted your aura"],
+  linkedify: [7, "cringe, copied"],
 };
 
 // Profile headline: your branch + grad year from your resume ("CSE-AI '30"), or a joke if it's not there
 export const EDU_TEXT = {
   unknown: "branch: vibes '??",
   noYear: (branch) => `${branch} '??`,
+};
+
+// ---------- 404, privacy, crashes ----------
+export const NOT_FOUND = {
+  label: "error 404",
+  sticker: "GHOSTED",
+  title: "this page got ghosted.",
+  sub: "HR says this page never existed. we'll circle back.",
+  home: "take me home",
+  jobs: "swipe jobs instead",
+};
+
+export const PRIVACY = {
+  label: "privacy",
+  title: "privacy, but make it short.",
+  points: [
+    "your resume never leaves your device. AuraGPT reads it right here in your browser. no servers, no uploads.",
+    "what gets saved: your aura, name, stickers, disses, fight record and vibe, in your browser's localStorage. not on any server.",
+    "challenge links carry only your name, aura, tier and profile colour. never your resume.",
+    "no accounts, no cookies, no ads, no tracking pixels.",
+    "fonts load from Google Fonts, and the PDF reader (pdf.js) loads from cdnjs only when you pick a PDF. those services see a normal web request, nothing else.",
+    "want it all gone? profile → reset wipes everything, or clear this site's data in your browser.",
+  ],
+  footer: "legally distinct. please do not sue.",
+  back: "back home",
+};
+
+// shown (at most every few seconds) if something breaks, instead of a silently frozen screen
+export const CRASH_TEXT = "AuraGPT crashed out. refresh the page, twin.";
+
+// ---------- LinkedIn-ify my resume ----------
+// Turns your resume into a peak cringe LinkedIn post (js/linkedify.js writes it).
+// **text** becomes 𝐛𝐨𝐥𝐝 unicode, like real LinkedIn posts. Level 1 = humble, 2 = thought leader, 3 = top voice.
+export const LINKEDIFY = {
+  button: "LinkedIn-ify my resume 🚀",
+  buttonFriend: "LinkedIn-ify their resume 🚀",
+  title: "your resume, LinkedIn-ified",
+  levels: ["🙂 humble", "😤 thought leader", "🤡 top voice"],
+  copy: "copy post",
+  reroll: "reroll 🎲",
+  post: "post it",
+  copied: "copied. post it if you're brave.",
+  posted: "we stopped you. you're welcome.",
+  seeMore: "…see more",
+  meta: "2m · edited · 🌐",
+  you: "You and 3 relatives reacted",
+  headline: (tier) => `Aspiring CEO of my own life | ${tier} | Open to work (desperately)`,
+  openers: {
+    1: ["Happy to share a small update 🙏", "Grateful for the journey so far.", "Quick reflection on my journey:"],
+    2: ["Humbled and honoured to share something personal.", "This is your sign to keep going. Here's mine:", "Unpopular opinion: I'm built different. Let me explain."],
+    3: ["I wasn't going to post this, but my therapist said I should.", "I cried in the office today. Here's what it taught me about B2B sales.", "POV: you're the main character and HR is a side quest."],
+  },
+  hooks: ["3 years ago, I couldn't spell \"API\".", "3 years ago, I was rejected by 47 companies.\nToday, I am rejected by 48.", "My parents wanted a doctor.\nThey got a **visionary**."],
+  // what AuraGPT finds in your resume → the line it becomes (first matches win; `m` is the regex match)
+  topics: [
+    { re: /scrap(e|es|er|ing)\b/i, line: () => "Today, I built a **scraper** that reads government websites **for fun**.", tag: "#webscraping" },
+    { re: /(\d[\d,]*)\s*(automated\s+)?(unit\s+)?tests?\b/i, line: (m) => `${m[1]} automated tests.\nZero failures.\nZero friends.`, tag: "#testing" },
+    { re: /robot|arduino|raspberry pi|rover/i, line: () => "I build **robots**. Mostly so I have someone to talk to.", tag: "#robotics",
+      source: (text) => { const y = text.match(/(\d+)\+?\s*years?/i); return y ? `${y[1]} years of robotics` : "Robotics"; },
+      lesson: "Be the robot arm you want to see in the world." },
+    { societies: true, line: (n) => `I'm a core member of ${n} societies.\nI attend 2 of them.\nThe other ${n - 2} are a **mindset**.`, tag: "#leadership" },
+    { re: /(\d+)\s*hackathons?/i, line: (m) => `${m[1]} hackathons. 0 sleep. 1 personality.`, tag: "#hackathon" },
+    { re: /\bhackathons?\b/i, line: () => "I don't do hackathons. Hackathons do **me**.", tag: "#hackathon", source: () => "My last hackathon" },
+    { re: /uncle|dad'?s|cousin|family friend/i, line: () => "Landed my internship through pure **networking**. (my uncle)", tag: "#networking" },
+    { re: /\bintern(ship)?s?\b/i, line: () => "Interned somewhere you've heard of. (unpaid, but the **exposure**)", tag: "#internship" },
+    { re: /([\d,]+)\+?\s*(leetcode\s+)?problems/i, line: (m) => `${m[1]} LeetCode problems.\n0 problems solved in my personal life.`, tag: "#dsa" },
+    { re: /(\d\.\d+)\s*c?gpa|c?gpa\s*[:\-]?\s*(\d\.\d+)/i, line: (m) => { const g = Number(m[1] || m[2]); return `CGPA ${g}. My parents asked where the other ${(10 - g).toFixed(1)} went.`; }, tag: "#academics" },
+    { re: /founder|startup|\bceo\b/i, line: () => "Founder & CEO of a startup.\n(pre-revenue, pre-product, pre-everything)", tag: "#startup" },
+    { re: /(\d{2,})\s*(free\s+)?(\w+\s+)?(certificat\w*|courses?)/i, line: (m) => `${m[1]} certificates. **Lifelong learner.** Short-term memory.`, tag: "#lifelonglearning" },
+    { re: /\b(live|deployed|vercel|production)\b/i, line: () => "Shipped to **production**. On a Friday. At 5:59pm.", tag: "#shipit" },
+    { re: /figma|ui\/?ux|\bdesign/i, line: () => "I don't design interfaces. I design **experiences**. (it's a figma file)", tag: "#design" },
+    { re: /([\d,]+)\+?\s*(linkedin\s+)?followers/i, line: (m) => `${m[1]} followers. Each one a **lesson**.`, tag: "#personalbranding" },
+    { re: /attendance/i, line: () => "Attendance: low. I believe in **async presence**.", tag: "#worklifebalance" },
+    { re: /passionate|hard.?working|team player|motivated/i, line: () => "They call me passionate.\nI call me **the vision**.", tag: "#mindset" },
+    { re: /to.?do app|calculator|weather app/i, line: () => "Built a to-do app. First item: \"change the world\". Done ✅", tag: "#buildinpublic" },
+    { re: /hello world in (\d+)/i, line: (m) => `Said hello world in ${m[1]} languages.\nThe world has not replied.`, tag: "#polyglot" },
+    { re: /full.?stack/i, line: () => "Full-stack developer. Every stack. Full. 🥞", tag: "#fullstack" },
+  ],
+  // used when the resume doesn't give enough to work with
+  generic: ["I don't chase opportunities. Opportunities chase **me**. (they're slow)", "I'm not unemployed. I'm **pre-hired**.", "Every rejection is just a **yes** in a different font."],
+  lessonsIntro: (source, level) => `${source} taught me 3 things about ${level === 3 ? "B2B sales" : "leadership"}:`,
+  lessons: ["Never ask about salary. 🙏", "If HR ghosts you, ghost them first.", "Your network is your net worth. (mine is ₹43)", "Sleep is a subscription. I cancelled it.",
+    "Every L is a W that hasn't loaded yet.", "Be so good they can't ignore you. They will anyway.", "Ship first, sleep never.", "Agree with the senior. Always. Even when he's wrong."],
+  thanks: "Huge thanks to @my uncle @Elon (didn't reply) @God and @the chai guy outside college.",
+  hiring: "I'm hiring!! (I'm not.)",
+  cta: { 1: "", 2: "Agree? 👇", 3: "Agree? 👇\nRepost ♻️ if you also breathe." },
+  hashtags: ["#grateful", "#humbled", "#opentowork", "#aurafarming", "#6767", "#hustle", "#blessed", "#leadership"],
+  reactions: ["6,767", "4,206", "69,420", "4,999"],
+  commentCounts: ["49", "67", "420"],
+  reposts: ["420", "69", "7"],
+  // [who, comment]; HR unc always shows up, then 2 random ones
+  hrComment: ["HR unc", "we'll circle back 🙏"],
+  comments: [["a bot", "Congrats on the new role!! 🎉 (there is no role)"], ["someone", "Can you refer me?"], ["a guy who didn't read it", "Insightful."],
+    ["your senior", "This. 💯"], ["random recruiter", "Interested"], ["your mom", "so proud beta ❤️ (please call)"], ["LinkedIn Top Voice", "Agree. Also, buy my course."]],
 };
 
 // ---------- share my aura + "beat my aura" challenge links ----------

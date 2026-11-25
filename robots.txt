@@ -1,0 +1,5 @@
+# AuraHire: everyone's welcome to crawl. HR included.
+User-agent: *
+Allow: /
+
+Sitemap: https://aurahire-nebulith.vercel.app/sitemap.xml

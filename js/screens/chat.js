@@ -12,7 +12,7 @@ import { earn } from "../aura.js";
 import { scrollToY } from "../motion.js";
 
 const TRAY = ["SIX7", "W", "L", "COOKED", "TWIN", "UNC", "SEVEN", "DELULU", "CRASH", "GLAZER", "HUZZ", "WOMP"];
-const AI_MEME_SRC = "assets/no-thanks-i-use-ai.png";
+const AI_MEME_SRC = "assets/no-thanks-i-use-ai.webp";   // 480px webp (was an 864 KB png)
 const LOGOFF_AFTER = 9;   // HR "logs off" once after this many of your messages
 
 export default function chat(root) {

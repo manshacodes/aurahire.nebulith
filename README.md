@@ -7,7 +7,7 @@ A brainrot job portal built for **NEBULITH: The Brainrot Ideathon & Hackathon** 
 
 ## About
 
-AuraHire is a brainrot parody of LinkedIn culture: stop applying, start aura farming. Upload your resume (PDF, text, or one of six personas) and AuraGPT judges it line by line, slamming stamps like CAP and NEPO and scoring you in aura, with a breakdown for yap, nepo, delulu, grind and cap. Swipe through red-flag listings (Tralalero Tralala Pvt Ltd is hiring), chase a runaway Apply button, then face HR in a fighting-game boss battle with chiptune music, timed blocks and an aura ultimate. Win and memes slam onto the screen; lose and HR flips you off. HR interviews you in memes, every action farms aura to climb the batch leaderboard, and you can roast your friends' resumes too. Five switchable vibes, synthesized sound, plain HTML, CSS and JavaScript with GSAP, fully responsive and live on Vercel. Chaos in the copy, clarity in the journey.
+AuraHire is a brainrot parody of LinkedIn culture: stop applying, start aura farming. Upload your resume (PDF, text, or one of six personas) and AuraGPT judges it line by line, slamming stamps like CAP and NEPO and scoring you in aura, with a breakdown for yap, nepo, delulu, grind and cap. Share your aura card, send friends a "beat my aura" link, or LinkedIn-ify your resume into a peak cringe post. Swipe through 23 red-flag listings (Tralalero Tralala Pvt Ltd is hiring), chase a runaway Apply button, then face HR in a fighting-game boss battle where your resume becomes your moveset, with chiptune music, timed blocks and an aura ultimate. Win and memes slam onto the screen; lose and HR flips you off. HR interviews you in memes, every action farms aura to climb the batch leaderboard, and you can roast your friends' resumes too. Five switchable vibes, synthesized sound, plain HTML, CSS and JavaScript with GSAP, fully responsive and live on Vercel. Chaos in the copy, clarity in the journey.
 
 ## The idea
 
@@ -19,13 +19,13 @@ The brief asked for an unusual idea turned into a thoughtfully designed experien
 
 1. **Intro:** a believable LinkedIn feed gets crossed out with a red marker, "nah.", stickered, scrambled into brainrot, and wiped away to reveal AuraHire.
 2. **Landing page:** a scroll story (see below), ending in a live theme picker and a feature grid.
-3. **Upload:** type your first name and AuraGPT assigns you a surname (Grindwala, Mogwani, Rizzvi…, reroll-able). Then paste your resume, upload a `.txt`, or pick a persona: the hackathon tourist, the nepo intern, the dsa monk, the linkedin lunatic, the founder (19) or the club president.
+3. **Upload:** type your first name and AuraGPT assigns you a surname (Grindwala, Mogwani, Rizzvi…, reroll-able). Then paste your resume, upload a PDF or `.txt`, or pick a persona: the hackathon tourist, the nepo intern, the dsa monk, the linkedin lunatic, the founder (19) or the club president.
 4. **Scan:** AuraGPT reads every line live, with a thinking orb, a terminal log, a highlighter sweep, verdict stamps (W, BASED, MID, L, CAP, NEPO, GLAZE, LARP, TOURIST) and points flying into a counter and graph.
-5. **Score:** a count-up, a rank from "certified npc" to "mogging the whole batch", a roast, rizz (6-7/10 only when earned), and the **AuraGPT breakdown**: yap level, nepo index, delulu meter, grind, touch grass and a cap detector, each scored 0–10 from what's actually in your resume.
+5. **Score:** a count-up, a rank from "certified npc" to "mogging the whole batch", a roast, rizz (6-7/10 only when earned), and the **AuraGPT breakdown**: yap level, nepo index, delulu meter, grind, touch grass and a cap detector, each scored 0–10 from what's actually in your resume. From here you can **share my aura** (a 1080×1350 card in your vibe, plus a "beat my aura" challenge link) or **LinkedIn-ify my resume** (a fake LinkedIn post at three cringe levels, with fake reactions and comments).
 6. **Pick your 5:** describe yourself in 5 stickers, choosing from text stickers and meme stickers mixed together (try a 6th: "this isn't 6-7, twin").
-7. **Swipe:** 12 red-flag listings in a new order every visit. Swipe right to apply, left to ghost them first.
+7. **Swipe:** 23 red-flag listings in a new order every visit. Swipe right to apply, left to ghost them first.
 8. **Apply:** the Apply button runs away from your cursor, then gives up and becomes a press-and-hold ring.
-9. **Boss fight:** a turn-based fight against that company's HR boss. You're dealt 3 random moves from a pool of 11 each turn, plus "ask about salary" (always there, always backfires). Dodge, stun and 2× charge effects; HR enters rage mode below 40 HP.
+9. **Boss fight:** a turn-based fight against that company's HR boss, from 🌶️ chill HR to ☠️ final boss depending on the job. You're dealt 3 random moves from a pool of 11 each turn, plus "ask about salary" (always there, always backfires), and moves unlocked by your resume (merged PRs, a 9+ CGPA, "call uncle"…) show up in your hand. HR talks back to every move, hits you with TAKE-HOME ASSIGNMENTS and GHOSTING, and enters rage mode below 40 HP.
 10. **Win:** the meme slam. Memes slam onto the screen faster and faster until they cover it, then "OFFER UNLOCKED", then an offer letter and a typewriter "humbled and honoured" post.
 11. **Lose:** the app drains to grey, "HR is typing" forever, then "HR said:" shatters and a hand flips you off.
 
@@ -33,9 +33,11 @@ The brief asked for an unusual idea turned into a thoughtfully designed experien
 
 | Feature | What it does |
 | --- | --- |
-| **AuraGPT** | A rule-based resume scorer (regex rules + roasts per line) and a 0–10 breakdown across six factors. No servers, no API keys, runs in your browser |
-| **Swipe feed** | Drag-to-swipe card stack with APPLY / GHOST stamps; 12 listings, each with its own boss and signature attack (BOMBARDIRO CROCODILO, FANUM TAX, SKIBIDI DOP DOP…) |
-| **Boss fight** | Fighting-game style: a VS intro, HR taunts, a block timing bar (perfect blocks counter-attack), an aura meter that unlocks the AURA FARM ULTIMATE, rage mode, a K.O. splash, and chiptune battle music that speeds up in rage mode |
+| **AuraGPT** | A rule-based resume scorer: signals stack per line, societies are judged by type and role, repeated flexes get discounted, and "sketchy but real" lines are grey MIDs instead of harsh Ls. Plus a 0–10 breakdown across six factors. No servers, no API keys, runs in your browser |
+| **Share my aura** | Draws a share card on a canvas in your current vibe and opens the share sheet. "Beat my aura" links carry only your name, score, tier and colour (with a checksum, so an edited link says "that's cap") |
+| **LinkedIn-ify** | Turns what AuraGPT found in your resume into a LinkedIn post: humble, thought leader or top voice ("3 things this taught me about B2B sales", "I'm hiring!! (I'm not.)") |
+| **Swipe feed** | Drag-to-swipe card stack with APPLY / GHOST stamps; 23 listings, each with its own boss, signature attack (BOMBARDIRO CROCODILO, FANUM TAX, SKIBIDI DOP DOP…) and HR difficulty |
+| **Boss fight** | Fighting-game style: a VS intro, HR taunts, a block timing bar (perfect blocks counter-attack), an aura meter that unlocks the AURA FARM ULTIMATE, rage mode, a K.O. splash, and chiptune battle music that speeds up in rage mode. Four HR levels (chill to final boss), resume moves, and HR specials. Your win/loss record shows on your profile |
 | **Roast a friend** | Paste or upload anyone's resume (PDF or .txt), get AuraGPT's full verdict, then add them to the batch to race their aura |
 | **Aura farming** | Every action earns or costs aura with a "+12 aura" pop; pass a classmate and you get told your new rank |
 | **Sound** | Synthesized sound effects, battle music and a victory jingle (Web Audio, no audio files), with a mute button |
@@ -51,13 +53,15 @@ The brief asked for an unusual idea turned into a thoughtfully designed experien
 
 1. Hero: scramble-text logo, parallax stickers, a title that lifts away as you scroll.
 2. A marquee that skews and speeds up with your scroll velocity.
-3. "Your resume, rated in aura" (pinned): the counter scrubs 0 → 4,200 while lines get judged.
+3. "Your resume, rated in aura" (pinned): the counter scrubs 0 → 4,606 while lines get judged, then two phone notifications drop in (share your aura, beat my aura).
 4. "Every listing is a red flag" (pinned): job cards flip away one by one.
-5. "Applying is a boss fight" (pinned): the HP bar drains, damage numbers pop, "OFFER UNLOCKED".
+5. "Applying is a boss fight" (pinned): HR talks, a move card from your resume flips in, the HP bar drains, "OFFER UNLOCKED", and a live preview shows "your resume is your moveset".
 6. "HR only replies in stickers": a sticker storm flies in and assembles into a wall.
 7. "Pick your vibe": the 5 themes as live previews; tapping one switches the whole site.
 8. "Everything else in the grind": a bento grid of features, each with a tiny demo, linking to the feature.
 9. Finale: "your aura is waiting."
+
+There's also a funny 404 ("this page got ghosted.") for broken links, and a short privacy page.
 
 ## For the judges
 
@@ -66,8 +70,8 @@ The brief asked for an unusual idea turned into a thoughtfully designed experien
 | **Creativity & Originality (25%)** | A job portal where applying is a boss fight and HR replies in memes. Original copy, characters, listings and stickers, built on current brainrot (Italian brainrot, 6-7, aura farming, fanum tax, skibidi, clanker) |
 | **Functionality & Implementation (25%)** | Nothing is faked: AuraGPT scoring and breakdown (`js/aura-engine.js`), the swipe stack, the dodge button and hold ring, the boss fight (`js/screens/boss.js`), the context-aware chat (`js/screens/chat.js`), cap/fax and disses that persist, drag-and-drop ratings, a live theme switcher |
 | **UI/UX & Visual Design (20%)** | 5 complete themes from one set of design tokens (`css/themes.css`), die-cut stickers, a clean single-column app with a tab bar, and chaos kept to copy and interactions |
-| **Code Quality & Structure (15%)** | No framework, no build step. One file per screen, all copy in `js/data.js`, small single-purpose modules, CSS variables for theming, every screen cleans up its timers and animations, user text is escaped |
-| **Deployment & Responsiveness (10%)** | Live on Vercel (auto-deploys on push). Phone-first app screens that switch to wider two-column layouts on tablets and laptops (`css/desktop.css`), tested at 390px, 768px, 1024px and 1440px. Mobile-specific performance work: no smooth-scroll library on touch, no heavy blur filters, pinned scenes sized to fit a small phone |
+| **Code Quality & Structure (15%)** | No framework, no build step. One file per screen, all copy in `js/data.js`, small single-purpose modules, CSS variables for theming, every screen cleans up its timers and animations, user text is escaped. Unit tests and a browser smoke test run on every pull request (`tests/`, GitHub Actions) |
+| **Deployment & Responsiveness (10%)** | Live on Vercel (auto-deploys on push). Phone-first app screens that switch to wider two-column layouts on tablets and laptops (`css/desktop.css`), tested at 390px, 768px, 1024px and 1440px. Mobile-specific performance work: no smooth-scroll library on touch, no heavy blur filters, pinned scenes sized to fit a small phone. Link previews (Open Graph image), robots.txt, a sitemap and cache headers for images |
 | **Theme Interpretation (5%)** | Brainrot as the language of the whole product: aura points instead of skills, stickers instead of messages, memes instead of feedback |
 
 ## Tech
@@ -75,7 +79,8 @@ The brief asked for an unusual idea turned into a thoughtfully designed experien
 - Plain **HTML, CSS and JavaScript (ES modules)**. No framework and no build step.
 - **GSAP 3** (ScrollTrigger, ScrambleText) and **Lenis**, bundled locally in `vendor/`.
 - A small **hash router** (`js/router.js`), so it works on any static host.
-- State is saved in **localStorage** (aura, name, avatar, stickers, disses, theme), wrapped in try/catch.
+- State is saved in **localStorage** (aura, name, avatar, stickers, disses, fight record, theme), wrapped in try/catch.
+- PDF resumes are read in the browser with **pdf.js**, loaded from cdnjs (with a Subresource Integrity hash) only when someone picks a PDF.
 - Accessibility: real buttons, aria labels on icon-only controls, alt text on every meme, toasts in a `role="status"` region, and a `prefers-reduced-motion` fallback.
 
 ## Project structure
@@ -96,7 +101,13 @@ js/
   theme.js            switching vibes
   motion.js           Lenis + ScrollTrigger setup, scramble text, cursor, tilt
   intro.js            the "LinkedIn gets crossed out" intro
-  aura-engine.js      AuraGPT: per-line scoring + the 0-10 breakdown
+  aura-engine.js      AuraGPT: per-line scoring, the 0-10 breakdown, resume moves
+  breakdown.js        the breakdown meters (score, roast a friend, profiles)
+  share-card.js       the share card + "beat my aura" challenge links
+  linkedify.js        LinkedIn-ify my resume
+  resume-file.js      reads .txt and PDF resumes
+  fight-fx.js         boss fight extras: VS intro, HR speech bubble, blocks, K.O.
+  sound.js, music.js  synthesized sound effects and battle music
   identity.js         funny surname generator + profile circle
   memes.js            meme sticker helper + mixing memes with text stickers
   slam.js             the accelerating meme slam
@@ -106,7 +117,10 @@ js/
   data.js             all the copy: jobs, stickers, memes, replies, personas
   screens/            one file per screen
 vendor/               GSAP, ScrollTrigger, ScrambleText, Lenis
-assets/stickers/      the meme stickers (320px)
+assets/               meme stickers (320px), the link preview image (og.png)
+tests/                unit tests (node:test) + a Playwright smoke test
+.github/workflows/    CI: syntax check, unit tests, smoke test
+vercel.json           cache headers for images and libraries
 tools/make_sticker.py turns an image into a die-cut sticker
 ```
 
@@ -119,6 +133,27 @@ python3 -m http.server 8000
 ```
 
 Then open http://localhost:8000.
+
+## Tests
+
+No installs needed for the unit tests (Node 22's built-in test runner):
+
+```bash
+node --test tests/*.test.mjs
+```
+
+They lock in AuraGPT's tuned scores for the six personas and five sample resumes, check the per-line verdicts (CAP is an L, 47 courses is a grey MID), branch and year detection, resume moves, challenge links (including edited ones), LinkedIn-ify, and that every job is complete. The smoke test opens the site in headless Chrome and clicks through landing → upload → scan → score → LinkedIn-ify, the boss fight, the 404 and the privacy page, failing on any page error:
+
+```bash
+python3 -m http.server 8000 &
+node tests/smoke.mjs        # needs Playwright
+```
+
+GitHub Actions runs a syntax check, the unit tests and the smoke test on every push to `main` and every pull request.
+
+## Privacy
+
+Your resume never leaves your device: AuraGPT runs in your browser. Everything AuraHire saves lives in your own browser's localStorage. There are no accounts, cookies, ads or trackers, and challenge links never include your resume. Details are on the site at `#/privacy`.
 
 ## Deployment
 
