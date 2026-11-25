@@ -150,7 +150,7 @@ export default function home(root) {
         <h2 class="final-text">your aura<br>is waiting.</h2>
         <button class="btn btn-cta btn-xl" id="start2">enter the grind →</button>
         <button class="link-btn" id="replay">replay the intro</button>
-        <p class="fine">*legally distinct. please do not sue.</p>
+        <p class="fine">*legally distinct. please do not sue. · <a href="#/privacy">privacy</a></p>
       </div>
     </section>`;
 

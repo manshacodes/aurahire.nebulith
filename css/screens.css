@@ -595,3 +595,9 @@ textarea[data-lenis-prevent] { overflow-y: auto; resize: none; }
 .li-comments b { font-size: 12.5px; }
 .li-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
 .li-actions .btn { padding-left: 8px; padding-right: 8px; }
+
+/* ---------- 404 + privacy ---------- */
+.not-found { display: grid; justify-items: start; gap: 12px; padding-top: 24px; }
+.nf-num { font-family: var(--font-display); font-weight: var(--display-weight); font-size: clamp(110px, 34vw, 200px); line-height: 0.85; letter-spacing: -0.07em; }
+.nf-stk { margin-top: -18px; margin-left: 40px; }
+.privacy-list { display: grid; gap: 12px; margin: 0; padding-left: 18px; font-weight: 600; line-height: 1.45; }

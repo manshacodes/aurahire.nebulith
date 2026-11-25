@@ -1032,6 +1032,34 @@ export const EDU_TEXT = {
   noYear: (branch) => `${branch} '??`,
 };
 
+// ---------- 404, privacy, crashes ----------
+export const NOT_FOUND = {
+  label: "error 404",
+  sticker: "GHOSTED",
+  title: "this page got ghosted.",
+  sub: "HR says this page never existed. we'll circle back.",
+  home: "take me home",
+  jobs: "swipe jobs instead",
+};
+
+export const PRIVACY = {
+  label: "privacy",
+  title: "privacy, but make it short.",
+  points: [
+    "your resume never leaves your device. AuraGPT reads it right here in your browser. no servers, no uploads.",
+    "what gets saved: your aura, name, stickers, disses, fight record and vibe, in your browser's localStorage. not on any server.",
+    "challenge links carry only your name, aura, tier and profile colour. never your resume.",
+    "no accounts, no cookies, no ads, no tracking pixels.",
+    "fonts load from Google Fonts, and the PDF reader (pdf.js) loads from cdnjs only when you pick a PDF. those services see a normal web request, nothing else.",
+    "want it all gone? profile → reset wipes everything, or clear this site's data in your browser.",
+  ],
+  footer: "legally distinct. please do not sue.",
+  back: "back home",
+};
+
+// shown (at most every few seconds) if something breaks, instead of a silently frozen screen
+export const CRASH_TEXT = "AuraGPT crashed out. refresh the page, twin.";
+
 // ---------- LinkedIn-ify my resume ----------
 // Turns your resume into a peak cringe LinkedIn post (js/linkedify.js writes it).
 // **text** becomes 𝐛𝐨𝐥𝐝 unicode, like real LinkedIn posts. Level 1 = humble, 2 = thought leader, 3 = top voice.

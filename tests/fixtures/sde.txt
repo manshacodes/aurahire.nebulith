@@ -1,0 +1,9 @@
+Software Engineering Intern, Razorpay · May 2026 – Jul 2026
+Built an internal reconciliation dashboard used by 40+ ops staff; cut manual matching time by 60%
+Wrote 120 unit tests for the payouts service and fixed 3 production bugs
+CodeChef 4 star, 600+ LeetCode problems
+Winner, HackNSUT 2025 (out of 180 teams)
+DevTrack: open-source issue tracker, 300+ GitHub stars, deployed on Vercel
+CGPA: 9.2
+Skills: Go, TypeScript, React, PostgreSQL, Docker, Redis
+Member, ACM student chapter

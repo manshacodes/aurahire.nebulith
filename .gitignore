@@ -8,3 +8,6 @@ __pycache__/
 
 # original sticker images (the site uses the resized copies in assets/stickers)
 /stickers/
+
+# playwright, installed only for the smoke test
+node_modules/

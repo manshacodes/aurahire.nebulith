@@ -93,8 +93,12 @@ js/
   data.js             ALL copy: jobs, stickers, slang, boss moves, HR chat replies, post templates
   screens/            one file per screen (see the flow below)
 vendor/               gsap, ScrollTrigger, ScrambleTextPlugin, lenis (+ lenis.css)
-assets/               no-thanks-i-use-ai.png (meme used as a chat sticker), stickers/ (image stickers)
+assets/               no-thanks-i-use-ai.webp (meme used as a chat sticker, 11 KB), og.png (link preview image), stickers/ (image stickers)
 tools/make_sticker.py turns any image into a die-cut sticker PNG (needs: pip install "rembg[cpu]" pillow)
+tests/                aura-engine.test.mjs + features.test.mjs (node:test, no installs: `node --test tests/*.test.mjs`; they lock in the tuned scores, so update the numbers when you change scoring on purpose) and smoke.mjs (Playwright clicks through the main flow; needs a server, BASE=http://localhost:8765/). fixtures/ holds made-up resumes only: never commit the owner's real resume (public repo)
+.github/workflows/ci.yml  syntax check + unit tests + smoke test on every push to main and every PR. No package.json on purpose (Vercel would try to build it)
+vercel.json           week-long cache headers for assets/ and vendor/
+robots.txt, sitemap.xml  SEO; OG/Twitter tags + JSON-LD live in index.html (og image: assets/og.png, 1200×630)
 ```
 
 ## User flow (screens)
@@ -165,6 +169,7 @@ Done and tested end to end in headless Chrome (no console errors):
 - [x] "LinkedIn gets crossed out" intro animation
 - [x] runaway Apply button, then "hold to apply"
 - [x] Ghosted "hold to check status", then the "HR said:" hand flip-off
+- [x] launch polish: a 404 screen for unknown links (`notFound()` in router.js, `js/screens/notfound.js`), `#/privacy` (`js/screens/privacy.js`; copy in `NOT_FOUND` / `PRIVACY` in data.js), a crash toast (`CRASH_TEXT`, window error handler at the end of main.js), SRI on pdf.js, link previews, caching, tests + CI
 
 ## Next up (priority order)
 

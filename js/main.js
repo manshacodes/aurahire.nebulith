@@ -1,9 +1,9 @@
 // Entry point: theme ("vibe") switcher, live aura pill, and the route table.
 
-import { route, start } from "./router.js";
+import { route, start, notFound } from "./router.js";
 import * as S from "./state.js";
-import { $, signed } from "./fx.js";
-import { THEMES } from "./data.js";
+import { $, signed, toast } from "./fx.js";
+import { THEMES, CRASH_TEXT } from "./data.js";
 import { initMotion, afterRender } from "./motion.js";
 import { avatarHTML } from "./identity.js";
 import { applyTheme, setTheme } from "./theme.js";
@@ -28,6 +28,8 @@ import rate from "./screens/rate.js";
 import chat from "./screens/chat.js";
 import profile from "./screens/profile.js";
 import vs from "./screens/vs.js";
+import notFoundScreen from "./screens/notfound.js";
+import privacy from "./screens/privacy.js";
 
 // ---------- vibes ----------
 function setupVibes() {
@@ -144,5 +146,17 @@ route("/u/:id", withMotion(person));
 route("/judge", withMotion(judge));
 route("/f/:id", withMotion(friend));
 route("/vs/:code", withMotion(vs));      // "beat my aura" challenge links
+route("/privacy", withMotion(privacy));
+notFound(withMotion(notFoundScreen));   // any other link: the 404 screen
 
 start($("#screen"));
+
+// If something breaks, say so (once every few seconds) instead of leaving a silently frozen screen
+let lastCrash = 0;
+function onCrash(message) {
+  if (/ResizeObserver|Script error/i.test(message) || Date.now() - lastCrash < 8000) return;   // harmless browser noise
+  lastCrash = Date.now();
+  toast(CRASH_TEXT);
+}
+addEventListener("error", (e) => onCrash(String(e.message || "")));
+addEventListener("unhandledrejection", (e) => onCrash(String(e.reason?.message || e.reason || "")));

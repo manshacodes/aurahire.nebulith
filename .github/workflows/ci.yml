@@ -1,0 +1,36 @@
+# Runs on every push and pull request: syntax check, AuraGPT regression tests, and a browser smoke test.
+# No package.json on purpose (the site has no build step); Playwright is installed only here, in CI.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: syntax check every JS file
+        run: for f in $(find js tests -name '*.js' -o -name '*.mjs'); do node --check "$f"; done
+      - name: unit tests (scorer, share links, LinkedIn-ify, jobs)
+        run: node --test tests/*.test.mjs
+
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: install playwright (CI only)
+        run: npm i --no-save playwright@1.63.0 && npx playwright install --with-deps chromium
+      - name: smoke test in headless chrome
+        run: |
+          python3 -m http.server 8000 &
+          sleep 2
+          node tests/smoke.mjs

@@ -3,6 +3,9 @@
 
 const routes = [];
 let cleanup = null;
+let fallback = null;   // the 404 screen, for links that match no route
+
+export const notFound = (screen) => { fallback = screen; };
 
 export function route(pattern, screen) {
   const keys = [];
@@ -17,7 +20,7 @@ export const go = (path) => { location.hash = "#" + path; };
 export function start(root) {
   const render = () => {
     const path = location.hash.slice(1) || "/";
-    const match = routes.find((r) => r.regex.test(path)) || routes[0];
+    const match = routes.find((r) => r.regex.test(path)) || (fallback ? { regex: /.*/, keys: [], screen: fallback } : routes[0]);
     const values = path.match(match.regex) || [];
     const params = Object.fromEntries(match.keys.map((k, i) => [k, decodeURIComponent(values[i + 1] || "")]));
 
