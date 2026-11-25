@@ -4,7 +4,33 @@ This doc is the plan for AuraHire after the NEBULITH hackathon. It's written so 
 
 **Paste this to start a new chat:**
 
-> Read `CLAUDE.md` and `docs/ROADMAP.md` in the aurahire.nebulith repo. We're building the features in the roadmap, in the order it suggests. Before changing anything, show me a plan for the feature and wait for my OK.
+> Read `CLAUDE.md` and `docs/ROADMAP.md` in the aurahire.nebulith repo. Start with "0. Start here" in the roadmap. Before changing anything, show me a plan and wait for my OK.
+
+---
+
+## 0. Start here (last updated 25 Nov 2026)
+
+**Check first:** is PR #8 merged? (LinkedIn-ify, picture stickers for classmates, and the launch polish: 404, privacy page, link previews, caching, tests + CI.) If it's still open, remind the owner to merge it. If GitHub Actions shows a red ❌ on it, fix that first. The smoke job installs Playwright 1.63.0 in CI. If it fails there, it's most likely the install step or a selector in `tests/smoke.mjs`.
+
+**Status of the planned features (section 3):** A ✅ share card + challenge links · B ✅ resume moves · D ✅ LinkedIn-ify · C ⬜ Fix my L · E ⬜ resume vs resume · F ⬜ global leaderboard · G ⬜ other degrees.
+
+**Suggested next, in order:**
+1. **Visitor stats:** the owner has to turn on Analytics in the Vercel dashboard (project → Analytics → Enable). Then add `<script defer src="/_vercel/insights/script.js"></script>` before `</body>` in `index.html` and update the privacy copy (`PRIVACY` in data.js), since it says "no tracking". Vercel Analytics is cookieless, so add a line like "anonymous page-view counts via Vercel Analytics, no cookies".
+2. **C. Fix my L** (below): small, useful, no new scoring logic.
+3. **E. Resume vs resume.**
+4. Phone polish pass (section 4) and README screenshots/GIF.
+5. Bigger and later: **F** global leaderboard (needs a backend), **G** other degrees, the liquid glass vibe.
+
+**Before you push any change:**
+- Run `node --test tests/*.test.mjs`. If you changed scoring on purpose, update the expected numbers in `tests/aura-engine.test.mjs` in the same commit, and tell the owner the before/after.
+- Start `python3 -m http.server 8765` and run `BASE=http://localhost:8765/ node tests/smoke.mjs`.
+
+**Practical notes for the cloud sandbox:**
+- Work on the branch the session gives you and open a PR only when the owner says yes.
+- **Never force-push** (it's blocked). If main has moved on, merge `origin/main` into your branch, or start a fresh branch from `origin/main` and cherry-pick.
+- Very long inline shell commands can trip a safety check. Write a Python edit script to the scratchpad and run it.
+- Playwright is preinstalled (`require('playwright')`). Inside an `.mjs` file, use `createRequire(import.meta.url)("playwright")`.
+- Don't add a `package.json` (Vercel would try to build it). Don't commit the owner's real resume; the repo is public.
 
 ---
 
@@ -16,7 +42,22 @@ This doc is the plan for AuraHire after the NEBULITH hackathon. It's written so 
 - **How changes ship:** work on a branch → push → open a pull request → the owner clicks **Merge** on GitHub → Vercel redeploys within a minute or two.
 - **Tech:** plain HTML/CSS/JS ES modules, no framework, no build step. GSAP and Lenis are in `vendor/`. A hash router, and all state in `localStorage`. All copy (jokes, roasts, lines) lives in `js/data.js`. See `CLAUDE.md` for every convention.
 
-### Done since the hackathon submission (all merged and live)
+### Done since the hackathon submission (merged and live, except PR #8)
+
+**Later PRs (#3–#8), short version:**
+- **Branch + grad year** on the profile, read from the resume by `eduFacts` (e.g. "CSE-AI '30").
+- **Share my aura** card + **"beat my aura"** challenge links (`#/vs/:code`, checksum so edited links say "that's cap").
+- **Resume moves** in the fight (`perksFor`, `PERK_MOVES`) and an HR record on the profile.
+- **HR levels per job** (supersede the fight numbers further down): 🌶️ chill 115 HP ×1.35 (~61% win) · 🌶️🌶️ mid 130 ×1.42 (~44%) · 🌶️🌶️🌶️ sweaty 140 ×1.48 (~33%) · ☠️ final boss 150 ×1.5 (~24%). HR specials are 35% of its turns; chai break +25.
+- **23 jobs:** the original 12 + 6 italian brainrot + 5 other trends (six seven data analyst, crash out coordinator, NPC streamer, lock in specialist, AI reel watcher at Fruit Love Island Productions). The owner said no to a bedsheet consultant and a chief delulu officer.
+- **Landing page updates:** the counter goes to 4,606, two glassy phone notifications (share / beat my aura), a "your resume is your moveset" preview in the boss chapter, and hero stickers scattered all over (the owner's preference). The feature grid stays at 6 tiles, with no swipe row.
+- **Scorer "funny, not harsh" pass:** sketchy but real lines are grey MIDs (47 courses −20, 22 hackathons −10 TOURIST, LinkedIn flexing +50); Hello World is a small −30 but stamped L; real Ls are cap −250, larp, glaze −70 and nepo.
+- **LinkedIn-ify my resume** (3 cringe levels, fake reactions and comments); classmates' 5 stickers can include meme pictures.
+- **Launch polish (PR #8):** 404, privacy page, crash toast, OG image + tags, robots/sitemap, an 11 KB webp chat meme, cache headers, SRI on pdf.js, tests + CI.
+
+**Current reference scores (locked in by the tests):** tourist 2,685 · nepo 1,505 · dsa monk 5,220 · linkedin lunatic 2,535 · founder 2,715 · club president 3,795 · sample resumes: avg 3,284 · sde intern 5,262 · designer 3,980 · club hopper 2,780 · ai bro 2,255. The owner's own resume was 4,606 (certified linkedin sigma) when last checked. It's deliberately not in the repo.
+
+**Earlier work (details):**
 
 **AuraGPT resume scorer rewrite** (`js/aura-engine.js`, PRs #1 and #2):
 - Rejoins lines that wrap in a PDF, and drops headings, contact info, page footers and repeated name headers (`tidyLines`).
@@ -61,12 +102,13 @@ This doc is the plan for AuraHire after the NEBULITH hackathon. It's written so 
 - Keep the humour: lowercase, deadpan, chronically online (see "Tone and slang" in `CLAUDE.md`). **Don't remove or reword existing jokes** without asking. New copy goes in `data.js`.
 - Keep the scoring honest but not harsh. She pushed back when MIDs took over and when her real work (Lurk, a scraper with 169 tests) got Ls.
 - She likes pull requests she can merge herself.
+- Things she has said no to before (don't propose them again without a new reason): MIDs shown green, a harsher scorer, removing or softening the certificate roasts, swipeable tile rows on the landing page, separate landing tiles for each new feature, stickers grouped at the sides of the hero, an "a" icon on the notifications, making all fights uniformly easier (she wanted difficulty per job instead), and the bedsheet / chief delulu jobs.
 
 ---
 
 ## 3. Planned features
 
-Suggested order: **A → B → C → D → E**, then **F** and **G** later. Each one is independent once A exists.
+A, B and D are done. Next: **C → E**, then **F** and **G** later.
 
 ### A. Shareable aura card + "beat my aura" challenge link (build these together) — ✅ DONE
 
@@ -205,7 +247,9 @@ Pure comedy, small.
 - **Daily challenge:** the same HR boss and moves for everyone each day, with streaks.
 - **Achievements:** pop-ups ("first W", "survived a take-home", "asked about salary 5 times").
 - **Liquid glass vibe:** a 6th theme (see `CLAUDE.md`, "Next up" #2).
-- **Visitor stats:** turn on Vercel Web Analytics in the Vercel dashboard (Analytics tab), and add `<script defer src="/_vercel/insights/script.js"></script>` before `</body>` in `index.html`. Hash routes may only count as home page views.
+- **Visitor stats:** see "0. Start here" (the owner enables it in Vercel first). Hash routes may only count as home page views.
+- **Fight result share card:** "hired by Tralalero Tralala in 9 turns" / "ghosted by recruiter karen" (the owner said "later" when A was built).
 - **Phone polish pass:** tap targets, swipe feel, and the fight in all 5 vibes. HR's speech bubble covers HR's HP bar for a second or two while it talks.
 - **Profile headline bug (fixed):** the profile always said "CSE '29". It now reads the branch and grad year from the resume with `eduFacts` (e.g. "CSE-AI '30"), and shows "branch: vibes '??" when they're not there.
-- **Housekeeping:** `CLAUDE.md` still says the upload screen only accepts `.txt` (PDF works). The README's features section predates the scorer rewrite and the fight changes.
+- **Housekeeping (done):** the README and CLAUDE.md were brought up to date in PR #8.
+- **Checklist items that don't apply yet:** auth, a database, email and rate limiting only matter once a backend exists (F).
